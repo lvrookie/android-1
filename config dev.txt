@@ -1,0 +1,24 @@
+configuring Android dev :
+(Eclipse > Windows > Preferences)
+
+- General > Editors > Text Editors :
+Show print margin at 160
+Show line numbers
+- General > Editors > Text Editors > Spelling :
+Encoding UTF-8
+- General > Workspace :
+Text file encoding UTF-8
+- Android > Build :
+Default debug keystore : debug.keystore from //192.168.3.99/partage/Pole Mobile/Android/Config/debug.keystore
+- Android > Editors :
+Format on Save
+- Java > Code Style > Clean Up :
+Import file //192.168.3.99/partage/Pole Mobile/Android/Config/Kreactive CleanUp Eclipse.xml
+- Java > Code Style > Formatter :
+Import file //192.168.3.99/partage/Pole Mobile/Android/Config/Kreactive Fromatter Eclipse.xml
+- Java > Compiler :
+Compiler compliance level 1.6
+
+BE CAREFULL : for each projects you import/create, you also need to verify in its properties :
+- Java > Compiler :
+No project specific compiler compliance level or Compiler compliance level 1.6
