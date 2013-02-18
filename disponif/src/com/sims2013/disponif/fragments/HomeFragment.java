@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.Request;
@@ -18,17 +20,18 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
 import com.sims2013.disponif.R;
+import com.sims2013.disponif.activities.DisponibilityActivity;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements OnClickListener{
 
 	public static final String TAG = "com.sims2013.disponif.fragments.LoginFragment";
 
 	private UiLifecycleHelper uiHelper;
-	
 
 	private TextView mWelcomeMessage; 
 	private ProfilePictureView mProfilePictureView; 
+	private Button mDisponibilityButton;
 
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
@@ -52,6 +55,8 @@ public class HomeFragment extends Fragment {
 		
 		mWelcomeMessage = (TextView) view.findViewById(R.id.home_welcome_tv);
 		mProfilePictureView = (ProfilePictureView) view.findViewById(R.id.selection_profile_pic);
+		mDisponibilityButton = (Button) view.findViewById(R.id.home_dispo_button);
+		mDisponibilityButton.setOnClickListener(this);
 		
 		authButton.setFragment(this);
 
@@ -125,5 +130,13 @@ public class HomeFragment extends Fragment {
 	        }
 	    });
 	    request.executeAsync();
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == mDisponibilityButton.getId()) {
+			Intent intent = new Intent(getActivity(), DisponibilityActivity.class);
+			startActivity(intent);
+		}
 	} 
 }
