@@ -14,7 +14,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical" >
 
@@ -34,5 +35,14 @@
             android:visibility="gone"
             facebook:preset_size="large" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/home_dispo_button"
+        style="@style/blue_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="@string/create_disponibility"
+        android:textColor="@color/white" />
 
 </LinearLayout>
