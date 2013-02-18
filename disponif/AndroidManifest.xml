@@ -35,6 +35,11 @@
             android:theme="@style/MyActionBarTheme"
             android:windowSoftInputMode="stateHidden" >
         </activity>
+        
+        <activity
+            android:name="com.sims2013.disponif.client.ClientTestActivity"
+            android:label="@string/title_activity_client_test" >
+        </activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
