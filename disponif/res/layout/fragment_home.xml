@@ -43,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:text="@string/create_disponibility"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:visibility="invisible" />
 
 </LinearLayout>

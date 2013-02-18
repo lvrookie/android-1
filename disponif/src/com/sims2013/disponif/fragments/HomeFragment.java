@@ -20,22 +20,22 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
 import com.sims2013.disponif.R;
-import com.sims2013.disponif.activities.DisponibilityActivity;
+import com.sims2013.disponif.activities.AvailabilityActivity;
 
-
-public class HomeFragment extends Fragment implements OnClickListener{
+public class HomeFragment extends Fragment implements OnClickListener {
 
 	public static final String TAG = "com.sims2013.disponif.fragments.LoginFragment";
 
 	private UiLifecycleHelper uiHelper;
 
-	private TextView mWelcomeMessage; 
-	private ProfilePictureView mProfilePictureView; 
+	private TextView mWelcomeMessage;
+	private ProfilePictureView mProfilePictureView;
 	private Button mDisponibilityButton;
 
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
-		public void call(Session session, SessionState state, Exception exception) {
+		public void call(Session session, SessionState state,
+				Exception exception) {
 			onSessionStateChange(session, state, exception);
 		}
 	};
@@ -48,16 +48,20 @@ public class HomeFragment extends Fragment implements OnClickListener{
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-		LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
-		
+		LoginButton authButton = (LoginButton) view
+				.findViewById(R.id.authButton);
+
 		mWelcomeMessage = (TextView) view.findViewById(R.id.home_welcome_tv);
-		mProfilePictureView = (ProfilePictureView) view.findViewById(R.id.selection_profile_pic);
-		mDisponibilityButton = (Button) view.findViewById(R.id.home_dispo_button);
+		mProfilePictureView = (ProfilePictureView) view
+				.findViewById(R.id.selection_profile_pic);
+		mDisponibilityButton = (Button) view
+				.findViewById(R.id.home_dispo_button);
 		mDisponibilityButton.setOnClickListener(this);
-		
+
 		authButton.setFragment(this);
 
 		return view;
@@ -86,7 +90,6 @@ public class HomeFragment extends Fragment implements OnClickListener{
 		super.onDestroy();
 		uiHelper.onDestroy();
 	}
-	
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
@@ -94,49 +97,55 @@ public class HomeFragment extends Fragment implements OnClickListener{
 		uiHelper.onSaveInstanceState(outState);
 	}
 
-	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+	private void onSessionStateChange(Session session, SessionState state,
+			Exception exception) {
 		if (state.isOpened()) {
 			Log.i(TAG, "Logged in...");
 			mProfilePictureView.setVisibility(View.VISIBLE);
 			makeMeRequest(Session.getActiveSession());
+			mDisponibilityButton.setVisibility(View.VISIBLE);
 		} else if (state.isClosed()) {
 			mProfilePictureView.setVisibility(View.GONE);
-            mWelcomeMessage.setText(getString(R.string.home_disconnected));
+			mWelcomeMessage.setText(getString(R.string.home_disconnected));
 			Log.i(TAG, "Logged out...");
+			mDisponibilityButton.setVisibility(View.INVISIBLE);
 		}
 	}
 
-	
 	private void makeMeRequest(final Session session) {
-	    // Make an API call to get user data and define a 
-	    // new callback to handle the response.
-	    Request request = Request.newMeRequest(session, 
-	            new Request.GraphUserCallback() {
-	        @Override
-	        public void onCompleted(GraphUser user, Response response) {
-	            // If the response is successful
-	            if (session == Session.getActiveSession()) {
-	                if (user != null) {
-	                    // Set the id for the ProfilePictureView
-	                    // view that in turn displays the profile picture.
-	                    mProfilePictureView.setProfileId(user.getId());
-	                    // Set the Textview's text to the user's name.
-	                    mWelcomeMessage.setText(getString(R.string.home_welcome, user.getName()));
-	                }
-	            }
-	            if (response.getError() != null) {
-	                // Handle errors, will do so later.
-	            }
-	        }
-	    });
-	    request.executeAsync();
+		// Make an API call to get user data and define a
+		// new callback to handle the response.
+		Request request = Request.newMeRequest(session,
+				new Request.GraphUserCallback() {
+					@Override
+					public void onCompleted(GraphUser user, Response response) {
+						// If the response is successful
+						if (session == Session.getActiveSession()) {
+							if (user != null) {
+								// Set the id for the ProfilePictureView
+								// view that in turn displays the profile
+								// picture.
+								mProfilePictureView.setProfileId(user.getId());
+								// Set the Textview's text to the user's name.
+								mWelcomeMessage.setText(getString(
+										R.string.home_welcome, user.getName()));
+							}
+						}
+						if (response.getError() != null) {
+							// Handle errors, will do so later.
+						}
+					}
+				});
+		request.executeAsync();
 	}
 
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == mDisponibilityButton.getId()) {
-			Intent intent = new Intent(getActivity(), DisponibilityActivity.class);
+
+			Intent intent = new Intent(getActivity(),
+					AvailabilityActivity.class);
 			startActivity(intent);
 		}
-	} 
+	}
 }

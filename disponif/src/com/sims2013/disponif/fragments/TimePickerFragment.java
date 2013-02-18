@@ -13,16 +13,27 @@ public class TimePickerFragment extends DialogFragment implements
 		TimePickerDialog.OnTimeSetListener {
 
 	public static final String TAG = "com.sims2013.disponif.fragments.TimePickerFragment";
+	public static final String EXTRA_CALLER_ID = "com.sims2013.disponif.fragments.TimePickerFragment.EXTRA_CALLER_ID";
 	private OnTimeRangeSelected mListener;
+
+	private int mCallerId;
 
 	public static TimePickerFragment newInstance(Bundle b) {
 		TimePickerFragment f = new TimePickerFragment();
 		f.setArguments(b);
 		return f;
 	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		if (getArguments() != null) {
+			setCallerId(getArguments().getInt(EXTRA_CALLER_ID));
+		}
+	}
 
 	public interface OnTimeRangeSelected {
-		public void onTimeRangeSelected(String value);
+		public void onTimeRangeSelected(int hourOfDay, int minute, int callerId);
 	}
 
 	public void setListener(OnTimeRangeSelected listener) {
@@ -42,6 +53,14 @@ public class TimePickerFragment extends DialogFragment implements
 	}
 
 	public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-		// Do something with the time chosen by the user
+		mListener.onTimeRangeSelected(hourOfDay, minute, mCallerId);
+	}
+	
+	public int getCallerId() {
+		return mCallerId;
+	}
+
+	public void setCallerId(int mCallerId) {
+		this.mCallerId = mCallerId;
 	}
 }

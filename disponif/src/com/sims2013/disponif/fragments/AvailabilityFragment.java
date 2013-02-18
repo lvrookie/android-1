@@ -1,8 +1,7 @@
-package com.sims2013.disponif.client;
+package com.sims2013.disponif.fragments;
 
 import java.util.Calendar;
 
-import android.app.DatePickerDialog.OnDateSetListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
@@ -17,12 +16,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.sims2013.disponif.R;
-import com.sims2013.disponif.fragments.DatePickerFragment;
 import com.sims2013.disponif.fragments.DatePickerFragment.OnDateSelected;
-import com.sims2013.disponif.fragments.TimePickerFragment;
 import com.sims2013.disponif.fragments.TimePickerFragment.OnTimeRangeSelected;
 
-public class DisponibilityFragment extends Fragment implements OnClickListener,
+public class AvailabilityFragment extends Fragment implements OnClickListener,
 		OnDateSelected, OnTimeRangeSelected {
 
 	Button mSubmitButton;
@@ -40,18 +37,18 @@ public class DisponibilityFragment extends Fragment implements OnClickListener,
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_disponibility,
+		View view = inflater.inflate(R.layout.fragment_availability,
 				container, false);
 
-		mSubmitButton = (Button) view.findViewById(R.id.dispo_button_submit);
+		mSubmitButton = (Button) view.findViewById(R.id.availability_button_submit);
 		mDateButtonFrom = (Button) view
-				.findViewById(R.id.dispo_button_date_from);
+				.findViewById(R.id.availability_button_date_from);
 		mHourButtonFrom = (Button) view
-				.findViewById(R.id.dispo_button_hour_from);
-		mDateButtonTo = (Button) view.findViewById(R.id.dispo_button_date_from);
-		mHourButtonTo = (Button) view.findViewById(R.id.dispo_button_hour_from);
-		mPlaceET = (EditText) view.findViewById(R.id.dispo_place_et);
-		mTypeSpinner = (Spinner) view.findViewById(R.id.dispo_spinner_type);
+				.findViewById(R.id.availability_button_hour_from);
+		mDateButtonTo = (Button) view.findViewById(R.id.availability_button_date_to);
+		mHourButtonTo = (Button) view.findViewById(R.id.availability_button_hour_to);
+		mPlaceET = (EditText) view.findViewById(R.id.availability_place_et);
+		mTypeSpinner = (Spinner) view.findViewById(R.id.availability_spinner_type);
 
 		mDateButtonFrom.setOnClickListener(this);
 		mDateButtonTo.setOnClickListener(this);
@@ -83,25 +80,38 @@ public class DisponibilityFragment extends Fragment implements OnClickListener,
 				datePicker.setListener(this);
 				datePicker.show(getActivity().getFragmentManager(),
 						DatePickerFragment.TAG);
-				// mTimeButton.setText(getResources().getString(R.string.cart_date_fragment_choose_time));
-				// mTimeButton.setEnabled(false);
 			}
 		} else if (v.getId() == mDateButtonTo.getId()) {
 			if (getActivity() != null && !isDetached()
 					&& getActivity().getSupportFragmentManager() != null) {
+				Bundle b = new Bundle();
+				b.putInt(DatePickerFragment.EXTRA_CALLER_ID,
+						mDateButtonTo.getId());
 				final DatePickerFragment datePicker = DatePickerFragment
-						.newInstance(null);
+						.newInstance(b);
 				datePicker.setListener(this);
 				datePicker.show(getActivity().getFragmentManager(),
 						DatePickerFragment.TAG);
-				// mTimeButton.setText(getResources().getString(R.string.cart_date_fragment_choose_time));
-				// mTimeButton.setEnabled(false);
 			}
-		} else if (v.getId() == mHourButtonFrom.getId()
-				|| v.getId() == mHourButtonTo.getId()) {
+		} else if (v.getId() == mHourButtonFrom.getId()) {
 			if (getActivity() != null && !isDetached()
 					&& getActivity().getSupportFragmentManager() != null) {
 				Bundle b = new Bundle();
+				b.putInt(TimePickerFragment.EXTRA_CALLER_ID,
+						mHourButtonFrom.getId());
+				final TimePickerFragment timePicker = TimePickerFragment
+						.newInstance(b);
+				timePicker.setListener(this);
+				timePicker.show(getActivity().getFragmentManager(),
+						TimePickerFragment.TAG);
+			}
+
+		} else if (v.getId() == mHourButtonTo.getId()) {
+			if (getActivity() != null && !isDetached()
+					&& getActivity().getSupportFragmentManager() != null) {
+				Bundle b = new Bundle();
+				b.putInt(TimePickerFragment.EXTRA_CALLER_ID,
+						mHourButtonTo.getId());
 				final TimePickerFragment timePicker = TimePickerFragment
 						.newInstance(b);
 				timePicker.setListener(this);
@@ -121,20 +131,24 @@ public class DisponibilityFragment extends Fragment implements OnClickListener,
 		StringBuilder title = new StringBuilder();
 		title.append(DateUtils.formatDateTime(view.getContext(),
 				c.getTimeInMillis(), DateUtils.FORMAT_SHOW_DATE
-						| DateUtils.FORMAT_ABBREV_WEEKDAY
 						| DateUtils.FORMAT_SHOW_WEEKDAY
 						| DateUtils.FORMAT_ABBREV_MONTH));
 
 		if (callerId == mDateButtonFrom.getId()) {
 			mDateButtonFrom.setText(title);
+			mHourButtonFrom.setEnabled(true);
 		} else if (callerId == mDateButtonTo.getId()) {
 			mDateButtonTo.setText(title);
+			mHourButtonTo.setEnabled(true);
 		}
 	}
 
 	@Override
-	public void onTimeRangeSelected(String value) {
-		// TODO Auto-generated method stub
-
+	public void onTimeRangeSelected(int hourOfDay, int minute, int callerId) {
+		if (callerId == mHourButtonFrom.getId()) {
+			mHourButtonFrom.setText(hourOfDay + ":" + minute);
+		} else if (callerId == mHourButtonTo.getId()) {
+			mHourButtonTo.setText(hourOfDay + ":" + minute);
+		}
 	}
 }

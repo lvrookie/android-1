@@ -2,16 +2,17 @@
 <resources>
 
     <string name="submit_disponibility">Créer disponibilité</string>
-    <string name="dispo_type_label">Type d\'activité</string>
-    <string name="dispo_date_label">Créneau horaire</string>
-    <string name="dispo_date_from">Début</string>
-    <string name="dispo_date_to">Fin</string>
-    <string name="dispo_place_label">Lieu</string>
-    <string name="dispo_choose_date_from">Date début</string>
-    <string name="dispo_choose_hour_from">Heure début</string>
-    <string name="dispo_choose_date_to">Date fin</string>
-    <string name="dispo_choose_hour_to">Heure fin</string>
-    <string name="dispo_place_hint">Entrez une adresse</string>
+    <string name="availability_type_label">Type d\'activité</string>
+    <string name="availability_date_label">Créneau horaire</string>
+    <string name="availability_date_from">Début</string>
+    <string name="availability_date_to">Fin</string>
+    <string name="availability_place_label">Lieu</string>
+    <string name="availability_choose_date_from">Date début</string>
+    <string name="availability_choose_hour_from">Heure début</string>
+    <string name="availability_choose_date_to">Date fin</string>
+    <string name="availability_choose_hour_to">Heure fin</string>
+    <string name="availability_place_hint">Entrez une adresse</string>
+    <string name="availability_title">Ma disponibilité</string>
 
     <string-array name="disponibility_type_array">
         <item>Sport</item>

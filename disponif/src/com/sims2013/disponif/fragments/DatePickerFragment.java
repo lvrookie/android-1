@@ -3,7 +3,6 @@ package com.sims2013.disponif.fragments;
 import java.util.Calendar;
 
 import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;

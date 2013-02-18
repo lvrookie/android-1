@@ -10,19 +10,21 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/dispo_type_label"
+        android:text="@string/availability_type_label"
         android:textStyle="bold" />
 
     <Spinner
-        android:id="@+id/dispo_spinner_type"
+        android:id="@+id/availability_spinner_type"
+        style="@android:style/Widget.Spinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:padding="5dp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="@string/dispo_date_label"
+        android:text="@string/availability_date_label"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -35,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:text="@string/dispo_date_from" />
+            android:text="@string/availability_date_from" />
 
         <!-- <View -->
         <!-- android:layout_width="1dp" -->
@@ -47,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:text="@string/dispo_date_to" />
+            android:text="@string/availability_date_to" />
     </LinearLayout>
 
     <LinearLayout
@@ -56,12 +58,14 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/dispo_button_date_from"
+            android:id="@+id/availability_button_date_from"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="2dp"
             android:layout_weight="1"
+            android:background="@drawable/white_bt"
             android:gravity="center"
-            android:text="@string/dispo_choose_date_from" />
+            android:text="@string/availability_choose_date_from" />
 
         <!-- <View -->
         <!-- android:layout_width="1dp" -->
@@ -69,12 +73,14 @@
         <!-- android:background="@color/black" /> -->
 
         <Button
-            android:id="@+id/dispo_button_date_to"
+            android:id="@+id/availability_button_date_to"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="2dp"
             android:layout_weight="1"
+            android:background="@drawable/white_bt"
             android:gravity="center"
-            android:text="@string/dispo_choose_date_to" />
+            android:text="@string/availability_choose_date_to" />
     </LinearLayout>
 
     <LinearLayout
@@ -83,13 +89,15 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/dispo_button_hour_from"
+            android:id="@+id/availability_button_hour_from"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="2dp"
             android:layout_weight="1"
+            android:background="@drawable/white_bt"
             android:enabled="false"
             android:gravity="center"
-            android:text="@string/dispo_choose_hour_from" />
+            android:text="@string/availability_choose_hour_from" />
 
         <!-- <View -->
         <!-- android:layout_width="1dp" -->
@@ -97,28 +105,30 @@
         <!-- android:background="@color/black" /> -->
 
         <Button
-            android:id="@+id/dispo_button_hour_to"
+            android:id="@+id/availability_button_hour_to"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="2dp"
             android:layout_weight="1"
+            android:background="@drawable/white_bt"
             android:enabled="false"
             android:gravity="center"
-            android:text="@string/dispo_choose_hour_to" />
+            android:text="@string/availability_choose_hour_to" />
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="@string/dispo_place_label"
+        android:text="@string/availability_place_label"
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/dispo_place_et"
+        android:id="@+id/availability_place_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bkg_edit"
-        android:hint="@string/dispo_place_hint"
+        android:hint="@string/availability_place_hint"
         android:inputType="text"
         android:padding="5dp" />
 
@@ -128,7 +138,7 @@
         android:layout_weight="1" />
 
     <Button
-        android:id="@+id/dispo_button_submit"
+        android:id="@+id/availability_button_submit"
         style="@style/blue_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
