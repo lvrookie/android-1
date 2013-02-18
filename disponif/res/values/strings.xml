@@ -1,5 +1,7 @@
 <resources>
 
     <string name="app_name">DisponIf</string>
+    <string name="applicationId">304651096304195</string>
+    <string name="blank_content_description"></string>
 
 </resources>

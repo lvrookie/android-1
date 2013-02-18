@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="home_welcome">Hello %1$s</string>
+    <string name="home_disconnected">Veuillez vous connecter</string>
+
+</resources>

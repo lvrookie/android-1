@@ -1,4 +1,0 @@
-INDEX VERSION 1.126+/Users/Xavier/Documents/DŽveloppement/GIT/OT SIMS/android/.metadata/.plugins/org.eclipse.jdt.core
-152113576.index
-366814020.index
-3024647415.index
