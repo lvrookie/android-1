@@ -21,8 +21,9 @@ import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.activities.AvailabilityActivity;
+import com.sims2013.disponif.client.Client;
 
-public class HomeFragment extends Fragment implements OnClickListener {
+public class HomeFragment extends Fragment implements OnClickListener, Client.onReceiveListener {
 
 	public static final String TAG = "com.sims2013.disponif.fragments.LoginFragment";
 
@@ -31,6 +32,8 @@ public class HomeFragment extends Fragment implements OnClickListener {
 	private TextView mWelcomeMessage;
 	private ProfilePictureView mProfilePictureView;
 	private Button mDisponibilityButton;
+	
+	private Client mClient;
 
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
@@ -45,6 +48,8 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		uiHelper = new UiLifecycleHelper(getActivity(), callback);
 		uiHelper.onCreate(savedInstanceState);
+		mClient = new Client("http://disponif.darkserver.fr/server/api.php");
+		mClient.setListener(this);
 	}
 
 	@Override
@@ -101,9 +106,8 @@ public class HomeFragment extends Fragment implements OnClickListener {
 			Exception exception) {
 		if (state.isOpened()) {
 			Log.i(TAG, "Logged in...");
-			mProfilePictureView.setVisibility(View.VISIBLE);
-			makeMeRequest(Session.getActiveSession());
-			mDisponibilityButton.setVisibility(View.VISIBLE);
+			mWelcomeMessage.setText("Connexion au serveur Dispon'if ...");
+			mClient.logIn(session.getAccessToken());
 		} else if (state.isClosed()) {
 			mProfilePictureView.setVisibility(View.GONE);
 			mWelcomeMessage.setText(getString(R.string.home_disconnected));
@@ -147,5 +151,34 @@ public class HomeFragment extends Fragment implements OnClickListener {
 					AvailabilityActivity.class);
 			startActivity(intent);
 		}
+	}
+
+	@Override
+	public void onPingReceive(String result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onLogInTokenReceive(String result) {
+		if (result == Client.ERROR_STRING) {
+			mWelcomeMessage.setText("Erreur de connexion au serveur Dispon'if");
+		} else {
+			mProfilePictureView.setVisibility(View.VISIBLE);
+			makeMeRequest(Session.getActiveSession());
+			mDisponibilityButton.setVisibility(View.VISIBLE);
+		}
+	}
+
+	@Override
+	public void onAvailabilityAdded(Boolean result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onCategoriesReceive(String categories) {
+		// TODO Auto-generated method stub
+		
 	}
 }
