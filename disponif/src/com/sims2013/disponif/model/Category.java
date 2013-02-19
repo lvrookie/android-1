@@ -6,17 +6,23 @@ public class Category {
 
 	private int mId;
 	private String mName;
+	private int mRadius;
 	ArrayList<Type> mTypes;
 	
 	public Category() {
-		
+		mTypes = new ArrayList<Type>();
 	}
 	
-	public Category(int mId, String mName, ArrayList<Type> mTypes) {
+	public Category(int mId, String mName, int radius, ArrayList<Type> mTypes) {
 		super();
 		this.mId = mId;
 		this.mName = mName;
 		this.mTypes = mTypes;
+		this.mRadius = radius;
+	}
+	
+	public void addType(Type type) {
+		mTypes.add(type);
 	}
 
 	public int getId() {
@@ -42,8 +48,18 @@ public class Category {
 	public void setTypes(ArrayList<Type> mTypes) {
 		this.mTypes = mTypes;
 	}
-	
-	
-	
-	
+
+	public int getRadius() {
+		return mRadius;
+	}
+
+	public void setRadius(int mRadius) {
+		this.mRadius = mRadius;
+	}
+
+	@Override
+	public String toString() {
+		return "Category [mId=" + mId + ", mName=" + mName + ", mRadius="
+				+ mRadius + ", mTypes=" + mTypes + "]";
+	}
 }

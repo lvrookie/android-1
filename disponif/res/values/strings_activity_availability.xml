@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="submit_disponibility">Créer disponibilité</string>
+    <string name="submit_availability">Créer disponibilité</string>
     <string name="availability_type_label">Type d\'activité</string>
     <string name="availability_date_label">Créneau horaire</string>
     <string name="availability_date_from">Début</string>

@@ -12,7 +12,7 @@ public class AvailabilityActivity extends FragmentActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_home);
+		setContentView(R.layout.activity_availability);
 
 		if (savedInstanceState == null) {
 			// Add the fragment on initial activity setup

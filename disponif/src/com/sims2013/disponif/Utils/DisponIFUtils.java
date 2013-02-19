@@ -6,6 +6,11 @@ import android.widget.Toast;
 
 public class DisponIFUtils {
 	public static void makeToast(Context context, String text) {
-		Toast.makeText(context, text, Toast.LENGTH_LONG).show();
+		makeToast(context, text,Toast.LENGTH_LONG);
+	}
+
+	public static void makeToast(Context activity, String string,
+			int lengthShort) {
+		Toast.makeText(activity, string, lengthShort).show();
 	}
 }
