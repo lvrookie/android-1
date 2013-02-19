@@ -26,7 +26,7 @@ public class ClientTestActivity extends Activity implements Client.onReceiveList
 		mTv.setText("Connexion en cours ...");
 		mClient = new Client("http://disponif.darkserver.fr/server/api.php");
 		mClient.setListener(this);
-		mClient.logIn("AAACEdEose0cBANZAgtJ4Kkl0ysdmPseomISP6TBGqHgjViV7ILNP92Q5KErR4tq5kMoRM7BHlNBecroOhqs0qdlEsz5InXvyBw3HC61ZCeZC7NmLFrq");
+		mClient.logIn("AAAEVFBxgKkMBAJnkBxExdU5Q8X2EI686tMVgV3SFb1wdyYq8sh26D8YeZB5AW2Pqref2H4f3EtOQjalFjkMsx6jZCk8TjkfQrljwj3qWLcn4fvDvdg");
 //		mClient.ping();
 		
 	}

@@ -59,7 +59,6 @@ public class Category {
 
 	@Override
 	public String toString() {
-		return "Category [mId=" + mId + ", mName=" + mName + ", mRadius="
-				+ mRadius + ", mTypes=" + mTypes + "]";
+		return mName;
 	}
 }
