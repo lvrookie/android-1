@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="availability_list_title">Disponibilités en cours</string>
+    <string name="availability_list_no_availabilities">Aucune disponibilité ne correspond à vos critères</string>
+
+</resources>

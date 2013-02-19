@@ -21,6 +21,7 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
+import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.activities.AvailabilityActivity;
 import com.sims2013.disponif.client.Client;
@@ -79,6 +80,13 @@ public class HomeFragment extends Fragment implements OnClickListener, Client.on
 	public void onResume() {
 		super.onResume();
 		uiHelper.onResume();
+		
+		Session session = Session.getActiveSession();
+		if (session != null && session.getState().equals(SessionState.OPENED)) {
+			mProfilePictureView.setVisibility(View.VISIBLE);
+			makeMeRequest(session);
+			mDisponibilityButton.setVisibility(View.VISIBLE);
+		}
 	}
 
 	@Override
@@ -163,10 +171,11 @@ public class HomeFragment extends Fragment implements OnClickListener, Client.on
 	}
 
 	@Override
-	public void onLogInTokenReceive(String result) {
-		if (result == Client.ERROR_STRING) {
+	public void onLogInTokenReceive(String token) {
+		if (token == Client.ERROR_STRING) {
 			mWelcomeMessage.setText("Erreur de connexion au serveur Dispon'if");
 		} else {
+			DisponifApplication.setAccessToken(token);
 			mProfilePictureView.setVisibility(View.VISIBLE);
 			makeMeRequest(Session.getActiveSession());
 			mDisponibilityButton.setVisibility(View.VISIBLE);
@@ -178,6 +187,7 @@ public class HomeFragment extends Fragment implements OnClickListener, Client.on
 		// TODO Auto-generated method stub
 		
 	}
+
 
 	@Override
 	public void onCategoriesReceive(ArrayList<Category> categories) {
