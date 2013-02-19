@@ -27,4 +27,9 @@ public class Type {
 	public void setName(String mName) {
 		this.mName = mName;
 	}
+
+	@Override
+	public String toString() {
+		return "Type [mId=" + mId + ", mName=" + mName + "]";
+	}
 }
