@@ -30,5 +30,4 @@ public class HomeActivity extends FragmentActivity {
 			mFragment = (HomeFragment) getSupportFragmentManager().findFragmentById(android.R.id.content);
 		}
 	}
-
 }
