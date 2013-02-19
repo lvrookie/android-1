@@ -1,5 +1,7 @@
 package com.sims2013.disponif.fragments;
 
+import java.util.ArrayList;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +24,7 @@ import com.facebook.widget.ProfilePictureView;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.activities.AvailabilityActivity;
 import com.sims2013.disponif.client.Client;
+import com.sims2013.disponif.model.Category;
 
 public class HomeFragment extends Fragment implements OnClickListener, Client.onReceiveListener {
 
@@ -177,7 +180,7 @@ public class HomeFragment extends Fragment implements OnClickListener, Client.on
 	}
 
 	@Override
-	public void onCategoriesReceive(String categories) {
+	public void onCategoriesReceive(ArrayList<Category> categories) {
 		// TODO Auto-generated method stub
 		
 	}
