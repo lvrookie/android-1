@@ -3,6 +3,7 @@ package com.sims2013.disponif.fragments;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -22,6 +23,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.sims2013.disponif.R;
+import com.sims2013.disponif.Utils.DisponIFUtils;
+import com.sims2013.disponif.activities.AvailabilityListActivity;
 import com.sims2013.disponif.fragments.DatePickerFragment.OnDateSelected;
 import com.sims2013.disponif.fragments.TimePickerFragment.OnTimeRangeSelected;
 
@@ -48,7 +51,7 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 	ArrayList<SubmitErrors> checkFieldsErrors;
 
 	private enum SubmitErrors {
-		ERROR_END_DATE_BEFORE_START_DATE, ERROR_NO_PLACE_GIVEN, ERROR_MISSING_INFORMATION
+		ERROR_NO_PLACE_GIVEN, ERROR_MISSING_INFORMATION, ERROR_END_DATE_BEFORE_START_DATE
 	}
 
 	@Override
@@ -170,13 +173,37 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 			boolean isValid = checkFields();
 			if (isValid) {
 				submitDisponibility();
+			} else {
+				if (checkFieldsErrors != null && !checkFieldsErrors.isEmpty()) {
+					String errorMessage = "";
+					for (SubmitErrors error : checkFieldsErrors) {
+						if (!TextUtils.isEmpty(errorMessage)) {
+							errorMessage += "\n";
+						}
+						switch (error) {
+						case ERROR_NO_PLACE_GIVEN:
+							errorMessage += "- " + getString(R.string.availability_toast_error_no_place);
+							break;
+						case ERROR_MISSING_INFORMATION:
+							errorMessage += "- " + getString(R.string.availability_toast_error_required_field);
+							break;
+						case ERROR_END_DATE_BEFORE_START_DATE:
+							errorMessage += "- " + getString(R.string.availability_dates_error);
+							break;
+						}
+					}
+					DisponIFUtils.makeToast(getActivity(), errorMessage);
+				}
 			}
 		}
 	}
 
 	private void submitDisponibility() {
-		// TODO Auto-generated method stub
+		// TODO Call the web service to submit the availability,
+		// Move this to the onSuccess callback
 
+		Intent intent = new Intent(getActivity(), AvailabilityListActivity.class);
+		startActivity(intent);
 	}
 
 	private boolean checkFields() {
@@ -228,7 +255,7 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 
 	private void addFieldError(SubmitErrors errorMissingInformation) {
 		if (!checkFieldsErrors.contains(errorMissingInformation)) {
-			checkFieldsErrors.add(SubmitErrors.ERROR_MISSING_INFORMATION);
+			checkFieldsErrors.add(errorMissingInformation);
 		}
 	}
 

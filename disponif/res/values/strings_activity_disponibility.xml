@@ -17,7 +17,8 @@
     <string name="availability_place_hint">Entrez une adresse</string>
     <string name="availability_title">Ma disponibilité</string>
     <string name="availability_error_required_field">Champ requis</string>
-    <string name="availability_toast_error_required_field">Certains champs obligatoires ne sont pas renseignés</string>
+    <string name="availability_toast_error_required_field">Certains champs obligatoires ne sont pas renseignés.</string>
+    <string name="availability_toast_error_no_place">Vous devez spécifiez un lieu.</string>
     <string name="availability_dates_error">La date de fin est antérieure à la date de début.</string>
 
     <string-array name="dummy_disponibility_type_array">

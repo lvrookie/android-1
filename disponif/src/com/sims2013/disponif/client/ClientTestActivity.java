@@ -1,7 +1,5 @@
 package com.sims2013.disponif.client;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -52,9 +50,8 @@ public class ClientTestActivity extends Activity implements Client.onReceiveList
 	}
 
 	@Override
-	public void onCategoriesReceive(ArrayList<String> categories) {
+	public void onCategoriesReceive(String categories) {
 		// TODO Auto-generated method stub
 		
 	}
-
 }
