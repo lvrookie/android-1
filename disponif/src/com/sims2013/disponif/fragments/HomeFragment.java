@@ -71,6 +71,13 @@ public class HomeFragment extends Fragment implements OnClickListener {
 	public void onResume() {
 		super.onResume();
 		uiHelper.onResume();
+		
+		Session session = Session.getActiveSession();
+		if (session != null && session.getState().equals(SessionState.OPENED)) {
+			mProfilePictureView.setVisibility(View.VISIBLE);
+			makeMeRequest(session);
+			mDisponibilityButton.setVisibility(View.VISIBLE);
+		}
 	}
 
 	@Override
@@ -102,7 +109,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		if (state.isOpened()) {
 			Log.i(TAG, "Logged in...");
 			mProfilePictureView.setVisibility(View.VISIBLE);
-			makeMeRequest(Session.getActiveSession());
+			makeMeRequest(session);
 			mDisponibilityButton.setVisibility(View.VISIBLE);
 		} else if (state.isClosed()) {
 			mProfilePictureView.setVisibility(View.GONE);

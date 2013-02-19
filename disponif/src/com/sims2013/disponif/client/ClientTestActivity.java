@@ -2,14 +2,12 @@ package com.sims2013.disponif.client;
 
 import java.util.ArrayList;
 
-import com.sims2013.disponif.R;
-import com.sims2013.disponif.R.layout;
-import com.sims2013.disponif.R.menu;
-
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.widget.TextView;
+
+import com.sims2013.disponif.R;
 
 public class ClientTestActivity extends Activity implements Client.onReceiveListener {
 
