@@ -1,18 +1,15 @@
 package com.sims2013.disponif.activities;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.fragments.AvailabilityFragment;
 
-public class AvailabilityActivity extends FragmentActivity{
-	private AvailabilityFragment mFragment;
+public class AvailabilityActivity extends GenericActivity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_availability);
 
 		if (savedInstanceState == null) {
 			// Add the fragment on initial activity setup

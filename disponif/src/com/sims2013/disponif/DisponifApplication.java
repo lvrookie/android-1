@@ -16,7 +16,7 @@ public class DisponifApplication extends Application {
 		mAccessToken = token;
 	}
 	
-	public static String getAccesToken(){
+	public static String getAccessToken(){
 		return mAccessToken;
 	}
 }
