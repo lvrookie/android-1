@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.widget.TextView;
 
 import com.sims2013.disponif.R;
+import com.sims2013.disponif.model.Availability;
 import com.sims2013.disponif.model.Category;
 
 public class ClientTestActivity extends Activity implements Client.onReceiveListener {
@@ -26,7 +27,7 @@ public class ClientTestActivity extends Activity implements Client.onReceiveList
 		mTv.setText("Connexion en cours ...");
 		mClient = new Client("http://disponif.darkserver.fr/server/api.php");
 		mClient.setListener(this);
-		mClient.logIn("AAAEVFBxgKkMBAJnkBxExdU5Q8X2EI686tMVgV3SFb1wdyYq8sh26D8YeZB5AW2Pqref2H4f3EtOQjalFjkMsx6jZCk8TjkfQrljwj3qWLcn4fvDvdg");
+		mClient.logIn("AAAEVFBxgKkMBALvAq5WJDaoQgBUPknhpugZCFRbQFO4Ew894ComEMVXrIcZB1Pr26wlBpL400p5lIbi4OKdDioGi9tKEY49iTXgbgUYZBOmfZB9ilXki");
 //		mClient.ping();
 		
 	}
@@ -45,30 +46,51 @@ public class ClientTestActivity extends Activity implements Client.onReceiveList
 
 	@Override
 	public void onLogInTokenReceive(String token) {
-//		mTv.setText(token);
 		if (token == Client.ERROR_STRING) {
 			mTv.setText("Erreur de connexion !!");
 		} else {
-			mTv.setText("Connexion réussie. Récupération des catégories.");
 			mToken = token;
-			mClient.getAllCategories(mToken);
+//			mTv.setText("Connexion réussie. Envoie d'une dispo");
+//			Availability a = new Availability();
+//			a.setCategoryId(1);
+//			a.setTypeId(1);
+//			a.setStartTime("2013-02-21 14:30:00");
+//			a.setEndTime("2013-02-21 16:30:00");
+//			a.setDescription("Hey les gars ! J'suis dispo !");
+//			mClient.addAvailability(mToken, a);
+			
+			mTv.setText("Connexion réussie. Récupération des dispos");
+			mClient.getUserAvailabilities(mToken);
 		}
 	}
 
 	@Override
-	public void onAvailabilityAdded(Boolean result) {
-		// TODO Auto-generated method stub
-		
+	public void onAvailabilityAdded(int id) {
+		if (id != -1) {
+			mTv.setText("Dispo ajoutée !");
+		} else {
+			mTv.setText("Erreur lors de l'ajout de la dispo !!");
+		}
 	}
 
 	@Override
 	public void onCategoriesReceive(ArrayList<Category> categories) {
-		mTv.setText(categories.get(0).toString());
+//		mTv.setText(categories.get(0).toString());
 //		if (categories == Client.ERROR_STRING) {
 //			mTv.setText("Erreur lors de la récupération des catégories.");
 //		} else {
 //			mTv.setText(categories);
 //		}
+	}
+
+	@Override
+	public void onUserAvailabilitiesReceive(
+			ArrayList<Availability> availbilities) {
+		if (availbilities != null) {
+			mTv.setText(availbilities.toString());
+		} else {
+			mTv.setText("Erreur lors de la récupération des dispos !!");
+		}
 	}
 
 

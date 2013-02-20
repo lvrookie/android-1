@@ -16,6 +16,11 @@ public class Availability {
 	private String mOption;
 	private String mStartTime;
 	private String mEndTime;
+	private String mDescription;
+	
+	public Availability() {
+		
+	}
 	
 	public Availability(int mId, String mUserId, int mCategoryId, int mTypeId,
 			float mLatitude, float mLongitude, int mRadius, int mPrivacy,
@@ -114,4 +119,23 @@ public class Availability {
 	public void setEndTime(String mEndTime) {
 		this.mEndTime = mEndTime;
 	}
+	public String getDescription() {
+		return mDescription;
+	}
+	public void setDescription(String mDescription) {
+		this.mDescription = mDescription;
+	}
+
+	@Override
+	public String toString() {
+		return "Availability [mId=" + mId + ", mUserId=" + mUserId
+				+ ", mCategoryId=" + mCategoryId + ", mTypeId=" + mTypeId
+				+ ", mLatitude=" + mLatitude + ", mLongitude=" + mLongitude
+				+ ", mRadius=" + mRadius + ", mPrivacy=" + mPrivacy
+				+ ", mStatus=" + mStatus + ", mMaxParticipant="
+				+ mMaxParticipant + ", mOption=" + mOption + ", mStartTime="
+				+ mStartTime + ", mEndTime=" + mEndTime + ", mDescription="
+				+ mDescription + "]";
+	}
+	
 }
