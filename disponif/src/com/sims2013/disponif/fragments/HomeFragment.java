@@ -25,6 +25,7 @@ import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.activities.AvailabilityActivity;
 import com.sims2013.disponif.client.Client;
+import com.sims2013.disponif.model.Availability;
 import com.sims2013.disponif.model.Category;
 
 public class HomeFragment extends Fragment implements OnClickListener, Client.onReceiveListener {
@@ -186,7 +187,7 @@ public class HomeFragment extends Fragment implements OnClickListener, Client.on
 	}
 
 	@Override
-	public void onAvailabilityAdded(Boolean result) {
+	public void onAvailabilityAdded(int result) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -194,6 +195,13 @@ public class HomeFragment extends Fragment implements OnClickListener, Client.on
 
 	@Override
 	public void onCategoriesReceive(ArrayList<Category> categories) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUserAvailabilitiesReceive(
+			ArrayList<Availability> availbilities) {
 		// TODO Auto-generated method stub
 		
 	}

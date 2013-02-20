@@ -33,6 +33,7 @@ import com.sims2013.disponif.adapter.TypeSpinnerAdapter;
 import com.sims2013.disponif.client.Client;
 import com.sims2013.disponif.fragments.DatePickerFragment.OnDateSelected;
 import com.sims2013.disponif.fragments.TimePickerFragment.OnTimeRangeSelected;
+import com.sims2013.disponif.model.Availability;
 import com.sims2013.disponif.model.Category;
 import com.sims2013.disponif.model.Type;
 
@@ -375,7 +376,7 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 	}
 
 	@Override
-	public void onAvailabilityAdded(Boolean result) {
+	public void onAvailabilityAdded(int result) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -389,5 +390,12 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 			mActivitySpinner.setAdapter(adapter);
 			mActivitySpinner.setEnabled(true);
 		}
+	}
+
+	@Override
+	public void onUserAvailabilitiesReceive(
+			ArrayList<Availability> availbilities) {
+		// TODO Auto-generated method stub
+		
 	}
 }
