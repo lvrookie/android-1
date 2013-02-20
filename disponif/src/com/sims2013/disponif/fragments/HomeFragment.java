@@ -70,8 +70,11 @@ public class HomeFragment extends Fragment implements OnClickListener, Client.on
 		mDisponibilityButton = (Button) view
 				.findViewById(R.id.home_dispo_button);
 		mDisponibilityButton.setOnClickListener(this);
-
+		mDisponibilityButton.setVisibility(View.GONE);
+		
 		authButton.setFragment(this);
+		
+		
 
 		return view;
 	}
@@ -85,7 +88,7 @@ public class HomeFragment extends Fragment implements OnClickListener, Client.on
 		if (session != null && session.getState().equals(SessionState.OPENED)) {
 			mProfilePictureView.setVisibility(View.VISIBLE);
 			makeMeRequest(session);
-			mDisponibilityButton.setVisibility(View.VISIBLE);
+//			mDisponibilityButton.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -142,8 +145,7 @@ public class HomeFragment extends Fragment implements OnClickListener, Client.on
 								// picture.
 								mProfilePictureView.setProfileId(user.getId());
 								// Set the Textview's text to the user's name.
-								mWelcomeMessage.setText(getString(
-										R.string.home_welcome, user.getName()));
+//								mWelcomeMessage.setText(getString( R.string.home_welcome, user.getName()));
 							}
 						}
 						if (response.getError() != null) {
@@ -175,6 +177,7 @@ public class HomeFragment extends Fragment implements OnClickListener, Client.on
 		if (token == Client.ERROR_STRING) {
 			mWelcomeMessage.setText("Erreur de connexion au serveur Dispon'if");
 		} else {
+			mWelcomeMessage.setText("Connecté au serveur Dispon'if !!");
 			DisponifApplication.setAccessToken(token);
 			mProfilePictureView.setVisibility(View.VISIBLE);
 			makeMeRequest(Session.getActiveSession());

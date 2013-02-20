@@ -14,28 +14,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.activities.AvailabilityListActivity;
+import com.sims2013.disponif.adapter.CategorySpinnerAdapter;
+import com.sims2013.disponif.adapter.TypeSpinnerAdapter;
+import com.sims2013.disponif.client.Client;
 import com.sims2013.disponif.fragments.DatePickerFragment.OnDateSelected;
 import com.sims2013.disponif.fragments.TimePickerFragment.OnTimeRangeSelected;
+import com.sims2013.disponif.model.Category;
+import com.sims2013.disponif.model.Type;
 
 public class AvailabilityFragment extends Fragment implements OnClickListener,
-		OnDateSelected, OnTimeRangeSelected {
+		OnDateSelected, OnTimeRangeSelected, Client.onReceiveListener {
 
 	Button mSubmitButton;
 	Button mDateButtonFrom;
 	Button mHourButtonFrom;
 	Button mDateButtonTo;
 	Button mHourButtonTo;
+	Spinner mActivitySpinner;
 	Spinner mTypeSpinner;
 	EditText mPlaceET;
 
@@ -44,9 +53,14 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 	ImageView mDateFromErrorImage;
 	ImageView mDateToErrorImage;
 	
-	
 	Calendar mDateFrom;
 	Calendar mDateTo;
+	
+	Client mClient;
+	
+	ArrayList<Category> mCategories;
+	Category mCurrentCategory;
+	Type mCurrentType;
 
 	ArrayList<SubmitErrors> checkFieldsErrors;
 
@@ -60,6 +74,9 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 		View view = inflater.inflate(R.layout.fragment_availability, container,
 				false);
 
+		mCurrentCategory = null;
+		mCurrentType = null;
+		
 		mSubmitButton = (Button) view
 				.findViewById(R.id.availability_button_submit);
 		mDateButtonFrom = (Button) view
@@ -71,6 +88,8 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 		mHourButtonTo = (Button) view
 				.findViewById(R.id.availability_button_hour_to);
 		mPlaceET = (EditText) view.findViewById(R.id.availability_place_et);
+		mActivitySpinner = (Spinner) view
+				.findViewById(R.id.availability_spinner_activity);
 		mTypeSpinner = (Spinner) view
 				.findViewById(R.id.availability_spinner_type);
 
@@ -105,16 +124,49 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 				
 			}
 		});
+		
+		mClient = new Client("http://disponif.darkserver.fr/server/api.php");
+		mClient.setListener(this);
+		mClient.getAllCategories(DisponifApplication.getAccesToken());
+		
+		mActivitySpinner.setEnabled(false);
+		mTypeSpinner.setEnabled(false);
+		
+		mActivitySpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
 
-		// Create an ArrayAdapter using the string array and a default spinner
-		// layout
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-				getActivity(), R.array.dummy_disponibility_type_array,
-				android.R.layout.simple_spinner_item);
-		// Specify the layout to use when the list of choices appears
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		// Apply the adapter to the spinner
-		mTypeSpinner.setAdapter(adapter);
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
+				mCurrentCategory = mCategories.get(position);
+				TypeSpinnerAdapter adapter = new TypeSpinnerAdapter(getActivity(), mCategories.get(position).getTypes());
+				mTypeSpinner.setAdapter(adapter);
+				mTypeSpinner.setEnabled(true);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+		mTypeSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
+				mCurrentType = mCurrentCategory.getTypes().get(position);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
 		return view;
 	}
 
@@ -307,6 +359,35 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 			mHourButtonTo.setText(hourOfDay + ":" + ((minute<10) ? "0" + minute : minute));
 			
 			mDateToErrorImage.setVisibility(View.INVISIBLE);
+		}
+	}
+
+	@Override
+	public void onPingReceive(String result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onLogInTokenReceive(String result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onAvailabilityAdded(Boolean result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onCategoriesReceive(ArrayList<Category> categories) {
+		if (categories != null && categories.size() > 0) {
+			Toast.makeText(getActivity(), "receive categories", Toast.LENGTH_SHORT).show();
+			mCategories = categories;
+			CategorySpinnerAdapter adapter = new CategorySpinnerAdapter(getActivity(), mCategories);
+			mActivitySpinner.setAdapter(adapter);
+			mActivitySpinner.setEnabled(true);
 		}
 	}
 }
