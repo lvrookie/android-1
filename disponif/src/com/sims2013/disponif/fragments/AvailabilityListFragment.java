@@ -1,26 +1,23 @@
 package com.sims2013.disponif.fragments;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.Utils.DisponIFUtils;
-import com.sims2013.disponif.model.Category;
+import com.sims2013.disponif.adapter.AvailabilityAdapter;
+import com.sims2013.disponif.model.Availability;
 
 public class AvailabilityListFragment extends ListFragment {
 	private static final boolean DEBUG_MODE = DisponifApplication.DEBUG_MODE;
 
-	ArrayAdapter<Category> mAdapter;
-	public static List<Category> ITEMS = new ArrayList<Category>();
+	AvailabilityAdapter mAdapter;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -32,26 +29,20 @@ public class AvailabilityListFragment extends ListFragment {
 
 		// We have a menu item to show in action bar.
 		setHasOptionsMenu(true);
-
-		// Create an empty adapter we will use to display the loaded data.
-		mAdapter = new ArrayAdapter<Category>(getActivity(),
-				android.R.layout.simple_list_item_activated_1,
-				android.R.id.text1, ITEMS);
+		
+		ArrayList<Availability> dummy_items = new ArrayList<Availability>();
+		
+		if (DEBUG_MODE) {
+			dummy_items.add(new Availability(0, "user0", 0, 0,0,0,0,0/* privacy */, "status", 0, "option", "startTime", "endTime"));
+			dummy_items.add(new Availability(1, "user1", 1, 1,0,0,0,1/* privacy */, "status", 0, "option", "startTime", "endTime"));
+			dummy_items.add(new Availability(2, "user2", 2, 2,0,0,0,1/* privacy */, "status", 0, "option", "startTime", "endTime"));
+			dummy_items.add(new Availability(3, "user3", 3, 3,0,0,0,0/* privacy */, "status", 0, "option", "startTime", "endTime"));
+			dummy_items.add(new Availability(4, "user4", 4, 4,0,0,0,1/* privacy */, "status", 0, "option", "startTime", "endTime"));
+		}
+		
+		mAdapter = new AvailabilityAdapter(getActivity(), dummy_items);
 
 		setListAdapter(mAdapter);
-		
-		if (DEBUG_MODE && mAdapter.isEmpty()) {
-			List<Category> dummy_items = new ArrayList<Category>();
-			dummy_items.add(new Category(0, "Dispo 1", 1, null));
-			dummy_items.add(new Category(1, "Dispo 2", 2, null));
-			dummy_items.add(new Category(2, "Dispo 3", 3, null));
-			dummy_items.add(new Category(3, "Dispo 4", 4, null));
-			dummy_items.add(new Category(4, "Dispo 5", 5, null));
-			mAdapter.addAll(dummy_items);
-		}
-
-		// Start out with a progress indicator.
-		// setListShown(false);
 	}
 
 	@Override

@@ -51,7 +51,7 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 	ArrayList<SubmitErrors> checkFieldsErrors;
 
 	private enum SubmitErrors {
-		ERROR_NO_PLACE_GIVEN, ERROR_MISSING_INFORMATION, ERROR_END_DATE_BEFORE_START_DATE
+		ERROR_NO_PLACE_GIVEN, ERROR_MISSING_INFORMATION, ERROR_END_DATE_BEFORE_START_DATE, ERROR_PAST_START_DATE
 	}
 
 	@Override
@@ -190,6 +190,9 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 						case ERROR_END_DATE_BEFORE_START_DATE:
 							errorMessage += "- " + getString(R.string.availability_dates_error);
 							break;
+						case ERROR_PAST_START_DATE:
+							errorMessage += "- " + getString(R.string.availability_past_start_date);
+							break;
 						}
 					}
 					DisponIFUtils.makeToast(getActivity(), errorMessage);
@@ -244,6 +247,13 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 			isValid = false;
 			addFieldError(SubmitErrors.ERROR_END_DATE_BEFORE_START_DATE);
 			mErrorDatesTv.setVisibility(View.VISIBLE);
+			mErrorDatesTv.setText(getString(R.string.availability_dates_error));
+		}
+		if (isValid && mDateFrom.before(Calendar.getInstance())) {
+			isValid = false;
+			addFieldError(SubmitErrors.ERROR_PAST_START_DATE);
+			mErrorDatesTv.setVisibility(View.VISIBLE);
+			mErrorDatesTv.setText(getString(R.string.availability_past_start_date));
 		}
 		if (TextUtils.isEmpty(mPlaceET.getText())) {
 			isValid = false;
