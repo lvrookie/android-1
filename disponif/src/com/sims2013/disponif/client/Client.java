@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.model.Availability;
 import com.sims2013.disponif.model.Category;
 import com.sims2013.disponif.model.Type;
@@ -47,7 +48,7 @@ public class Client {
 	// Namespace for addAvailability method
 	private class addAvailability {
 		// Method name
-		public static final String METHOD = "availabilityAdd";
+		public static final String METHOD = "saveAvailability";
 		// Parameter keys
 		public static final String PARAM_TOKEN = "token";
 		public static final String PARAM_CATEGORY_ID = "category_id";
@@ -62,6 +63,7 @@ public class Client {
 		public static final String PARAM_PRIVACY = "privacy";
 		// Result keys
 		public static final String RESULT_STATE = "state";
+		public static final String RESULT_ID = "id";
 	}
 	
 	// Namespace for getCategories method
@@ -81,12 +83,35 @@ public class Client {
 		
 	}
 	
+	private class getUserAvailabilities {
+		public static final String METHOD = "getAvailabilities";
+		
+		public static final String PARAM_TOKEN = "token";
+		
+		public static final String RESULT_AVAILABILITIES = "availabilities";
+		
+		public static final String RESULT_ID = "id";
+		public static final String RESULT_CATEGORY_ID = "category_id";
+		public static final String RESULT_TYPE_ID = "type_id";
+		public static final String RESULT_START_TIME = "startTime";
+		public static final String RESULT_END_TIME = "endTime";
+		public static final String RESULT_OPTION = "option";
+		public static final String RESULT_DESCRIPTION = "description";
+		public static final String RESULT_MAX_PARTICIPANT = "maxParticipant";
+		public static final String RESULT_LATITUDE = "latitude";
+		public static final String RESULT_LONGITUDE = "longitude";
+		public static final String RESULT_RADIUS = "radius";
+		public static final String RESULT_PRIVACY = "privacy";
+		
+	}
+	
 	// Response listener interface
 	public interface onReceiveListener {
 		public void onPingReceive(String result);
 		public void onLogInTokenReceive(String result);
-		public void onAvailabilityAdded(Boolean result);
+		public void onAvailabilityAdded(int id);
 		public void onCategoriesReceive(ArrayList<Category> categories);
+		public void onUserAvailabilitiesReceive(ArrayList<Availability> availbilities);
 	}
 	
 	// API Path
@@ -158,28 +183,41 @@ public class Client {
 	public void addAvailability(
 			final String token, 
 			final Availability availability) {
-		new AsyncTask<String, Void, Boolean>(){
+		new AsyncTask<String, Void, Integer>(){
 
 			@Override
-			protected Boolean doInBackground(String... params) {
+			protected Integer doInBackground(String... params) {
 		        try {
 		        	JSONObject JSObjet = new JSONObject();
-//		        	JSObjet.put(addAvailability.PARAM_TOKEN, token);
-//		        	JSObjet.put(addAvailability.PARAM_CATEGORY, category);
-//		        	JSObjet.put(addAvailability.PARAM_START_TIME, startTime);
-//		        	JSObjet.put(addAvailability.PARAM_END_TIME, endTime);
-//		        	JSObjet.put(addAvailability.PARAM_ADDRESS, address);
+		        	JSObjet.put(addAvailability.PARAM_TOKEN, token);
+		        	JSObjet.put(addAvailability.PARAM_CATEGORY_ID, availability.getCategoryId());
+//		        	JSObjet.put(addAvailability.PARAM_TYPE_ID, availability.getTypeId());
+		        	JSObjet.put(addAvailability.PARAM_START_TIME, availability.getStartTime());
+		        	JSObjet.put(addAvailability.PARAM_END_TIME, availability.getEndTime());
+		        	JSObjet.put(addAvailability.PARAM_DESCRIPTION, availability.getDescription());
+//		        	JSObjet.put(addAvailability.PARAM_MAX_PARTICIPANT, availability.getMaxParticipant());
+//		        	JSObjet.put(addAvailability.PARAM_LATITUDE, availability.getLatitude());
+//		        	JSObjet.put(addAvailability.PARAM_LONGITUDE, availability.getLongitude());
+//		        	JSObjet.put(addAvailability.PARAM_RADIUS, availability.getRadius());
+//		        	JSObjet.put(addAvailability.PARAM_PRIVACY, availability.getPrivacy());
 		        	JSONObject res = mJsonClient.callJSONObject(addAvailability.METHOD, JSObjet);
-		        	return res.getBoolean(addAvailability.RESULT_STATE);
+		        	Log.v("ClientJSON - addAvailability", res.toString());
+		        	Boolean state = res.getBoolean(addAvailability.RESULT_STATE);
+		        	if (state) {
+		        		return res.getInt(addAvailability.RESULT_ID);
+		        	} else {
+		        		return -1;
+		        	}
 		        } catch (JSONRPCException e) {
-		            return false;
+		        	Log.v("ClientJSON - addAvailability", e.getMessage());
+		            return -1;
 		        } catch (JSONException e) {
-		        	return false;
+		        	return -1;
 		        }
 			}
 
 			@Override
-			protected void onPostExecute(Boolean result) {
+			protected void onPostExecute(Integer result) {
 				mListener.onAvailabilityAdded(result);
 				super.onPostExecute(result);
 			}
@@ -223,10 +261,60 @@ public class Client {
 		        	return null;
 		        }
 			}
-
+			
 			@Override
 			protected void onPostExecute(ArrayList<Category> result) {
 				mListener.onCategoriesReceive(result);
+				super.onPostExecute(result);
+			}
+		}.execute();
+	}
+	
+	// Get availabilities by user
+	public void getUserAvailabilities(final String token) {
+		new AsyncTask<String, Void, ArrayList<Availability>>(){
+
+			@Override
+			protected ArrayList<Availability> doInBackground(String... params) {
+		        try {
+		        	JSONObject JSObjet = new JSONObject();
+		        	JSObjet.put(getCategories.PARAM_TOKEN, token);
+		        	JSONObject res = mJsonClient.callJSONObject(getUserAvailabilities.METHOD, JSObjet);
+		        	Log.v("ClientJSON - getUserAvailabilities", res.toString());
+		        	ArrayList<Availability> availabilitiesList = new ArrayList<Availability>();
+		        	JSONArray availailitiesArray = res.getJSONArray(getUserAvailabilities.RESULT_AVAILABILITIES);
+		        	for (int i = 0; i < availailitiesArray.length(); ++ i) {
+		        		JSONObject availabilityObject = availailitiesArray.getJSONObject(i);
+		        		Availability availability = new Availability();
+		        		availability.setId(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_ID));
+		        		availability.setCategoryId(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_CATEGORY_ID));
+		        		availability.setTypeId(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_TYPE_ID));
+		        		availability.setStartTime(DisponIFUtils.getJSONString(availabilityObject, getUserAvailabilities.RESULT_START_TIME));
+		        		availability.setEndTime(DisponIFUtils.getJSONString(availabilityObject, getUserAvailabilities.RESULT_END_TIME));
+		        		availability.setMaxParticipant(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_MAX_PARTICIPANT));
+		        		availability.setLatitude(DisponIFUtils.getJSONFloat(availabilityObject, getUserAvailabilities.RESULT_LATITUDE));
+		        		availability.setLongitude(DisponIFUtils.getJSONFloat(availabilityObject, getUserAvailabilities.RESULT_LONGITUDE));
+		        		availability.setRadius(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_RADIUS));
+		        		availability.setPrivacy(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_PRIVACY));
+		        		
+		        		JSONObject option = availabilityObject.getJSONObject(getUserAvailabilities.RESULT_OPTION);
+		        		availability.setDescription(DisponIFUtils.getJSONString(option, getUserAvailabilities.RESULT_DESCRIPTION));
+		        		
+		        		availabilitiesList.add(availability);
+		        	}    	
+		        	return availabilitiesList;
+		        } catch (JSONRPCException e) {
+		        	Log.v("ClientJSON - getUserAvailabilities", e.getMessage());
+		            return null;
+		        } catch (JSONException e) {
+		        	Log.v("ClientJSON - getUserAvailabilities", e.getMessage());
+		        	return null;
+		        }
+			}
+
+			@Override
+			protected void onPostExecute(ArrayList<Availability> result) {
+				mListener.onUserAvailabilitiesReceive(result);
 				super.onPostExecute(result);
 			}
 		}.execute();
