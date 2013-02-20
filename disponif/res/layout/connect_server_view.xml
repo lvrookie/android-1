@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/gray_bkg"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="100dp" >
+
+    <TextView
+        android:id="@+id/connect_server_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/connecting_to_server" />
+
+    <Button
+        android:id="@+id/connect_server_retry_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/retry"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/connect_server_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+</LinearLayout>

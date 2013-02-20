@@ -128,7 +128,7 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 		
 		mClient = new Client("http://disponif.darkserver.fr/server/api.php");
 		mClient.setListener(this);
-		mClient.getAllCategories(DisponifApplication.getAccesToken());
+		mClient.getAllCategories(DisponifApplication.getAccessToken());
 		
 		mActivitySpinner.setEnabled(false);
 		mTypeSpinner.setEnabled(false);

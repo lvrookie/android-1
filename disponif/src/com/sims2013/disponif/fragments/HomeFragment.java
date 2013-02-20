@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,50 +14,49 @@ import android.widget.TextView;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
-import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.activities.AvailabilityActivity;
 import com.sims2013.disponif.client.Client;
 import com.sims2013.disponif.model.Availability;
 import com.sims2013.disponif.model.Category;
 
-public class HomeFragment extends Fragment implements OnClickListener, Client.onReceiveListener {
+public class HomeFragment extends GenericFragment implements OnClickListener,
+		Client.onReceiveListener {
 
 	public static final String TAG = "com.sims2013.disponif.fragments.LoginFragment";
 
-	private UiLifecycleHelper uiHelper;
+	// private UiLifecycleHelper uiHelper;
 
 	private TextView mWelcomeMessage;
 	private ProfilePictureView mProfilePictureView;
 	private Button mDisponibilityButton;
-	
-	private Client mClient;
 
-	private Session.StatusCallback callback = new Session.StatusCallback() {
-		@Override
-		public void call(Session session, SessionState state,
-				Exception exception) {
-			onSessionStateChange(session, state, exception);
-		}
-	};
+	// private Client mClient;
+
+	// private Session.StatusCallback callback = new Session.StatusCallback() {
+	// @Override
+	// public void call(Session session, SessionState state,
+	// Exception exception) {
+	// onSessionStateChange(session, state, exception);
+	// }
+	// };
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		uiHelper = new UiLifecycleHelper(getActivity(), callback);
-		uiHelper.onCreate(savedInstanceState);
-		mClient = new Client("http://disponif.darkserver.fr/server/api.php");
-		mClient.setListener(this);
+		// uiHelper = new UiLifecycleHelper(getActivity(), callback);
+		// uiHelper.onCreate(savedInstanceState);
+		// mClient = new Client("http://disponif.darkserver.fr/server/api.php");
+		// mClient.setListener(this);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_home, container, false);
 
 		LoginButton authButton = (LoginButton) view
@@ -72,10 +69,8 @@ public class HomeFragment extends Fragment implements OnClickListener, Client.on
 				.findViewById(R.id.home_dispo_button);
 		mDisponibilityButton.setOnClickListener(this);
 		mDisponibilityButton.setVisibility(View.GONE);
-		
+
 		authButton.setFragment(this);
-		
-		
 
 		return view;
 	}
@@ -83,52 +78,73 @@ public class HomeFragment extends Fragment implements OnClickListener, Client.on
 	@Override
 	public void onResume() {
 		super.onResume();
-		uiHelper.onResume();
-		
+		// uiHelper.onResume();
+		//
 		Session session = Session.getActiveSession();
-		if (session != null && session.getState().equals(SessionState.OPENED)) {
-			mProfilePictureView.setVisibility(View.VISIBLE);
-			makeMeRequest(session);
-//			mDisponibilityButton.setVisibility(View.VISIBLE);
+		if (session == null || session.isClosed()) {
+			// mClient.logIn(session.getAccessToken());
+			// } else {
+			displayDisconnected();
 		}
 	}
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		uiHelper.onActivityResult(requestCode, resultCode, data);
+	private void displayDisconnected() {
+		mWelcomeMessage.setText(getString(R.string.home_disconnected));
+		mWelcomeMessage.setVisibility(View.VISIBLE);
+		mProfilePictureView.setVisibility(View.GONE);
+		mDisponibilityButton.setVisibility(View.INVISIBLE);
 	}
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		uiHelper.onPause();
-	}
+	// @Override
+	// public void onActivityResult(int requestCode, int resultCode, Intent
+	// data) {
+	// super.onActivityResult(requestCode, resultCode, data);
+	// uiHelper.onActivityResult(requestCode, resultCode, data);
+	// }
+	//
+	// @Override
+	// public void onPause() {
+	// super.onPause();
+	// uiHelper.onPause();
+	// }
+	//
+	// @Override
+	// public void onDestroy() {
+	// super.onDestroy();
+	// uiHelper.onDestroy();
+	// }
+	//
+	// @Override
+	// public void onSaveInstanceState(Bundle outState) {
+	// super.onSaveInstanceState(outState);
+	// uiHelper.onSaveInstanceState(outState);
+	// }
+
+	// private void onSessionStateChange(Session session, SessionState state,
+	// Exception exception) {
+	// if (state.isOpened()) {
+	// if (DEBUG_MODE) {
+	// Log.i(TAG, "Logged in...");
+	// }
+	// mWelcomeMessage.setText("Connexion au serveur Dispon'if ...");
+	// mWelcomeMessage.setVisibility(View.VISIBLE);
+	// mClient.logIn(session.getAccessToken());
+	// } else if (state.isClosed()) {
+	// mProfilePictureView.setVisibility(View.GONE);
+	// mWelcomeMessage.setText(getString(R.string.home_disconnected));
+	// mWelcomeMessage.setVisibility(View.VISIBLE);
+	// if (DEBUG_MODE) {
+	// Log.i(TAG, "Logged out...");
+	// }
+	// mDisponibilityButton.setVisibility(View.INVISIBLE);
+	// }
+	// }
 
 	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		uiHelper.onDestroy();
-	}
+	protected void onFacebookSessionLost() {
+		super.onFacebookSessionLost();
 
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		uiHelper.onSaveInstanceState(outState);
-	}
-
-	private void onSessionStateChange(Session session, SessionState state,
-			Exception exception) {
-		if (state.isOpened()) {
-			Log.i(TAG, "Logged in...");
-			mWelcomeMessage.setText("Connexion au serveur Dispon'if ...");
-			mClient.logIn(session.getAccessToken());
-		} else if (state.isClosed()) {
-			mProfilePictureView.setVisibility(View.GONE);
-			mWelcomeMessage.setText(getString(R.string.home_disconnected));
-			Log.i(TAG, "Logged out...");
-			mDisponibilityButton.setVisibility(View.INVISIBLE);
-		}
+		displayDisconnected();
 	}
 
 	private void makeMeRequest(final Session session) {
@@ -146,7 +162,8 @@ public class HomeFragment extends Fragment implements OnClickListener, Client.on
 								// picture.
 								mProfilePictureView.setProfileId(user.getId());
 								// Set the Textview's text to the user's name.
-//								mWelcomeMessage.setText(getString( R.string.home_welcome, user.getName()));
+								mWelcomeMessage.setText(getString(
+										R.string.home_welcome, user.getName()));
 							}
 						}
 						if (response.getError() != null) {
@@ -167,36 +184,46 @@ public class HomeFragment extends Fragment implements OnClickListener, Client.on
 		}
 	}
 
+	// @Override
+	// public void onLogInTokenReceive(String token) {
+	// if (token == Client.ERROR_STRING) {
+	// mWelcomeMessage.setText("Erreur de connexion au serveur Dispon'if");
+	// mWelcomeMessage.setVisibility(View.VISIBLE);
+	// } else {
+	// mWelcomeMessage.setText("ConnectŽ au serveur Dispon'if !!");
+	// mWelcomeMessage.setVisibility(View.VISIBLE);
+	// DisponifApplication.setAccessToken(token);
+	// mProfilePictureView.setVisibility(View.VISIBLE);
+	// makeMeRequest(Session.getActiveSession());
+	// mDisponibilityButton.setVisibility(View.VISIBLE);
+	// }
+	// }
+
 	@Override
-	public void onPingReceive(String result) {
-		// TODO Auto-generated method stub
-		
+	protected void onConnectedToServer() {
+		super.onConnectedToServer();
+		mWelcomeMessage.setVisibility(View.VISIBLE);
+		mProfilePictureView.setVisibility(View.VISIBLE);
+		mDisponibilityButton.setVisibility(View.VISIBLE);
+		makeMeRequest(Session.getActiveSession());
 	}
 
 	@Override
-	public void onLogInTokenReceive(String token) {
-		if (token == Client.ERROR_STRING) {
-			mWelcomeMessage.setText("Erreur de connexion au serveur Dispon'if");
-		} else {
-			mWelcomeMessage.setText("Connecté au serveur Dispon'if !!");
-			DisponifApplication.setAccessToken(token);
-			mProfilePictureView.setVisibility(View.VISIBLE);
-			makeMeRequest(Session.getActiveSession());
-			mDisponibilityButton.setVisibility(View.VISIBLE);
-		}
+	public void onPingReceive(String result) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void onAvailabilityAdded(int result) {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void onCategoriesReceive(ArrayList<Category> categories) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
