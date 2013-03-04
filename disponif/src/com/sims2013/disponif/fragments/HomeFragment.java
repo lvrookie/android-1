@@ -19,7 +19,7 @@ import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
 import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
-import com.sims2013.disponif.activities.AvailabilityActivity;
+import com.sims2013.disponif.activities.AvailabilityListActivity;
 import com.sims2013.disponif.client.Client;
 
 public class HomeFragment extends GenericFragment implements OnClickListener,
@@ -86,7 +86,7 @@ public class HomeFragment extends GenericFragment implements OnClickListener,
 		if (v.getId() == mDisponibilityButton.getId()) {
 
 			Intent intent = new Intent(getActivity(),
-					AvailabilityActivity.class);
+					AvailabilityListActivity.class);
 			startActivity(intent);
 		}
 	}
@@ -103,7 +103,6 @@ public class HomeFragment extends GenericFragment implements OnClickListener,
 			onConnectedToServer();
 		}
 	}
-
 
 	@Override
 	public void onRetryClick() {
@@ -122,13 +121,13 @@ public class HomeFragment extends GenericFragment implements OnClickListener,
 
 		Session session = Session.getActiveSession();
 
-		if (session == null || session.isClosed()) {
-			onFacebookSessionClosed();
-		} else if (session.isOpened()) {
+		if (session != null && session.isOpened()) {
 			onConnectedToServer();
+		} else {
+			onFacebookSessionClosed();
 		}
 	}
-	
+
 	@Override
 	public void onFacebookSessionClosed() {
 		super.onFacebookSessionClosed();
@@ -140,7 +139,6 @@ public class HomeFragment extends GenericFragment implements OnClickListener,
 		}
 		mDisponibilityButton.setVisibility(View.INVISIBLE);
 	}
-	
 
 	@Override
 	public void onFacebookSessionOpened(Session session) {

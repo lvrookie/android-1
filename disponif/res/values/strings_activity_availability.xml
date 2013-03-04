@@ -8,6 +8,7 @@
     <string name="availability_date_from">Début</string>
     <string name="availability_date_to">Fin</string>
     <string name="availability_place_label">Lieu</string>
+    <string name="availability_description_label">Description</string>
     <string name="availability_choose_date_from">Date début</string>
     <string name="availability_choose_hour_from">Heure début</string>
     <string name="availability_choose_date_to">Date fin</string>
@@ -16,10 +17,12 @@
     <string name="availability_label_to_date">jusqu\'au</string>
     <string name="availability_label_hour">à</string>
     <string name="availability_place_hint">Entrez une adresse</string>
-    <string name="availability_title">Ma disponibilité</string>
+    <string name="availability_description_hint">Entrez une description</string>
+    <string name="availability_title">Nouvelle disponibilité</string>
     <string name="availability_error_required_field">Champ requis</string>
     <string name="availability_toast_error_required_field">Certains champs obligatoires ne sont pas renseignés.</string>
     <string name="availability_toast_error_no_place">Vous devez spécifiez un lieu.</string>
+    <string name="availability_toast_error_no_description">Vous devez donner une description.</string>
     <string name="availability_dates_error">La date de fin est antérieure à la date de début.</string>
     <string name="availability_past_start_date">La date indiquée est déjà passée.</string>
 

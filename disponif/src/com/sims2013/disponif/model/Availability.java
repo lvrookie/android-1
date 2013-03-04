@@ -128,7 +128,7 @@ public class Availability {
 
 	@Override
 	public String toString() {
-		return "ID : " + mId;
+		return "ID : " + mId + "\nDescription : "+mDescription;
 	}
 	
 }

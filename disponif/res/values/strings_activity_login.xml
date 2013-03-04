@@ -4,5 +4,6 @@
     <string name="login">Se connecter</string>
     <string name="logout">Se déconnecter</string>
     <string name="login_failed">Authentification failed</string>
+    <string name="logging">Connexion en cours...</string>
 
 </resources>

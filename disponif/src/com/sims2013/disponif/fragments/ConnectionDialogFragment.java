@@ -33,7 +33,7 @@ public class ConnectionDialogFragment extends DialogFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		super.setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Dialog);
+//		super.setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Dialog);
 		getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
 	}
 	
@@ -48,6 +48,7 @@ public class ConnectionDialogFragment extends DialogFragment {
 		mButton = (Button) v.findViewById(R.id.connect_server_retry_bt);
 		mProgressBar = (ProgressBar) v.findViewById(R.id.connect_server_progress_bar);
 		
+		getDialog().setTitle(getString(R.string.logging));
 		return v;
 	}
 	

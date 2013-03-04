@@ -100,5 +100,17 @@ public class ClientTestActivity extends Activity implements Client.onReceiveList
 		}
 	}
 
+	@Override
+	public void onNetworkError(String errorMessage) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTokenExpired() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

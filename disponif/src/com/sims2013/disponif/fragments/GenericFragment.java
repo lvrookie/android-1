@@ -35,7 +35,7 @@ public class GenericFragment extends Fragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mClient = new Client("http://disponif.darkserver.fr/server/api.php");
+		mClient = new Client(DisponifApplication.DISPONIF_SERVER);
 		mClient.setListener(this);
 
 		uiHelper = new UiLifecycleHelper(getActivity(), callback);
@@ -137,5 +137,19 @@ public class GenericFragment extends Fragment implements
 			}
 			onFacebookSessionClosed();
 		}
+	}
+	
+	protected void refresh() {
+		
+	}
+
+	@Override
+	public void onNetworkError(String errorMessage) {
+		
+	}
+
+	@Override
+	public void onTokenExpired() {
+		
 	}
 }
