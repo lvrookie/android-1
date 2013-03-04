@@ -3,6 +3,6 @@
 
     <string name="home_welcome">Hello %1$s</string>
     <string name="home_disconnected">Veuillez vous connecter</string>
-    <string name="create_disponibility">Je suis disponible !</string>
+    <string name="show_disponibility">Voir mes disponibilités</string>
 
 </resources>

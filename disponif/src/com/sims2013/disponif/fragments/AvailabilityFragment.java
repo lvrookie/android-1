@@ -142,6 +142,7 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 				TypeSpinnerAdapter adapter = new TypeSpinnerAdapter(getActivity(), mCategories.get(position).getTypes());
 				mTypeSpinner.setAdapter(adapter);
 				mTypeSpinner.setEnabled(true);
+				mCurrentType = mCurrentCategory.getTypes().get(0);
 			}
 
 			@Override
@@ -255,11 +256,14 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 	}
 
 	private void submitDisponibility() {
-		// TODO Call the web service to submit the availability,
-		// Move this to the onSuccess callback
-
-		Intent intent = new Intent(getActivity(), AvailabilityListActivity.class);
-		startActivity(intent);
+		
+		Availability av = new Availability();
+		av.setCategoryId(mCurrentCategory.getId());
+		av.setDescription("Dispo test");
+		av.setStartTime("2013-02-21 14:30:00");
+		av.setEndTime("2013-02-21 16:30:00");
+		
+		mClient.addAvailability(DisponifApplication.getAccessToken(), av);
 	}
 
 	private boolean checkFields() {
@@ -377,14 +381,17 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 
 	@Override
 	public void onAvailabilityAdded(int result) {
-		// TODO Auto-generated method stub
-		
+		if( result != -1) {
+			Intent intent = new Intent(getActivity(), AvailabilityListActivity.class);
+			startActivity(intent);
+		} else {
+			DisponIFUtils.makeToast(getActivity(), "Erreur pendant l'ajout de la dispo");
+		}
 	}
 
 	@Override
 	public void onCategoriesReceive(ArrayList<Category> categories) {
 		if (categories != null && categories.size() > 0) {
-			Toast.makeText(getActivity(), "receive categories", Toast.LENGTH_SHORT).show();
 			mCategories = categories;
 			CategorySpinnerAdapter adapter = new CategorySpinnerAdapter(getActivity(), mCategories);
 			mActivitySpinner.setAdapter(adapter);

@@ -1,6 +1,8 @@
 package com.sims2013.disponif.client;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.view.Menu;
 import android.widget.TextView;
 
 import com.sims2013.disponif.R;
+import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.model.Availability;
 import com.sims2013.disponif.model.Category;
 
@@ -24,10 +27,14 @@ public class ClientTestActivity extends Activity implements Client.onReceiveList
 		setContentView(R.layout.activity_client_test);
 		
 		mTv = (TextView)findViewById(R.id.textViewTest);
-		mTv.setText("Connexion en cours ...");
-		mClient = new Client("http://disponif.darkserver.fr/server/api.php");
-		mClient.setListener(this);
-		mClient.logIn("AAAEVFBxgKkMBALvAq5WJDaoQgBUPknhpugZCFRbQFO4Ew894ComEMVXrIcZB1Pr26wlBpL400p5lIbi4OKdDioGi9tKEY49iTXgbgUYZBOmfZB9ilXki");
+		
+		Calendar cal = Calendar.getInstance(Locale.FRENCH);
+		mTv.setText(DisponIFUtils.datetimeToFrTime(this, DisponIFUtils.calendarToDatetime(cal)));
+		
+//		mTv.setText("Connexion en cours ...");
+//		mClient = new Client("http://disponif.darkserver.fr/server/api.php");
+//		mClient.setListener(this);
+//		mClient.logIn("AAAEVFBxgKkMBALvAq5WJDaoQgBUPknhpugZCFRbQFO4Ew894ComEMVXrIcZB1Pr26wlBpL400p5lIbi4OKdDioGi9tKEY49iTXgbgUYZBOmfZB9ilXki");
 //		mClient.ping();
 		
 	}

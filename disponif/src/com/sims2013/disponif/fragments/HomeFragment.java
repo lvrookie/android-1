@@ -18,7 +18,7 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
 import com.sims2013.disponif.R;
-import com.sims2013.disponif.activities.AvailabilityActivity;
+import com.sims2013.disponif.activities.AvailabilityListActivity;
 import com.sims2013.disponif.client.Client;
 import com.sims2013.disponif.model.Availability;
 import com.sims2013.disponif.model.Category;
@@ -179,7 +179,7 @@ public class HomeFragment extends GenericFragment implements OnClickListener,
 		if (v.getId() == mDisponibilityButton.getId()) {
 
 			Intent intent = new Intent(getActivity(),
-					AvailabilityActivity.class);
+					AvailabilityListActivity.class);
 			startActivity(intent);
 		}
 	}

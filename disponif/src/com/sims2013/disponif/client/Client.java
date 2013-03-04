@@ -50,17 +50,17 @@ public class Client {
 		// Method name
 		public static final String METHOD = "saveAvailability";
 		// Parameter keys
-//		public static final String PARAM_TOKEN = "token";
-//		public static final String PARAM_CATEGORY_ID = "category_id";
-//		public static final String PARAM_TYPE_ID = "type_id";
-//		public static final String PARAM_START_TIME = "startTime";
-//		public static final String PARAM_END_TIME = "endTime";
-//		public static final String PARAM_DESCRIPTION = "description";
-//		public static final String PARAM_MAX_PARTICIPANT = "maxParticipant";
-//		public static final String PARAM_LATITUDE = "latitude";
-//		public static final String PARAM_LONGITUDE = "longitude";
-//		public static final String PARAM_RADIUS = "radius";
-//		public static final String PARAM_PRIVACY = "privacy";
+		public static final String PARAM_TOKEN = "token";
+		public static final String PARAM_CATEGORY_ID = "category_id";
+		public static final String PARAM_TYPE_ID = "type_id";
+		public static final String PARAM_START_TIME = "startTime";
+		public static final String PARAM_END_TIME = "endTime";
+		public static final String PARAM_DESCRIPTION = "description";
+		public static final String PARAM_MAX_PARTICIPANT = "maxParticipant";
+		public static final String PARAM_LATITUDE = "latitude";
+		public static final String PARAM_LONGITUDE = "longitude";
+		public static final String PARAM_RADIUS = "radius";
+		public static final String PARAM_PRIVACY = "privacy";
 		// Result keys
 		public static final String RESULT_STATE = "state";
 		public static final String RESULT_ID = "id";

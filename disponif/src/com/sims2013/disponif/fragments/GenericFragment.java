@@ -24,6 +24,7 @@ import com.facebook.UiLifecycleHelper;
 import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.client.Client;
+import com.sims2013.disponif.model.Availability;
 import com.sims2013.disponif.model.Category;
 
 public class GenericFragment extends Fragment implements
@@ -224,7 +225,7 @@ public class GenericFragment extends Fragment implements
 	}
 
 	@Override
-	public void onAvailabilityAdded(Boolean result) {
+	public void onAvailabilityAdded(int id) {
 		// TODO Auto-generated method stub
 
 	}
@@ -233,5 +234,12 @@ public class GenericFragment extends Fragment implements
 	public void onCategoriesReceive(ArrayList<Category> categories) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onUserAvailabilitiesReceive(
+			ArrayList<Availability> availbilities) {
+		// TODO Auto-generated method stub
+		
 	}
 }
