@@ -438,4 +438,16 @@ public class AvailabilityFragment extends GenericFragment implements
 	public interface onAvailabilityAddedListener {
 		void onAvailabilityAdded();
 	}
+
+	@Override
+	public void onNetworkError(String errorMessage) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTokenExpired() {
+		// TODO Auto-generated method stub
+		
+	}
 }
