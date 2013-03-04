@@ -15,18 +15,25 @@
         android:src="@drawable/logo" />
 
     <TextView
-        android:id="@+id/item_availability_username"
+        android:id="@+id/item_availability_startDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/item_availability_user_profile_picture" />
+
+    <TextView
+        android:id="@+id/item_availability_endDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_availability_startDate"
         android:layout_toRightOf="@id/item_availability_user_profile_picture" />
 
     <TextView
         android:id="@+id/item_availability_category_and_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/item_availability_username"
+        android:layout_below="@id/item_availability_endDate"
         android:layout_toRightOf="@id/item_availability_user_profile_picture" />
-
+    
     <ImageView
         android:id="@+id/item_availability_privacy"
         android:layout_width="wrap_content"

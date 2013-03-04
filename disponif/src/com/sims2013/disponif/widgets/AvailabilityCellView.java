@@ -8,12 +8,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sims2013.disponif.R;
+import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.model.Availability;
 
 public class AvailabilityCellView extends RelativeLayout{
 	ImageView mProfilePicture;
 	TextView mCategoryAndType;
-	TextView mUsername;
+	TextView mStartTime;
+	TextView mEndTime;
 	ImageView mPrivacy;
 	
 	public AvailabilityCellView(Context context) {
@@ -33,14 +35,16 @@ public class AvailabilityCellView extends RelativeLayout{
 		
 		mProfilePicture = (ImageView) findViewById(R.id.item_availability_user_profile_picture);
 		mPrivacy= (ImageView) findViewById(R.id.item_availability_privacy);
-		mUsername = (TextView) findViewById(R.id.item_availability_username);
+		mStartTime = (TextView) findViewById(R.id.item_availability_startDate);
+		mEndTime = (TextView) findViewById(R.id.item_availability_endDate);
 		mCategoryAndType= (TextView) findViewById(R.id.item_availability_category_and_type);
 	}
 	
 	public void setObject(Object object){
 		Availability availability = (Availability) object;
-		mUsername.setText("UserId = " + availability.getUserId());
-		mCategoryAndType.setText("Category : " + availability.getCategoryId() + " - Type : " + availability.getTypeId());
+		mStartTime.setText("du " + DisponIFUtils.datetimeToFrDate(getContext(), availability.getStartTime()) + " - " + DisponIFUtils.datetimeToFrTime(getContext(), availability.getStartTime()));
+		mEndTime.setText("au " + DisponIFUtils.datetimeToFrDate(getContext(), availability.getEndTime()) + " - " + DisponIFUtils.datetimeToFrTime(getContext(), availability.getEndTime()));
+		mCategoryAndType.setText("Category : " + availability.getCategoryId() + "     Type : " + availability.getTypeId());
 		switch (availability.getPrivacy()) {
 		case 0:
 			mPrivacy.setImageDrawable(getResources().getDrawable(R.drawable.privacy_private)); 

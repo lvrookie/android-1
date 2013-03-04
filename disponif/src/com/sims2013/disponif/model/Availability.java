@@ -128,14 +128,7 @@ public class Availability {
 
 	@Override
 	public String toString() {
-		return "Availability [mId=" + mId + ", mUserId=" + mUserId
-				+ ", mCategoryId=" + mCategoryId + ", mTypeId=" + mTypeId
-				+ ", mLatitude=" + mLatitude + ", mLongitude=" + mLongitude
-				+ ", mRadius=" + mRadius + ", mPrivacy=" + mPrivacy
-				+ ", mStatus=" + mStatus + ", mMaxParticipant="
-				+ mMaxParticipant + ", mOption=" + mOption + ", mStartTime="
-				+ mStartTime + ", mEndTime=" + mEndTime + ", mDescription="
-				+ mDescription + "]";
+		return "ID : " + mId;
 	}
 	
 }
