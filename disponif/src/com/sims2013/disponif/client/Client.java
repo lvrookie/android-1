@@ -112,6 +112,8 @@ public class Client {
 		public void onAvailabilityAdded(int id);
 		public void onCategoriesReceive(ArrayList<Category> categories);
 		public void onUserAvailabilitiesReceive(ArrayList<Availability> availbilities);
+		public void onNetworkError(String errorMessage);
+		public void onTokenExpired();
 	}
 	
 	// API Path
@@ -129,23 +131,40 @@ public class Client {
 		this.mListener = listener;
 	}
 	
+	private void throwError(String errorMessage) {
+		if (errorMessage.contains("\"code\":-32010")){
+			mListener.onTokenExpired();
+		} else {
+			mListener.onNetworkError(errorMessage);
+		}
+	}
+	
 	// Ping method
 	public void ping() {		
 		new AsyncTask<String, Void, String>(){
 
+			String errorMessage;
+			
 			@Override
 			protected String doInBackground(String... params) {
 		        try {
 		        	String res = mJsonClient.callString(ping.METHOD);
+		        	Log.v("ClientJSON - ping", res);
 		        	return res;
-		        } catch (JSONRPCException e) {
+		        } catch (Exception e) {
+		        	Log.v("ClientJSON - ping - error", e.getMessage());
+		        	errorMessage = e.getMessage();
 		            return ERROR_STRING;
 		        }
 			}
 
 			@Override
 			protected void onPostExecute(String result) {
-				mListener.onPingReceive(result);
+				if (result == ERROR_STRING) {
+					throwError(errorMessage);
+				} else {
+					mListener.onPingReceive(result);
+				}
 				super.onPostExecute(result);
 			}
 		}.execute();
@@ -155,25 +174,30 @@ public class Client {
 	public void logIn(final String token) {
 		new AsyncTask<String, Void, String>(){
 
+			String errorMessage;
+			
 			@Override
 			protected String doInBackground(String... params) {
 		        try {
 		        	JSONObject JSObjet = new JSONObject();
 		        	JSObjet.put(logIn.PARAM_TOKEN, token);
 		        	JSONObject res = mJsonClient.callJSONObject(logIn.METHOD, JSObjet);
-		        	Log.v("ClientJSON - getCategories", res.toString());
+		        	Log.v("ClientJSON - logIn", res.toString());
 		        	return res.getString(logIn.RESULT_TOKEN);
-		        } catch (JSONRPCException e) {
-		        	Log.v("ClientJSON - logIn", e.getMessage());
+		        } catch (Exception e) {
+		        	Log.v("ClientJSON - logIn - error", e.getMessage());
+		        	errorMessage = e.getMessage();
 		            return ERROR_STRING;
-		        } catch (JSONException e) {
-		        	return ERROR_JSON_STRING;
 		        }
 			}
 
 			@Override
 			protected void onPostExecute(String result) {
-				mListener.onLogInTokenReceive(result);
+				if (result.equals(ERROR_STRING)) {
+					throwError(errorMessage);
+				} else {
+					mListener.onLogInTokenReceive(result);
+				}
 				super.onPostExecute(result);
 			}
 		}.execute();
@@ -185,6 +209,8 @@ public class Client {
 			final Availability availability) {
 		new AsyncTask<String, Void, Integer>(){
 
+			String errorMessage;
+			
 			@Override
 			protected Integer doInBackground(String... params) {
 		        try {
@@ -206,19 +232,23 @@ public class Client {
 		        	if (state) {
 		        		return res.getInt(addAvailability.RESULT_ID);
 		        	} else {
+		        		errorMessage = "SERVER ISSUE"; 
 		        		return -1;
 		        	}
-		        } catch (JSONRPCException e) {
-		        	Log.v("ClientJSON - addAvailability", e.getMessage());
+		        } catch (Exception e) {
+		        	Log.v("ClientJSON - addAvailability - error", e.getMessage());
+		        	errorMessage = e.getMessage();
 		            return -1;
-		        } catch (JSONException e) {
-		        	return -1;
-		        }
+		        } 
 			}
 
 			@Override
 			protected void onPostExecute(Integer result) {
-				mListener.onAvailabilityAdded(result);
+				if (result == -1) {
+					throwError(errorMessage);
+				} else {
+					mListener.onAvailabilityAdded(result);
+				}
 				super.onPostExecute(result);
 			}
 		}.execute();
@@ -228,6 +258,8 @@ public class Client {
 	public void getAllCategories(final String token) {
 		new AsyncTask<String, Void, ArrayList<Category>>(){
 
+			String errorMessage;
+			
 			@Override
 			protected ArrayList<Category> doInBackground(String... params) {
 		        try {
@@ -254,17 +286,20 @@ public class Client {
 		        		catsArray.add(cat);
 		        	}
 		        	return catsArray;
-		        } catch (JSONRPCException e) {
-		        	Log.v("ClientJSON - getCategories", e.getMessage());
+		        } catch (Exception e) {
+		        	Log.v("ClientJSON - getCategories - error", e.getMessage());
+		        	errorMessage = e.getMessage();
 		            return null;
-		        } catch (JSONException e) {
-		        	return null;
-		        }
+		        } 
 			}
 			
 			@Override
 			protected void onPostExecute(ArrayList<Category> result) {
-				mListener.onCategoriesReceive(result);
+				if (result == null) {
+					throwError(errorMessage);
+				} else {
+					mListener.onCategoriesReceive(result);
+				}
 				super.onPostExecute(result);
 			}
 		}.execute();
@@ -274,6 +309,8 @@ public class Client {
 	public void getUserAvailabilities(final String token) {
 		new AsyncTask<String, Void, ArrayList<Availability>>(){
 
+			String errorMessage;
+			
 			@Override
 			protected ArrayList<Availability> doInBackground(String... params) {
 		        try {
@@ -303,18 +340,20 @@ public class Client {
 		        		availabilitiesList.add(availability);
 		        	}    	
 		        	return availabilitiesList;
-		        } catch (JSONRPCException e) {
+		        } catch (Exception e) {
 		        	Log.v("ClientJSON - getUserAvailabilities", e.getMessage());
+		        	errorMessage = e.getMessage();
 		            return null;
-		        } catch (JSONException e) {
-		        	Log.v("ClientJSON - getUserAvailabilities", e.getMessage());
-		        	return null;
-		        }
+		        } 
 			}
 
 			@Override
 			protected void onPostExecute(ArrayList<Availability> result) {
-				mListener.onUserAvailabilitiesReceive(result);
+				if (result == null) {
+					throwError(errorMessage);
+				}else {
+					mListener.onUserAvailabilitiesReceive(result);
+				}
 				super.onPostExecute(result);
 			}
 		}.execute();
