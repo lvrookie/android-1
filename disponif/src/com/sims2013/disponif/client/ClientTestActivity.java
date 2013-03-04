@@ -28,13 +28,10 @@ public class ClientTestActivity extends Activity implements Client.onReceiveList
 		
 		mTv = (TextView)findViewById(R.id.textViewTest);
 		
-		Calendar cal = Calendar.getInstance(Locale.FRENCH);
-		mTv.setText(DisponIFUtils.datetimeToFrTime(this, DisponIFUtils.calendarToDatetime(cal)));
-		
-//		mTv.setText("Connexion en cours ...");
-//		mClient = new Client("http://disponif.darkserver.fr/server/api.php");
-//		mClient.setListener(this);
-//		mClient.logIn("AAAEVFBxgKkMBALvAq5WJDaoQgBUPknhpugZCFRbQFO4Ew894ComEMVXrIcZB1Pr26wlBpL400p5lIbi4OKdDioGi9tKEY49iTXgbgUYZBOmfZB9ilXki");
+		mTv.setText("Connexion en cours ...");
+		mClient = new Client("http://disponif.darkserver.fr/server/api.php");
+		mClient.setListener(this);
+		mClient.logIn("AAAEVFBxgKkMBAODUlZA6xYeMzHkOd7rGQ6r1kvXFSmD92I9OfSlS5BCVpr3eLNx8HWjB0RHIORUzm9UNi7irTElraZASR24HPPbGbIUJxpJ46N6GDR");
 //		mClient.ping();
 		
 	}
@@ -57,7 +54,7 @@ public class ClientTestActivity extends Activity implements Client.onReceiveList
 			mTv.setText("Erreur de connexion !!");
 		} else {
 			mToken = token;
-//			mTv.setText("Connexion réussie. Envoie d'une dispo");
+			mTv.setText("Connexion réussie");
 //			Availability a = new Availability();
 //			a.setCategoryId(1);
 //			a.setTypeId(1);
@@ -82,12 +79,7 @@ public class ClientTestActivity extends Activity implements Client.onReceiveList
 
 	@Override
 	public void onCategoriesReceive(ArrayList<Category> categories) {
-//		mTv.setText(categories.get(0).toString());
-//		if (categories == Client.ERROR_STRING) {
-//			mTv.setText("Erreur lors de la récupération des catégories.");
-//		} else {
-//			mTv.setText(categories);
-//		}
+		mTv.setText(categories.toString());
 	}
 
 	@Override
@@ -98,6 +90,16 @@ public class ClientTestActivity extends Activity implements Client.onReceiveList
 		} else {
 			mTv.setText("Erreur lors de la récupération des dispos !!");
 		}
+	}
+
+	@Override
+	public void onNetworkError(String errorMessage) {
+		mTv.setText(errorMessage);
+	}
+
+	@Override
+	public void onTokenExpired() {
+		mTv.setText("token expired");
 	}
 
 
