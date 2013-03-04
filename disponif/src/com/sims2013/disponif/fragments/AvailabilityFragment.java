@@ -28,7 +28,6 @@ import com.sims2013.disponif.R;
 import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.adapter.CategorySpinnerAdapter;
 import com.sims2013.disponif.adapter.TypeSpinnerAdapter;
-import com.sims2013.disponif.client.Client;
 import com.sims2013.disponif.fragments.DatePickerFragment.OnDateSelected;
 import com.sims2013.disponif.fragments.TimePickerFragment.OnTimeRangeSelected;
 import com.sims2013.disponif.model.Availability;
@@ -36,8 +35,7 @@ import com.sims2013.disponif.model.Category;
 import com.sims2013.disponif.model.Type;
 
 public class AvailabilityFragment extends GenericFragment implements
-		OnClickListener, OnDateSelected, OnTimeRangeSelected,
-		Client.onReceiveListener {
+		OnClickListener, OnDateSelected, OnTimeRangeSelected {
 
 	Button mSubmitButton;
 	Button mDateButtonFrom;
@@ -439,15 +437,4 @@ public class AvailabilityFragment extends GenericFragment implements
 		void onAvailabilityAdded();
 	}
 
-	@Override
-	public void onNetworkError(String errorMessage) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onTokenExpired() {
-		// TODO Auto-generated method stub
-		
-	}
 }

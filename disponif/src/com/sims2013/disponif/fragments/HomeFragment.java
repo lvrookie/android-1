@@ -20,10 +20,8 @@ import com.facebook.widget.ProfilePictureView;
 import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.activities.AvailabilityListActivity;
-import com.sims2013.disponif.client.Client;
 
-public class HomeFragment extends GenericFragment implements OnClickListener,
-		Client.onReceiveListener {
+public class HomeFragment extends GenericFragment implements OnClickListener {
 
 	public static final String TAG = "com.sims2013.disponif.fragments.LoginFragment";
 
