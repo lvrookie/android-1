@@ -49,6 +49,7 @@ public class AvailabilityListFragment extends GenericFragment implements OnItemC
 		mClient = new Client("http://disponif.darkserver.fr/server/api.php");
 		mClient.setListener(this);
 		mClient.getUserAvailabilities(DisponifApplication.getAccessToken());
+//		mClient.getUserAvailabilities("qsdqd");
 		
 		return view;
 	}
@@ -82,7 +83,6 @@ public class AvailabilityListFragment extends GenericFragment implements OnItemC
 					AvailabilityActivity.class);
 			startActivityForResult(intent, REQUEST_CODE_ADD_AVAILABILITY);
 		}
-		
 		return false;
 	}
 	
@@ -99,7 +99,13 @@ public class AvailabilityListFragment extends GenericFragment implements OnItemC
 	@Override
 	protected void refresh() {
 		super.refresh();
-		
 		mClient.getUserAvailabilities(DisponifApplication.getAccessToken());
+	}
+	
+	@Override
+	public void onLogInTokenReceive(String token) {
+		super.onLogInTokenReceive(token);
+		
+		refresh();
 	}
 }

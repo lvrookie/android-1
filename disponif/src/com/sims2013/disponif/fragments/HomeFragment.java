@@ -26,7 +26,6 @@ public class HomeFragment extends GenericFragment implements OnClickListener,
 		Client.onReceiveListener {
 
 	public static final String TAG = "com.sims2013.disponif.fragments.LoginFragment";
-	ConnectionDialogFragment mDialogFragment;
 
 	private TextView mWelcomeMessage;
 	private ProfilePictureView mProfilePictureView;
@@ -94,14 +93,7 @@ public class HomeFragment extends GenericFragment implements OnClickListener,
 	@Override
 	public void onLogInTokenReceive(String token) {
 		super.onLogInTokenReceive(token);
-
-		if (token == Client.ERROR_STRING) {
-			mDialogFragment.displayServerUnreachable();
-		} else {
-			DisponifApplication.setAccessToken(token);
-			mDialogFragment.dismissAllowingStateLoss();
-			onConnectedToServer();
-		}
+		connectedToServer();
 	}
 
 	@Override
@@ -122,7 +114,7 @@ public class HomeFragment extends GenericFragment implements OnClickListener,
 		Session session = Session.getActiveSession();
 
 		if (session != null && session.isOpened()) {
-			onConnectedToServer();
+			connectedToServer();
 		} else {
 			onFacebookSessionClosed();
 		}
@@ -144,12 +136,12 @@ public class HomeFragment extends GenericFragment implements OnClickListener,
 	public void onFacebookSessionOpened(Session session) {
 		super.onFacebookSessionOpened(session);
 
-		mClient.logIn(session.getAccessToken());
 		FragmentManager fm = getActivity().getSupportFragmentManager();
 		mDialogFragment = (ConnectionDialogFragment) fm
 				.findFragmentByTag(ConnectionDialogFragment.TAG);
 		if (mDialogFragment == null) {
 			Bundle b = new Bundle();
+			b.putString(ConnectionDialogFragment.EXTRA_DIALOG_TITLE, getString(R.string.connection_logging));
 			mDialogFragment = ConnectionDialogFragment.newInstance(b);
 		}
 		if (!getActivity().isFinishing() && !mDialogFragment.isDetached()) {
@@ -159,11 +151,11 @@ public class HomeFragment extends GenericFragment implements OnClickListener,
 				Log.e(TAG, "activity isFinishing() impossible to show dialog ");
 			}
 		}
+
+		mClient.logIn(session.getAccessToken());
 	}
 
-	@Override
-	protected void onConnectedToServer() {
-		super.onConnectedToServer();
+	private void connectedToServer() {
 		mWelcomeMessage.setVisibility(View.VISIBLE);
 		mProfilePictureView.setVisibility(View.VISIBLE);
 		mDisponibilityButton.setVisibility(View.VISIBLE);
