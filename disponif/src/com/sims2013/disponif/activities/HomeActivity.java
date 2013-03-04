@@ -18,7 +18,7 @@ public class HomeActivity extends GenericActivity {
 		if (savedInstanceState == null) {
 			// Add the fragment on initial activity setup
 			mFragment = new HomeFragment();
-			getSupportFragmentManager().beginTransaction().add(android.R.id.content, mFragment).commit();
+			getSupportFragmentManager().beginTransaction().add(android.R.id.content, mFragment).commitAllowingStateLoss();
 		} else {
 			// Or set the fragment from restored state info
 			mFragment = (HomeFragment) getSupportFragmentManager().findFragmentById(android.R.id.content);

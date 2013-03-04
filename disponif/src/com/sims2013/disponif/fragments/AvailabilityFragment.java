@@ -1,11 +1,11 @@
 package com.sims2013.disponif.fragments;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -22,12 +22,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.Utils.DisponIFUtils;
-import com.sims2013.disponif.activities.AvailabilityListActivity;
 import com.sims2013.disponif.adapter.CategorySpinnerAdapter;
 import com.sims2013.disponif.adapter.TypeSpinnerAdapter;
 import com.sims2013.disponif.client.Client;
@@ -37,8 +35,9 @@ import com.sims2013.disponif.model.Availability;
 import com.sims2013.disponif.model.Category;
 import com.sims2013.disponif.model.Type;
 
-public class AvailabilityFragment extends Fragment implements OnClickListener,
-		OnDateSelected, OnTimeRangeSelected, Client.onReceiveListener {
+public class AvailabilityFragment extends GenericFragment implements
+		OnClickListener, OnDateSelected, OnTimeRangeSelected,
+		Client.onReceiveListener {
 
 	Button mSubmitButton;
 	Button mDateButtonFrom;
@@ -48,27 +47,35 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 	Spinner mActivitySpinner;
 	Spinner mTypeSpinner;
 	EditText mPlaceET;
+	EditText mDescriptionET;
 
 	TextView mErrorDatesTv;
-	
+
 	ImageView mDateFromErrorImage;
 	ImageView mDateToErrorImage;
-	
+
 	Calendar mDateFrom;
 	Calendar mDateTo;
-	
-	Client mClient;
-	
+
 	ArrayList<Category> mCategories;
 	Category mCurrentCategory;
 	Type mCurrentType;
 
 	ArrayList<SubmitErrors> checkFieldsErrors;
+	
+	onAvailabilityAddedListener mListener;
 
 	private enum SubmitErrors {
-		ERROR_NO_PLACE_GIVEN, ERROR_MISSING_INFORMATION, ERROR_END_DATE_BEFORE_START_DATE, ERROR_PAST_START_DATE
+		ERROR_NO_PLACE_GIVEN, ERROR_MISSING_INFORMATION, ERROR_END_DATE_BEFORE_START_DATE, ERROR_PAST_START_DATE, ERROR_NO_DESCRIPTION_GIVEN
 	}
 
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		mListener = (onAvailabilityAddedListener) getActivity();
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -77,7 +84,7 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 
 		mCurrentCategory = null;
 		mCurrentType = null;
-		
+
 		mSubmitButton = (Button) view
 				.findViewById(R.id.availability_button_submit);
 		mDateButtonFrom = (Button) view
@@ -89,6 +96,7 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 		mHourButtonTo = (Button) view
 				.findViewById(R.id.availability_button_hour_to);
 		mPlaceET = (EditText) view.findViewById(R.id.availability_place_et);
+		mDescriptionET = (EditText) view.findViewById(R.id.availability_description_et);
 		mActivitySpinner = (Spinner) view
 				.findViewById(R.id.availability_spinner_activity);
 		mTypeSpinner = (Spinner) view
@@ -99,24 +107,45 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 		mDateButtonTo.setOnClickListener(this);
 		mHourButtonFrom.setOnClickListener(this);
 		mHourButtonTo.setOnClickListener(this);
-		
+
 		mDateFromErrorImage = (ImageView) view
-		.findViewById(R.id.availability_error_date_from);
+				.findViewById(R.id.availability_error_date_from);
 		mDateToErrorImage = (ImageView) view
-		.findViewById(R.id.availability_error_date_to);
-		
-		mErrorDatesTv = (TextView) view.findViewById(R.id.availability_error_dates);
-		
+				.findViewById(R.id.availability_error_date_to);
+
+		mErrorDatesTv = (TextView) view
+				.findViewById(R.id.availability_error_dates);
+
 		mPlaceET.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+					int arg3) {
+				mPlaceET.setError(null);
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence arg0, int arg1,
+					int arg2, int arg3) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable arg0) {
+
+			}
+		});
+		mDescriptionET.addTextChangedListener(new TextWatcher() {
 			
 			@Override
-			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-				mPlaceET.setError(null);
+			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+					int arg3) {
+				mDescriptionET.setError(null);
 			}
 			
 			@Override
-			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-					int arg3) {
+			public void beforeTextChanged(CharSequence arg0, int arg1,
+					int arg2, int arg3) {
 				
 			}
 			
@@ -125,35 +154,34 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 				
 			}
 		});
-		
-		mClient = new Client("http://disponif.darkserver.fr/server/api.php");
-		mClient.setListener(this);
+
 		mClient.getAllCategories(DisponifApplication.getAccessToken());
-		
+
 		mActivitySpinner.setEnabled(false);
 		mTypeSpinner.setEnabled(false);
-		
-		mActivitySpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
 
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
-					int position, long arg3) {
-				mCurrentCategory = mCategories.get(position);
-				TypeSpinnerAdapter adapter = new TypeSpinnerAdapter(getActivity(), mCategories.get(position).getTypes());
-				mTypeSpinner.setAdapter(adapter);
-				mTypeSpinner.setEnabled(true);
-				mCurrentType = mCurrentCategory.getTypes().get(0);
-			}
+		mActivitySpinner
+				.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
-		
-		mTypeSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+					@Override
+					public void onItemSelected(AdapterView<?> arg0, View arg1,
+							int position, long arg3) {
+						mCurrentCategory = mCategories.get(position);
+						TypeSpinnerAdapter adapter = new TypeSpinnerAdapter(
+								getActivity(), mCategories.get(position)
+										.getTypes());
+						mTypeSpinner.setAdapter(adapter);
+						mTypeSpinner.setEnabled(true);
+						mCurrentType = mCurrentCategory.getTypes().get(0);
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> arg0) {
+					}
+
+				});
+
+		mTypeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
@@ -163,12 +191,10 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-				
 			}
-			
+
 		});
-		
+
 		return view;
 	}
 
@@ -236,16 +262,24 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 						}
 						switch (error) {
 						case ERROR_NO_PLACE_GIVEN:
-							errorMessage += "- " + getString(R.string.availability_toast_error_no_place);
+							errorMessage += "- "
+									+ getString(R.string.availability_toast_error_no_place);
 							break;
 						case ERROR_MISSING_INFORMATION:
-							errorMessage += "- " + getString(R.string.availability_toast_error_required_field);
+							errorMessage += "- "
+									+ getString(R.string.availability_toast_error_required_field);
 							break;
 						case ERROR_END_DATE_BEFORE_START_DATE:
-							errorMessage += "- " + getString(R.string.availability_dates_error);
+							errorMessage += "- "
+									+ getString(R.string.availability_dates_error);
 							break;
 						case ERROR_PAST_START_DATE:
-							errorMessage += "- " + getString(R.string.availability_past_start_date);
+							errorMessage += "- "
+									+ getString(R.string.availability_past_start_date);
+							break;
+						case ERROR_NO_DESCRIPTION_GIVEN:
+							errorMessage += "- "
+									+ getString(R.string.availability_toast_error_no_description);
 							break;
 						}
 					}
@@ -255,14 +289,16 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 		}
 	}
 
+	@SuppressLint("SimpleDateFormat")
 	private void submitDisponibility() {
-		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Availability av = new Availability();
 		av.setCategoryId(mCurrentCategory.getId());
-		av.setDescription("Dispo test");
-		av.setStartTime("2013-02-21 14:30:00");
-		av.setEndTime("2013-02-21 16:30:00");
+		av.setDescription(mDescriptionET.getText().toString());
 		
+		av.setStartTime(sdf.format(mDateFrom.getTime()));
+		av.setEndTime(sdf.format(mDateTo.getTime()));
+
 		mClient.addAvailability(DisponifApplication.getAccessToken(), av);
 	}
 
@@ -273,7 +309,8 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 		mDateFromErrorImage.setVisibility(View.INVISIBLE);
 		mDateToErrorImage.setVisibility(View.INVISIBLE);
 		mPlaceET.setError(null);
-		
+		mDescriptionET.setError(null);
+
 		checkFieldsErrors = new ArrayList<SubmitErrors>();
 		if (mDateButtonFrom.getText().equals(
 				getString(R.string.availability_choose_date_from))) {
@@ -310,12 +347,18 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 			isValid = false;
 			addFieldError(SubmitErrors.ERROR_PAST_START_DATE);
 			mErrorDatesTv.setVisibility(View.VISIBLE);
-			mErrorDatesTv.setText(getString(R.string.availability_past_start_date));
+			mErrorDatesTv
+					.setText(getString(R.string.availability_past_start_date));
 		}
 		if (TextUtils.isEmpty(mPlaceET.getText())) {
 			isValid = false;
 			mPlaceET.setError(getString(R.string.availability_error_required_field));
 			addFieldError(SubmitErrors.ERROR_NO_PLACE_GIVEN);
+		}
+		if (TextUtils.isEmpty(mDescriptionET.getText())) {
+			isValid = false;
+			mDescriptionET.setError(getString(R.string.availability_error_required_field));
+			addFieldError(SubmitErrors.ERROR_NO_DESCRIPTION_GIVEN);
 		}
 		return isValid;
 	}
@@ -355,55 +398,45 @@ public class AvailabilityFragment extends Fragment implements OnClickListener,
 		if (callerId == mHourButtonFrom.getId()) {
 			mDateFrom.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			mDateFrom.set(Calendar.MINUTE, minute);
-			mHourButtonFrom.setText(hourOfDay + ":" + ((minute<10) ? "0" + minute : minute));
+			mHourButtonFrom.setText(hourOfDay + ":"
+					+ ((minute < 10) ? "0" + minute : minute));
 
 			mDateFromErrorImage.setVisibility(View.INVISIBLE);
 		} else if (callerId == mHourButtonTo.getId()) {
 			mDateTo.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			mDateTo.set(Calendar.MINUTE, minute);
-			mHourButtonTo.setText(hourOfDay + ":" + ((minute<10) ? "0" + minute : minute));
-			
+			mHourButtonTo.setText(hourOfDay + ":"
+					+ ((minute < 10) ? "0" + minute : minute));
+
 			mDateToErrorImage.setVisibility(View.INVISIBLE);
 		}
 	}
 
-	@Override
-	public void onPingReceive(String result) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onLogInTokenReceive(String result) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onAvailabilityAdded(int result) {
-		if( result != -1) {
-			Intent intent = new Intent(getActivity(), AvailabilityListActivity.class);
-			startActivity(intent);
-		} else {
-			DisponIFUtils.makeToast(getActivity(), "Erreur pendant l'ajout de la dispo");
-		}
-	}
 
 	@Override
 	public void onCategoriesReceive(ArrayList<Category> categories) {
 		if (categories != null && categories.size() > 0) {
+			DisponIFUtils.makeToast(getActivity(), "receive categories");
 			mCategories = categories;
-			CategorySpinnerAdapter adapter = new CategorySpinnerAdapter(getActivity(), mCategories);
+			CategorySpinnerAdapter adapter = new CategorySpinnerAdapter(
+					getActivity(), mCategories);
 			mActivitySpinner.setAdapter(adapter);
 			mActivitySpinner.setEnabled(true);
 		}
 	}
 
 	@Override
-	public void onUserAvailabilitiesReceive(
-			ArrayList<Availability> availbilities) {
-		// TODO Auto-generated method stub
-		
+	public void onAvailabilityAdded(int result) {
+		if (result != -1) {
+			mListener.onAvailabilityAdded();
+		} else {
+			DisponIFUtils.makeToast(getActivity(),
+					"Erreur pendant l'ajout de la dispo");
+		}
+	}
+
+	public interface onAvailabilityAddedListener {
+		void onAvailabilityAdded();
 	}
 
 	@Override

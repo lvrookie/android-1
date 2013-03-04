@@ -5,6 +5,7 @@ import android.util.Log;
 
 public class DisponifApplication extends Application {
 	public static final boolean DEBUG_MODE = true;
+	public static final String DISPONIF_SERVER = "http://disponif.darkserver.fr/server/api.php";
 	private static final String TAG = "com.sims2013.disponif.DisponifApplication";
 	
 	private static String mAccessToken;

@@ -36,7 +36,7 @@
         android:layout_marginTop="5dp"
         android:background="@drawable/spinner_gray"
         android:padding="12dp" />
-    
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -207,6 +207,26 @@
         android:hint="@string/availability_place_hint"
         android:inputType="text"
         android:padding="5dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/availability_description_label"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/availability_description_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bkg_edit"
+        android:gravity="top"
+        android:hint="@string/availability_description_hint"
+        android:inputType="textMultiLine"
+        android:lines="5"
+        android:padding="5dp"
+        android:scrollHorizontally="false" />
 
     <View
         android:layout_width="match_parent"
