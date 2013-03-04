@@ -132,7 +132,7 @@ public class Client {
 	}
 	
 	private void throwError(String errorMessage) {
-		if (errorMessage.contains("\"code\":-32010")){
+		if (errorMessage.contains("\"code\":-32010") || errorMessage.contains("\"code\":-32000")){
 			mListener.onTokenExpired();
 		} else {
 			mListener.onNetworkError(errorMessage);
