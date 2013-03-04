@@ -242,4 +242,16 @@ public class GenericFragment extends Fragment implements
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void onNetworkError(String errorMessage) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTokenExpired() {
+		// TODO Auto-generated method stub
+		
+	}
 }
