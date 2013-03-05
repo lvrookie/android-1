@@ -5,17 +5,21 @@ import java.util.ArrayList;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.View;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.sims2013.disponif.DisponifApplication;
+import com.sims2013.disponif.R;
+import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.client.Client;
 import com.sims2013.disponif.model.Availability;
 import com.sims2013.disponif.model.Category;
 
-public class GenericFragment extends Fragment implements
+public abstract class GenericFragment extends Fragment implements
 		Client.onReceiveListener {
 
 	protected static final boolean DEBUG_MODE = DisponifApplication.DEBUG_MODE;
@@ -23,6 +27,12 @@ public class GenericFragment extends Fragment implements
 
 	protected Client mClient;
 	protected UiLifecycleHelper uiHelper;
+	protected boolean mTokenIsValid = false;
+	protected boolean mConnectedToFacebook = false;
+
+	protected ConnectionDialogFragment mDialogFragment;
+	
+	protected View mView;
 
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
@@ -72,19 +82,16 @@ public class GenericFragment extends Fragment implements
 		uiHelper.onSaveInstanceState(outState);
 	}
 
-	@Override
-	public void onStart() {
-		super.onStart();
-
-		initUI();
+	protected void initUI(){
+		
 	}
-
-	protected void initUI() {
-
-	}
-
+	
 	@Override
 	public void onLogInTokenReceive(String token) {
+		mTokenIsValid = true;
+		DisponifApplication.setAccessToken(token);
+		mDialogFragment.dismiss();
+		refresh();
 	}
 
 	@Override
@@ -107,21 +114,18 @@ public class GenericFragment extends Fragment implements
 	// This method handle the case where the user is connected to facebook
 	// Check connection to server
 	public void onFacebookSessionOpened(Session session) {
-
+		mConnectedToFacebook = true;
 	}
 
 	// This method handle the case where the user is disconnected from facebook.
 	public void onFacebookSessionClosed() {
-
+		mConnectedToFacebook = false;
 	}
 
-	// This method is called when the user is logged on FB and on the server
-	protected void onConnectedToServer() {
-
-	}
 
 	public void onRetryClick() {
-
+		mDialogFragment.displayTryingToReachServer();
+		mClient.logIn(DisponifApplication.getAccessToken());
 	}
 
 	private void onSessionStateChange(Session session, SessionState state,
@@ -139,22 +143,55 @@ public class GenericFragment extends Fragment implements
 		}
 	}
 	
-	protected void refresh() {
-		
-	}
+	protected abstract void refresh();
 
 	@Override
 	public void onNetworkError(String errorMessage) {
-		
+		if (mDialogFragment!=null && mDialogFragment.isShowing()) {
+			// if the fragment is already displayed, just show the retry button
+			mDialogFragment.displayServerUnreachable();
+		} else {
+			DisponIFUtils.makeToast(getActivity(), getString(R.string.connection_network_error));
+		}
 	}
 
 	@Override
 	public void onTokenExpired() {
-		
+		mTokenIsValid = false;
+		if (mDialogFragment!=null && mDialogFragment.isShowing()) {
+			// if the fragment is already displayed, just show the retry button
+			mDialogFragment.displayServerUnreachable();
+		} else {
+			// the fragment is not displayed. We have to ask the server for another 
+			// token using the facebook session. 
+			// Note : facebook session loss is handled by onSessionStateChanged, 
+			// so no check needed here.
+			
+			// First, display the connection dialog fragment
+			FragmentManager fm= getActivity().getSupportFragmentManager();
+			mDialogFragment = (ConnectionDialogFragment) fm
+					.findFragmentByTag(ConnectionDialogFragment.TAG);
+			if (mDialogFragment == null) {
+				Bundle b = new Bundle();
+				b.putString(ConnectionDialogFragment.EXTRA_DIALOG_TITLE, getString(R.string.connection_session_lost));
+				mDialogFragment = ConnectionDialogFragment.newInstance(b);
+			}
+			if (!getActivity().isFinishing() && !mDialogFragment.isDetached()) {
+				mDialogFragment.show(fm, ConnectionDialogFragment.TAG);
+			} else {
+				if (DEBUG_MODE) {
+					Log.e(TAG, "activity isFinishing() impossible to show dialog ");
+				}
+			}
+			
+			// Display the message "Your session is lost"
+			
+			// Then call the ws to log in and get a new access token
+			mClient.logIn(Session.getActiveSession().getAccessToken());
+		}
 	}
 
 	@Override
 	public void onUserAvailabilityRemoved() {
-
 	}
 }

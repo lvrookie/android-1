@@ -16,16 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 
-import com.facebook.android.Util;
 import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.activities.AvailabilityActivity;
 import com.sims2013.disponif.adapter.AvailabilityAdapter;
-import com.sims2013.disponif.client.Client;
 import com.sims2013.disponif.model.Availability;
 
 public class AvailabilityListFragment extends GenericFragment implements 
@@ -35,7 +32,6 @@ public class AvailabilityListFragment extends GenericFragment implements
 	
 	AvailabilityAdapter mAdapter;
 	ListView mListView;
-	Client mClient;
 	ProgressDialog mProgressDialog;
 	
 	@Override
@@ -48,28 +44,31 @@ public class AvailabilityListFragment extends GenericFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_list_availability, container, false);
+
+		super.onCreateView(inflater, container, savedInstanceState);
+		
+		mView = inflater.inflate(R.layout.fragment_list_availability, container, false);
+		initUI();
+		return mView;
+	}
+	
+	@Override
+	protected void initUI() {
+		super.initUI();
 		
 		mProgressDialog = new ProgressDialog(getActivity());
 		
-		mListView = (ListView)view.findViewById(R.id.listFragment);
+		mListView = (ListView)mView.findViewById(R.id.listFragment);
 		mListView.setOnItemClickListener(this);
 		registerForContextMenu(mListView);
 		
-
 		mProgressDialog.setTitle(getString(R.string.availability_progress_loading_title));
 		mProgressDialog.setMessage(getString(R.string.availability_progress_loading_message));
 		mProgressDialog.show();
 		
-		
-		mClient = new Client("http://disponif.darkserver.fr/server/api.php");
-		mClient.setListener(this);
 		mClient.getUserAvailabilities(DisponifApplication.getAccessToken());
-		
-		return view;
+//		mClient.getUserAvailabilities("qsdqd");
 	}
-	
-	
 	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
@@ -125,11 +124,8 @@ public class AvailabilityListFragment extends GenericFragment implements
 					AvailabilityActivity.class);
 			startActivityForResult(intent, REQUEST_CODE_ADD_AVAILABILITY);
 		}
-		
 		return false;
 	}
-	
-
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -142,17 +138,17 @@ public class AvailabilityListFragment extends GenericFragment implements
 
 	@Override
 	protected void refresh() {
-		super.refresh();
-		
 		mClient.getUserAvailabilities(DisponifApplication.getAccessToken());
+	}
+	
+	@Override
+	public void onLogInTokenReceive(String token) {
+		super.onLogInTokenReceive(token);
+		refresh();
 	}
 
 	@Override
 	public void onUserAvailabilityRemoved() {
-		mClient.getUserAvailabilities(DisponifApplication.getAccessToken());
-		
+		refresh();
 	}
-
-	
-
 }

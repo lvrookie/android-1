@@ -404,4 +404,9 @@ public class Client {
 			}
 		}.execute();
 	}
+	
+	// Get match availabilities
+	public void getMatchAvailabilities(final Availability availability) {
+		
+	}
 }

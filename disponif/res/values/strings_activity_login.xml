@@ -4,6 +4,9 @@
     <string name="login">Se connecter</string>
     <string name="logout">Se déconnecter</string>
     <string name="login_failed">Authentification failed</string>
-    <string name="logging">Connexion en cours...</string>
+    <string name="connection_logging">Connexion au serveur</string>
+    <string name="connection_session_lost">Session expirée</string>
+    <string name="connection_token_expired">Reconnexion en cours...</string>
+    <string name="connection_network_error">Problème de connectivité. Vérifiez votre connexion réseau.</string>
 
 </resources>

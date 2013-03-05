@@ -28,7 +28,6 @@ import com.sims2013.disponif.R;
 import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.adapter.CategorySpinnerAdapter;
 import com.sims2013.disponif.adapter.TypeSpinnerAdapter;
-import com.sims2013.disponif.client.Client;
 import com.sims2013.disponif.fragments.DatePickerFragment.OnDateSelected;
 import com.sims2013.disponif.fragments.TimePickerFragment.OnTimeRangeSelected;
 import com.sims2013.disponif.model.Availability;
@@ -36,8 +35,7 @@ import com.sims2013.disponif.model.Category;
 import com.sims2013.disponif.model.Type;
 
 public class AvailabilityFragment extends GenericFragment implements
-		OnClickListener, OnDateSelected, OnTimeRangeSelected,
-		Client.onReceiveListener {
+		OnClickListener, OnDateSelected, OnTimeRangeSelected {
 
 	Button mSubmitButton;
 	Button mDateButtonFrom;
@@ -62,7 +60,7 @@ public class AvailabilityFragment extends GenericFragment implements
 	Type mCurrentType;
 
 	ArrayList<SubmitErrors> checkFieldsErrors;
-	
+
 	onAvailabilityAddedListener mListener;
 
 	private enum SubmitErrors {
@@ -72,34 +70,40 @@ public class AvailabilityFragment extends GenericFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		mListener = (onAvailabilityAddedListener) getActivity();
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_availability, container,
+		mView = inflater.inflate(R.layout.fragment_availability, container,
 				false);
+		initUI();
+		return mView;
+	}
 
+	@Override
+	protected void initUI() {
 		mCurrentCategory = null;
 		mCurrentType = null;
 
-		mSubmitButton = (Button) view
+		mSubmitButton = (Button) mView
 				.findViewById(R.id.availability_button_submit);
-		mDateButtonFrom = (Button) view
+		mDateButtonFrom = (Button) mView
 				.findViewById(R.id.availability_button_date_from);
-		mHourButtonFrom = (Button) view
+		mHourButtonFrom = (Button) mView
 				.findViewById(R.id.availability_button_hour_from);
-		mDateButtonTo = (Button) view
+		mDateButtonTo = (Button) mView
 				.findViewById(R.id.availability_button_date_to);
-		mHourButtonTo = (Button) view
+		mHourButtonTo = (Button) mView
 				.findViewById(R.id.availability_button_hour_to);
-		mPlaceET = (EditText) view.findViewById(R.id.availability_place_et);
-		mDescriptionET = (EditText) view.findViewById(R.id.availability_description_et);
-		mActivitySpinner = (Spinner) view
+		mPlaceET = (EditText) mView.findViewById(R.id.availability_place_et);
+		mDescriptionET = (EditText) mView
+				.findViewById(R.id.availability_description_et);
+		mActivitySpinner = (Spinner) mView
 				.findViewById(R.id.availability_spinner_activity);
-		mTypeSpinner = (Spinner) view
+		mTypeSpinner = (Spinner) mView
 				.findViewById(R.id.availability_spinner_type);
 
 		mSubmitButton.setOnClickListener(this);
@@ -108,12 +112,12 @@ public class AvailabilityFragment extends GenericFragment implements
 		mHourButtonFrom.setOnClickListener(this);
 		mHourButtonTo.setOnClickListener(this);
 
-		mDateFromErrorImage = (ImageView) view
+		mDateFromErrorImage = (ImageView) mView
 				.findViewById(R.id.availability_error_date_from);
-		mDateToErrorImage = (ImageView) view
+		mDateToErrorImage = (ImageView) mView
 				.findViewById(R.id.availability_error_date_to);
 
-		mErrorDatesTv = (TextView) view
+		mErrorDatesTv = (TextView) mView
 				.findViewById(R.id.availability_error_dates);
 
 		mPlaceET.addTextChangedListener(new TextWatcher() {
@@ -136,26 +140,25 @@ public class AvailabilityFragment extends GenericFragment implements
 			}
 		});
 		mDescriptionET.addTextChangedListener(new TextWatcher() {
-			
+
 			@Override
 			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
 					int arg3) {
 				mDescriptionET.setError(null);
 			}
-			
+
 			@Override
 			public void beforeTextChanged(CharSequence arg0, int arg1,
 					int arg2, int arg3) {
-				
+
 			}
-			
+
 			@Override
 			public void afterTextChanged(Editable arg0) {
-				
+
 			}
 		});
 
-		mClient.getAllCategories(DisponifApplication.getAccessToken());
 
 		mActivitySpinner.setEnabled(false);
 		mTypeSpinner.setEnabled(false);
@@ -194,8 +197,9 @@ public class AvailabilityFragment extends GenericFragment implements
 			}
 
 		});
-
-		return view;
+		
+		// Call ws to get all the categories to fill the spinners.
+		mClient.getAllCategories(DisponifApplication.getAccessToken());
 	}
 
 	@Override
@@ -289,19 +293,21 @@ public class AvailabilityFragment extends GenericFragment implements
 		}
 	}
 
+	// Method calling the ws to send the new availability
 	@SuppressLint("SimpleDateFormat")
 	private void submitDisponibility() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Availability av = new Availability();
 		av.setCategoryId(mCurrentCategory.getId());
 		av.setDescription(mDescriptionET.getText().toString());
-		
+
 		av.setStartTime(sdf.format(mDateFrom.getTime()));
 		av.setEndTime(sdf.format(mDateTo.getTime()));
 
 		mClient.addAvailability(DisponifApplication.getAccessToken(), av);
 	}
 
+	// Method used to check the validity of the fields before calling the ws to send it
 	private boolean checkFields() {
 		boolean isValid = true;
 
@@ -357,18 +363,21 @@ public class AvailabilityFragment extends GenericFragment implements
 		}
 		if (TextUtils.isEmpty(mDescriptionET.getText())) {
 			isValid = false;
-			mDescriptionET.setError(getString(R.string.availability_error_required_field));
+			mDescriptionET
+					.setError(getString(R.string.availability_error_required_field));
 			addFieldError(SubmitErrors.ERROR_NO_DESCRIPTION_GIVEN);
 		}
 		return isValid;
 	}
 
+	// Method used to add an error to be displayed by a toast.
 	private void addFieldError(SubmitErrors errorMissingInformation) {
 		if (!checkFieldsErrors.contains(errorMissingInformation)) {
 			checkFieldsErrors.add(errorMissingInformation);
 		}
 	}
 
+	// Method called when the user has chosen a date
 	@Override
 	public void onDateSelected(DatePicker view, int year, int monthOfYear,
 			int dayOfMonth, int callerId) {
@@ -393,6 +402,7 @@ public class AvailabilityFragment extends GenericFragment implements
 		}
 	}
 
+	// Method called when the user has chosen an hour
 	@Override
 	public void onTimeRangeSelected(int hourOfDay, int minute, int callerId) {
 		if (callerId == mHourButtonFrom.getId()) {
@@ -412,11 +422,11 @@ public class AvailabilityFragment extends GenericFragment implements
 		}
 	}
 
-
+	// Method called when the user receive all the categories to fill the sppinners.
 	@Override
 	public void onCategoriesReceive(ArrayList<Category> categories) {
 		if (categories != null && categories.size() > 0) {
-			DisponIFUtils.makeToast(getActivity(), "receive categories");
+//			DisponIFUtils.makeToast(getActivity(), "receive categories");
 			mCategories = categories;
 			CategorySpinnerAdapter adapter = new CategorySpinnerAdapter(
 					getActivity(), mCategories);
@@ -425,6 +435,9 @@ public class AvailabilityFragment extends GenericFragment implements
 		}
 	}
 
+	// Method called when the user's availability has been added. 
+	// it has to be implemented by the availability list fragment 
+	// to refresh the list.
 	@Override
 	public void onAvailabilityAdded(int result) {
 		if (result != -1) {
@@ -435,19 +448,14 @@ public class AvailabilityFragment extends GenericFragment implements
 		}
 	}
 
+	// Interface to be implemented by the availability list fragment.
 	public interface onAvailabilityAddedListener {
 		void onAvailabilityAdded();
 	}
 
 	@Override
-	public void onNetworkError(String errorMessage) {
-		// TODO Auto-generated method stub
-		
+	protected void refresh() {
+		mClient.getAllCategories(DisponifApplication.getAccessToken());
 	}
 
-	@Override
-	public void onTokenExpired() {
-		// TODO Auto-generated method stub
-		
-	}
 }

@@ -17,16 +17,12 @@ import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
-import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.activities.AvailabilityListActivity;
-import com.sims2013.disponif.client.Client;
 
-public class HomeFragment extends GenericFragment implements OnClickListener,
-		Client.onReceiveListener {
+public class HomeFragment extends GenericFragment implements OnClickListener {
 
 	public static final String TAG = "com.sims2013.disponif.fragments.LoginFragment";
-	ConnectionDialogFragment mDialogFragment;
 
 	private TextView mWelcomeMessage;
 	private ProfilePictureView mProfilePictureView;
@@ -36,22 +32,10 @@ public class HomeFragment extends GenericFragment implements OnClickListener,
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-		LoginButton authButton = (LoginButton) view
-				.findViewById(R.id.authButton);
-
-		mWelcomeMessage = (TextView) view.findViewById(R.id.home_welcome_tv);
-		mProfilePictureView = (ProfilePictureView) view
-				.findViewById(R.id.selection_profile_pic);
-		mDisponibilityButton = (Button) view
-				.findViewById(R.id.home_dispo_button);
-		mDisponibilityButton.setOnClickListener(this);
-		mDisponibilityButton.setVisibility(View.GONE);
-
-		authButton.setFragment(this);
-
-		return view;
+		
+		mView = inflater.inflate(R.layout.fragment_home, container, false);
+		initUI();
+		return mView;
 	}
 
 	private void makeMeRequest(final Session session) {
@@ -94,40 +78,76 @@ public class HomeFragment extends GenericFragment implements OnClickListener,
 	@Override
 	public void onLogInTokenReceive(String token) {
 		super.onLogInTokenReceive(token);
-
-		if (token == Client.ERROR_STRING) {
-			mDialogFragment.displayServerUnreachable();
-		} else {
-			DisponifApplication.setAccessToken(token);
-			mDialogFragment.dismissAllowingStateLoss();
-			onConnectedToServer();
-		}
+		refresh();
 	}
 
-	@Override
-	public void onRetryClick() {
-		super.onRetryClick();
-		mDialogFragment.displayTryingToReachServer();
-		mClient.logIn(DisponifApplication.getAccessToken());
-	}
 
 	@Override
 	protected void initUI() {
 		super.initUI();
+		
+		LoginButton authButton = (LoginButton) mView
+				.findViewById(R.id.authButton);
 
-		if (DEBUG_MODE) {
-			Log.d(TAG, "initUi()");
-		}
+		mWelcomeMessage = (TextView) mView.findViewById(R.id.home_welcome_tv);
+		mProfilePictureView = (ProfilePictureView) mView
+				.findViewById(R.id.selection_profile_pic);
+		mDisponibilityButton = (Button) mView
+				.findViewById(R.id.home_dispo_button);
+		mDisponibilityButton.setOnClickListener(this);
+		mDisponibilityButton.setVisibility(View.GONE);
 
+		authButton.setFragment(this);
+		
+		checkFacebookSession();
+		
+		refresh();
+	}
+
+	private void checkFacebookSession() {
 		Session session = Session.getActiveSession();
 
 		if (session != null && session.isOpened()) {
-			onConnectedToServer();
+			mConnectedToFacebook = true;
 		} else {
-			onFacebookSessionClosed();
+			mConnectedToFacebook = false;
+			mTokenIsValid = false;
 		}
 	}
 
+	
+
+	@Override
+	public void onFacebookSessionOpened(Session session) {
+		super.onFacebookSessionOpened(session);
+
+		FragmentManager fm = getActivity().getSupportFragmentManager();
+		mDialogFragment = (ConnectionDialogFragment) fm
+				.findFragmentByTag(ConnectionDialogFragment.TAG);
+		if (mDialogFragment == null) {
+			Bundle b = new Bundle();
+			b.putString(ConnectionDialogFragment.EXTRA_DIALOG_TITLE, getString(R.string.connection_logging));
+			mDialogFragment = ConnectionDialogFragment.newInstance(b);
+		}
+		if (!getActivity().isFinishing() && !mDialogFragment.isDetached()) {
+			mDialogFragment.show(fm, ConnectionDialogFragment.TAG);
+		} else {
+			if (DEBUG_MODE) {
+				Log.e(TAG, "activity isFinishing() impossible to show dialog ");
+			}
+		}
+		mTokenIsValid = false;
+		mClient.logIn(session.getAccessToken());
+	}
+
+	
+	private void connectedToServer() {
+		mWelcomeMessage.setVisibility(View.VISIBLE);
+		mProfilePictureView.setVisibility(View.VISIBLE);
+		mDisponibilityButton.setVisibility(View.VISIBLE);
+		makeMeRequest(Session.getActiveSession());
+	}
+	
 	@Override
 	public void onFacebookSessionClosed() {
 		super.onFacebookSessionClosed();
@@ -141,32 +161,13 @@ public class HomeFragment extends GenericFragment implements OnClickListener,
 	}
 
 	@Override
-	public void onFacebookSessionOpened(Session session) {
-		super.onFacebookSessionOpened(session);
-
-		mClient.logIn(session.getAccessToken());
-		FragmentManager fm = getActivity().getSupportFragmentManager();
-		mDialogFragment = (ConnectionDialogFragment) fm
-				.findFragmentByTag(ConnectionDialogFragment.TAG);
-		if (mDialogFragment == null) {
-			Bundle b = new Bundle();
-			mDialogFragment = ConnectionDialogFragment.newInstance(b);
+	protected void refresh() {
+		if (mConnectedToFacebook && mTokenIsValid) {
+			connectedToServer();
+		} else if (!mConnectedToFacebook) {
+			onFacebookSessionClosed();
+		} else if (mConnectedToFacebook && !mTokenIsValid) {
+			mClient.logIn(Session.getActiveSession().getAccessToken());
 		}
-		if (!getActivity().isFinishing() && !mDialogFragment.isDetached()) {
-			mDialogFragment.show(fm, ConnectionDialogFragment.TAG);
-		} else {
-			if (DEBUG_MODE) {
-				Log.e(TAG, "activity isFinishing() impossible to show dialog ");
-			}
-		}
-	}
-
-	@Override
-	protected void onConnectedToServer() {
-		super.onConnectedToServer();
-		mWelcomeMessage.setVisibility(View.VISIBLE);
-		mProfilePictureView.setVisibility(View.VISIBLE);
-		mDisponibilityButton.setVisibility(View.VISIBLE);
-		makeMeRequest(Session.getActiveSession());
 	}
 }
