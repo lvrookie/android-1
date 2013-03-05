@@ -23,7 +23,6 @@ import com.sims2013.disponif.R;
 import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.activities.AvailabilityActivity;
 import com.sims2013.disponif.adapter.AvailabilityAdapter;
-import com.sims2013.disponif.client.Client;
 import com.sims2013.disponif.model.Availability;
 
 public class AvailabilityListFragment extends GenericFragment implements 
@@ -33,7 +32,6 @@ public class AvailabilityListFragment extends GenericFragment implements
 	
 	AvailabilityAdapter mAdapter;
 	ListView mListView;
-	Client mClient;
 	ProgressDialog mProgressDialog;
 	
 	@Override
@@ -64,9 +62,8 @@ public class AvailabilityListFragment extends GenericFragment implements
 		mListView.setOnItemClickListener(this);
 		registerForContextMenu(mListView);
 		
-
-		mProgressDialog.setTitle("Chargement");
-		mProgressDialog.setMessage("R�cup�ration des disponibilit�s ...");
+		mProgressDialog.setTitle(getString(R.string.availability_progress_loading_title));
+		mProgressDialog.setMessage(getString(R.string.availability_progress_loading_message));
 		mProgressDialog.show();
 		
 		mClient.getUserAvailabilities(DisponifApplication.getAccessToken());
@@ -78,8 +75,8 @@ public class AvailabilityListFragment extends GenericFragment implements
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
 		int menuItemIndex = item.getItemId();
 		if (menuItemIndex == 0) {
-			mProgressDialog.setTitle("Suppression");
-			mProgressDialog.setMessage("Suppression de la disponibilit� ...");
+			mProgressDialog.setTitle(getString(R.string.availability_progress_remove_title));
+			mProgressDialog.setMessage(getString(R.string.availability_progress_remove_message));
 			mProgressDialog.show();
 			mClient.removeAvailability(DisponifApplication.getAccessToken(), (Availability)mAdapter.getItem(info.position));
 		}
@@ -91,8 +88,8 @@ public class AvailabilityListFragment extends GenericFragment implements
 			ContextMenuInfo menuInfo) {
 		
 		if (v.getId() == R.id.listFragment) {
-			menu.setHeaderTitle("Menu");
-			menu.add(Menu.NONE, 0, 0, "Supprimer");
+			menu.setHeaderTitle(getString(R.string.availability_context_menu_title));
+			menu.add(Menu.NONE, 0, 0, getString(R.string.availability_context_menu_item_remove));
 		}
 		
 	}

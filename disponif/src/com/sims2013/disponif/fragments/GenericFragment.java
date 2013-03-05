@@ -27,7 +27,8 @@ public abstract class GenericFragment extends Fragment implements
 
 	protected Client mClient;
 	protected UiLifecycleHelper uiHelper;
-	protected boolean mConnectedToServer;
+	protected boolean mTokenIsValid = false;
+	protected boolean mConnectedToFacebook = false;
 
 	protected ConnectionDialogFragment mDialogFragment;
 	
@@ -87,8 +88,10 @@ public abstract class GenericFragment extends Fragment implements
 	
 	@Override
 	public void onLogInTokenReceive(String token) {
+		mTokenIsValid = true;
 		DisponifApplication.setAccessToken(token);
 		mDialogFragment.dismiss();
+		refresh();
 	}
 
 	@Override
@@ -111,12 +114,12 @@ public abstract class GenericFragment extends Fragment implements
 	// This method handle the case where the user is connected to facebook
 	// Check connection to server
 	public void onFacebookSessionOpened(Session session) {
-
+		mConnectedToFacebook = true;
 	}
 
 	// This method handle the case where the user is disconnected from facebook.
 	public void onFacebookSessionClosed() {
-
+		mConnectedToFacebook = false;
 	}
 
 
@@ -154,6 +157,7 @@ public abstract class GenericFragment extends Fragment implements
 
 	@Override
 	public void onTokenExpired() {
+		mTokenIsValid = false;
 		if (mDialogFragment!=null && mDialogFragment.isShowing()) {
 			// if the fragment is already displayed, just show the retry button
 			mDialogFragment.displayServerUnreachable();

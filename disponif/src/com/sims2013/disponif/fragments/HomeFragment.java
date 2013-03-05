@@ -78,7 +78,7 @@ public class HomeFragment extends GenericFragment implements OnClickListener {
 	@Override
 	public void onLogInTokenReceive(String token) {
 		super.onLogInTokenReceive(token);
-		connectedToServer();
+		refresh();
 	}
 
 
@@ -100,15 +100,18 @@ public class HomeFragment extends GenericFragment implements OnClickListener {
 		authButton.setFragment(this);
 		
 		checkFacebookSession();
+		
+		refresh();
 	}
 
 	private void checkFacebookSession() {
 		Session session = Session.getActiveSession();
 
 		if (session != null && session.isOpened()) {
-			connectedToServer();
+			mConnectedToFacebook = true;
 		} else {
-			onFacebookSessionClosed();
+			mConnectedToFacebook = false;
+			mTokenIsValid = false;
 		}
 	}
 
@@ -133,7 +136,7 @@ public class HomeFragment extends GenericFragment implements OnClickListener {
 				Log.e(TAG, "activity isFinishing() impossible to show dialog ");
 			}
 		}
-
+		mTokenIsValid = false;
 		mClient.logIn(session.getAccessToken());
 	}
 
@@ -159,7 +162,12 @@ public class HomeFragment extends GenericFragment implements OnClickListener {
 
 	@Override
 	protected void refresh() {
-		// TODO Auto-generated method stub
-		
+		if (mConnectedToFacebook && mTokenIsValid) {
+			connectedToServer();
+		} else if (!mConnectedToFacebook) {
+			onFacebookSessionClosed();
+		} else if (mConnectedToFacebook && !mTokenIsValid) {
+			mClient.logIn(Session.getActiveSession().getAccessToken());
+		}
 	}
 }
