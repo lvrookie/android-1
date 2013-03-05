@@ -152,4 +152,9 @@ public class GenericFragment extends Fragment implements
 	public void onTokenExpired() {
 		
 	}
+
+	@Override
+	public void onUserAvailabilityRemoved() {
+
+	}
 }

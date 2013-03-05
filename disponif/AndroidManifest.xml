@@ -22,6 +22,11 @@
             android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboard|orientation|screenSize" >
       
+                <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             
         </activity>
         <activity
@@ -47,13 +52,7 @@
             android:name="com.sims2013.disponif.client.ClientTestActivity"
             android:label="@string/title_activity_client_test"
             android:configChanges="keyboard|orientation|screenSize" >
-            
-                    <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            
         </activity>
 
         <meta-data
