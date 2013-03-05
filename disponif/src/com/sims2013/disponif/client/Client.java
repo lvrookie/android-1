@@ -84,7 +84,7 @@ public class Client {
 	private class getUserAvailabilities {
 		public static final String METHOD = "getAvailabilities";
 		
-//		public static final String PARAM_TOKEN = "token";
+		public static final String PARAM_TOKEN = "token";
 		
 		public static final String RESULT_AVAILABILITIES = "availabilities";
 		
@@ -103,6 +103,15 @@ public class Client {
 		
 	}
 	
+	private class removeAvailability {
+		public static final String METHOD = "removeAvailability";
+		
+		public static final String PARAM_TOKEN = "token";
+		public static final String PARAM_ID = "id";
+		
+		public static final String RESULT_STATE = "state";
+	}
+	
 	// Response listener interface
 	public interface onReceiveListener {
 		public void onPingReceive(String result);
@@ -110,6 +119,7 @@ public class Client {
 		public void onAvailabilityAdded(int id);
 		public void onCategoriesReceive(ArrayList<Category> categories);
 		public void onUserAvailabilitiesReceive(ArrayList<Availability> availbilities);
+		public void onUserAvailabilityRemoved();
 		public void onNetworkError(String errorMessage);
 		public void onTokenExpired();
 	}
@@ -313,7 +323,7 @@ public class Client {
 			protected ArrayList<Availability> doInBackground(String... params) {
 		        try {
 		        	JSONObject JSObjet = new JSONObject();
-		        	JSObjet.put(getCategories.PARAM_TOKEN, token);
+		        	JSObjet.put(getUserAvailabilities.PARAM_TOKEN, token);
 		        	JSONObject res = mJsonClient.callJSONObject(getUserAvailabilities.METHOD, JSObjet);
 		        	Log.v("ClientJSON - getUserAvailabilities", res.toString());
 		        	ArrayList<Availability> availabilitiesList = new ArrayList<Availability>();
@@ -351,6 +361,44 @@ public class Client {
 					throwError(errorMessage);
 				}else {
 					mListener.onUserAvailabilitiesReceive(result);
+				}
+				super.onPostExecute(result);
+			}
+		}.execute();
+	}
+	
+	// Remove availability method
+	public void removeAvailability(final String token, final Availability availability) {
+		new AsyncTask<String, Void, Boolean>(){
+
+			String errorMessage;
+			
+			@Override
+			protected Boolean doInBackground(String... params) {
+		        try {
+		        	JSONObject JSObjet = new JSONObject();
+		        	JSObjet.put(removeAvailability.PARAM_TOKEN, token);
+		        	JSObjet.put(removeAvailability.PARAM_ID, availability.getId());
+		        	JSONObject res = mJsonClient.callJSONObject(removeAvailability.METHOD, JSObjet);
+		        	Log.v("ClientJSON - removeAvailability", res.toString());
+		        	Boolean state = res.getBoolean(removeAvailability.RESULT_STATE);
+		        	if (!state) {
+		        		errorMessage = "REMOVED_FAILED";
+		        	}
+		        	return state;
+		        } catch (Exception e) {
+		        	Log.v("ClientJSON - removeAvailability - error", e.getMessage());
+		        	errorMessage = e.getMessage();
+		            return false;
+		        }
+			}
+
+			@Override
+			protected void onPostExecute(Boolean result) {
+				if (!result) {
+					throwError(errorMessage);
+				} else {
+					mListener.onUserAvailabilityRemoved();
 				}
 				super.onPostExecute(result);
 			}

@@ -17,7 +17,6 @@ import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
-import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.activities.AvailabilityListActivity;
 
@@ -33,22 +32,10 @@ public class HomeFragment extends GenericFragment implements OnClickListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-		LoginButton authButton = (LoginButton) view
-				.findViewById(R.id.authButton);
-
-		mWelcomeMessage = (TextView) view.findViewById(R.id.home_welcome_tv);
-		mProfilePictureView = (ProfilePictureView) view
-				.findViewById(R.id.selection_profile_pic);
-		mDisponibilityButton = (Button) view
-				.findViewById(R.id.home_dispo_button);
-		mDisponibilityButton.setOnClickListener(this);
-		mDisponibilityButton.setVisibility(View.GONE);
-
-		authButton.setFragment(this);
-
-		return view;
+		
+		mView = inflater.inflate(R.layout.fragment_home, container, false);
+		initUI();
+		return mView;
 	}
 
 	private void makeMeRequest(final Session session) {
@@ -94,21 +81,28 @@ public class HomeFragment extends GenericFragment implements OnClickListener {
 		connectedToServer();
 	}
 
-	@Override
-	public void onRetryClick() {
-		super.onRetryClick();
-		mDialogFragment.displayTryingToReachServer();
-		mClient.logIn(DisponifApplication.getAccessToken());
-	}
 
 	@Override
 	protected void initUI() {
 		super.initUI();
+		
+		LoginButton authButton = (LoginButton) mView
+				.findViewById(R.id.authButton);
 
-		if (DEBUG_MODE) {
-			Log.d(TAG, "initUi()");
-		}
+		mWelcomeMessage = (TextView) mView.findViewById(R.id.home_welcome_tv);
+		mProfilePictureView = (ProfilePictureView) mView
+				.findViewById(R.id.selection_profile_pic);
+		mDisponibilityButton = (Button) mView
+				.findViewById(R.id.home_dispo_button);
+		mDisponibilityButton.setOnClickListener(this);
+		mDisponibilityButton.setVisibility(View.GONE);
 
+		authButton.setFragment(this);
+		
+		checkFacebookSession();
+	}
+
+	private void checkFacebookSession() {
 		Session session = Session.getActiveSession();
 
 		if (session != null && session.isOpened()) {
@@ -118,17 +112,7 @@ public class HomeFragment extends GenericFragment implements OnClickListener {
 		}
 	}
 
-	@Override
-	public void onFacebookSessionClosed() {
-		super.onFacebookSessionClosed();
-		mProfilePictureView.setVisibility(View.GONE);
-		mWelcomeMessage.setText(getString(R.string.home_disconnected));
-		mWelcomeMessage.setVisibility(View.VISIBLE);
-		if (DEBUG_MODE) {
-			Log.i(TAG, "Logged out...");
-		}
-		mDisponibilityButton.setVisibility(View.INVISIBLE);
-	}
+	
 
 	@Override
 	public void onFacebookSessionOpened(Session session) {
@@ -153,10 +137,29 @@ public class HomeFragment extends GenericFragment implements OnClickListener {
 		mClient.logIn(session.getAccessToken());
 	}
 
+	
 	private void connectedToServer() {
 		mWelcomeMessage.setVisibility(View.VISIBLE);
 		mProfilePictureView.setVisibility(View.VISIBLE);
 		mDisponibilityButton.setVisibility(View.VISIBLE);
 		makeMeRequest(Session.getActiveSession());
+	}
+	
+	@Override
+	public void onFacebookSessionClosed() {
+		super.onFacebookSessionClosed();
+		mProfilePictureView.setVisibility(View.GONE);
+		mWelcomeMessage.setText(getString(R.string.home_disconnected));
+		mWelcomeMessage.setVisibility(View.VISIBLE);
+		if (DEBUG_MODE) {
+			Log.i(TAG, "Logged out...");
+		}
+		mDisponibilityButton.setVisibility(View.INVISIBLE);
+	}
+
+	@Override
+	protected void refresh() {
+		// TODO Auto-generated method stub
+		
 	}
 }

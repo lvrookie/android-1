@@ -437,4 +437,9 @@ public class AvailabilityFragment extends GenericFragment implements
 		void onAvailabilityAdded();
 	}
 
+	@Override
+	protected void refresh() {
+		
+	}
+
 }

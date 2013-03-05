@@ -3,8 +3,11 @@ package com.sims2013.disponif.fragments;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,13 +26,15 @@ import com.sims2013.disponif.adapter.AvailabilityAdapter;
 import com.sims2013.disponif.client.Client;
 import com.sims2013.disponif.model.Availability;
 
-public class AvailabilityListFragment extends GenericFragment implements OnItemClickListener {
+public class AvailabilityListFragment extends GenericFragment implements 
+																OnItemClickListener{
 
 	private static final int REQUEST_CODE_ADD_AVAILABILITY = 42;
 	
 	AvailabilityAdapter mAdapter;
 	ListView mListView;
 	Client mClient;
+	ProgressDialog mProgressDialog;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,25 +46,64 @@ public class AvailabilityListFragment extends GenericFragment implements OnItemC
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_list_availability, container, false);
+
+		super.onCreateView(inflater, container, savedInstanceState);
 		
-		mListView = (ListView)view.findViewById(R.id.listFragment);
-		mListView.setOnItemClickListener(this);
-		
-		mClient = new Client("http://disponif.darkserver.fr/server/api.php");
-		mClient.setListener(this);
-		mClient.getUserAvailabilities(DisponifApplication.getAccessToken());
-//		mClient.getUserAvailabilities("qsdqd");
-		
-		return view;
+		mView = inflater.inflate(R.layout.fragment_list_availability, container, false);
+		initUI();
+		return mView;
 	}
 	
+	@Override
+	protected void initUI() {
+		super.initUI();
+		
+		mProgressDialog = new ProgressDialog(getActivity());
+		
+		mListView = (ListView)mView.findViewById(R.id.listFragment);
+		mListView.setOnItemClickListener(this);
+		registerForContextMenu(mListView);
+		
+
+		mProgressDialog.setTitle("Chargement");
+		mProgressDialog.setMessage("R�cup�ration des disponibilit�s ...");
+		mProgressDialog.show();
+		
+		mClient.getUserAvailabilities(DisponifApplication.getAccessToken());
+//		mClient.getUserAvailabilities("qsdqd");
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+		int menuItemIndex = item.getItemId();
+		if (menuItemIndex == 0) {
+			mProgressDialog.setTitle("Suppression");
+			mProgressDialog.setMessage("Suppression de la disponibilit� ...");
+			mProgressDialog.show();
+			mClient.removeAvailability(DisponifApplication.getAccessToken(), (Availability)mAdapter.getItem(info.position));
+		}
+		return true;
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		
+		if (v.getId() == R.id.listFragment) {
+			menu.setHeaderTitle("Menu");
+			menu.add(Menu.NONE, 0, 0, "Supprimer");
+		}
+		
+	}
+
 	@Override
 	public void onUserAvailabilitiesReceive(
 			ArrayList<Availability> availabilities) {
 		if (availabilities != null) {
 			mAdapter = new AvailabilityAdapter(getActivity(), availabilities);
 			mListView.setAdapter(mAdapter);
+			mProgressDialog.dismiss();
 		}
 		
 	}
@@ -85,7 +129,6 @@ public class AvailabilityListFragment extends GenericFragment implements OnItemC
 		}
 		return false;
 	}
-	
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -98,14 +141,17 @@ public class AvailabilityListFragment extends GenericFragment implements OnItemC
 
 	@Override
 	protected void refresh() {
-		super.refresh();
 		mClient.getUserAvailabilities(DisponifApplication.getAccessToken());
 	}
 	
 	@Override
 	public void onLogInTokenReceive(String token) {
 		super.onLogInTokenReceive(token);
-		
+		refresh();
+	}
+
+	@Override
+	public void onUserAvailabilityRemoved() {
 		refresh();
 	}
 }

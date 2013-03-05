@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.View;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -18,7 +19,7 @@ import com.sims2013.disponif.client.Client;
 import com.sims2013.disponif.model.Availability;
 import com.sims2013.disponif.model.Category;
 
-public class GenericFragment extends Fragment implements
+public abstract class GenericFragment extends Fragment implements
 		Client.onReceiveListener {
 
 	protected static final boolean DEBUG_MODE = DisponifApplication.DEBUG_MODE;
@@ -26,8 +27,11 @@ public class GenericFragment extends Fragment implements
 
 	protected Client mClient;
 	protected UiLifecycleHelper uiHelper;
+	protected boolean mConnectedToServer;
 
 	protected ConnectionDialogFragment mDialogFragment;
+	
+	protected View mView;
 
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
@@ -77,17 +81,10 @@ public class GenericFragment extends Fragment implements
 		uiHelper.onSaveInstanceState(outState);
 	}
 
-	@Override
-	public void onStart() {
-		super.onStart();
-
-		initUI();
+	protected void initUI(){
+		
 	}
-
-	protected void initUI() {
-
-	}
-
+	
 	@Override
 	public void onLogInTokenReceive(String token) {
 		DisponifApplication.setAccessToken(token);
@@ -124,7 +121,8 @@ public class GenericFragment extends Fragment implements
 
 
 	public void onRetryClick() {
-
+		mDialogFragment.displayTryingToReachServer();
+		mClient.logIn(DisponifApplication.getAccessToken());
 	}
 
 	private void onSessionStateChange(Session session, SessionState state,
@@ -142,9 +140,7 @@ public class GenericFragment extends Fragment implements
 		}
 	}
 	
-	protected void refresh() {
-		
-	}
+	protected abstract void refresh();
 
 	@Override
 	public void onNetworkError(String errorMessage) {
@@ -189,5 +185,9 @@ public class GenericFragment extends Fragment implements
 			// Then call the ws to log in and get a new access token
 			mClient.logIn(Session.getActiveSession().getAccessToken());
 		}
+	}
+
+	@Override
+	public void onUserAvailabilityRemoved() {
 	}
 }
