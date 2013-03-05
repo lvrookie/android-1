@@ -40,7 +40,11 @@ public class User {
 	public void setSurname(String mSurname) {
 		this.mSurname = mSurname;
 	}
-	
-	
-	
+
+	@Override
+	public String toString() {
+		return "User [mId=" + mId + ", mName=" + mName + ", mSurname="
+				+ mSurname + "]";
+	}
+
 }

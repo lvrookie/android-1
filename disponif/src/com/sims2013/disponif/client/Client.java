@@ -14,6 +14,7 @@ import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.model.Availability;
 import com.sims2013.disponif.model.Category;
 import com.sims2013.disponif.model.Type;
+import com.sims2013.disponif.model.User;
 
 public class Client {
 	
@@ -103,6 +104,38 @@ public class Client {
 		
 	}
 	
+	private class getMatchAvailabilities {
+		public static final String METHOD = "getCorrespondants";
+		
+		public static final String PARAM_TOKEN = "token";
+		public static final String PARAM_ID = "id";
+		public static final String PARAM_START_ROW = "startRow";
+		public static final String PARAM_END_ROW = "endRow";
+		
+		public static final String RESULT_AVAILABILITIES = "availabilities";
+		public static final String RESULT_AVAILABILITY = "availability";
+		
+		public static final String RESULT_ID = "id";
+		public static final String RESULT_CATEGORY_ID = "category_id";
+		public static final String RESULT_TYPE_ID = "type_id";
+		public static final String RESULT_START_TIME = "startTime";
+		public static final String RESULT_END_TIME = "endTime";
+		public static final String RESULT_OPTION = "option";
+		public static final String RESULT_DESCRIPTION = "description";
+		public static final String RESULT_MAX_PARTICIPANT = "maxParticipant";
+		public static final String RESULT_LATITUDE = "latitude";
+		public static final String RESULT_LONGITUDE = "longitude";
+		public static final String RESULT_RADIUS = "radius";
+		public static final String RESULT_PRIVACY = "privacy";
+		
+		public static final String RESULT_USER = "@user";
+		
+		public static final String RESULT_USER_ID = "id";
+		public static final String RESULT_USER_NAME = "name";
+		public static final String RESULT_USER_SURNAME = "surname";
+		
+	}
+	
 	private class removeAvailability {
 		public static final String METHOD = "removeAvailability";
 		
@@ -120,6 +153,7 @@ public class Client {
 		public void onCategoriesReceive(ArrayList<Category> categories);
 		public void onUserAvailabilitiesReceive(ArrayList<Availability> availbilities);
 		public void onUserAvailabilityRemoved();
+		public void onMatchAvailabilitiesReceive(ArrayList<Availability> availabilities, int startRow, int endRow);
 		public void onNetworkError(String errorMessage);
 		public void onTokenExpired();
 	}
@@ -406,7 +440,70 @@ public class Client {
 	}
 	
 	// Get match availabilities
-	public void getMatchAvailabilities(final Availability availability) {
-		
+	public void getMatchAvailabilities(final String token, final Availability availability, final int startRow, final int endRow) {
+		new AsyncTask<String, Void, ArrayList<Availability>>(){
+
+			String errorMessage;
+			
+			@Override
+			protected ArrayList<Availability> doInBackground(String... params) {
+		        try {
+		        	JSONObject JSObjet = new JSONObject();
+		        	JSObjet.put(getMatchAvailabilities.PARAM_TOKEN, token);
+		        	JSObjet.put(getMatchAvailabilities.PARAM_ID, availability.getId());
+		        	JSObjet.put(getMatchAvailabilities.PARAM_START_ROW, startRow);
+		        	JSObjet.put(getMatchAvailabilities.PARAM_END_ROW, endRow);
+		        	JSONObject res = mJsonClient.callJSONObject(getMatchAvailabilities.METHOD, JSObjet);
+		        	Log.v("ClientJSON - getMatchAvailabilities", res.toString());
+		        	JSONArray avArray = res.getJSONArray(getMatchAvailabilities.RESULT_AVAILABILITIES);
+		        	
+		        	ArrayList<Availability> availabilities = new ArrayList<Availability>();
+		        	
+		        	for (int i = 0; i < avArray.length(); ++i) {
+		        		JSONObject availabilityObject = avArray.getJSONObject(i);
+		        		Availability a = new Availability();
+		        		
+		        		a.setId(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_ID));
+		        		a.setCategoryId(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_CATEGORY_ID));
+		        		a.setTypeId(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_TYPE_ID));
+		        		a.setStartTime(DisponIFUtils.getJSONString(availabilityObject, getMatchAvailabilities.RESULT_START_TIME));
+		        		a.setEndTime(DisponIFUtils.getJSONString(availabilityObject, getMatchAvailabilities.RESULT_END_TIME));
+		        		a.setMaxParticipant(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_MAX_PARTICIPANT));
+		        		a.setLatitude(DisponIFUtils.getJSONFloat(availabilityObject, getMatchAvailabilities.RESULT_LATITUDE));
+		        		a.setLongitude(DisponIFUtils.getJSONFloat(availabilityObject, getMatchAvailabilities.RESULT_LONGITUDE));
+		        		a.setRadius(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_RADIUS));
+		        		a.setPrivacy(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_PRIVACY));
+		        		
+		        		JSONObject option = availabilityObject.getJSONObject(getMatchAvailabilities.RESULT_OPTION);
+		        		a.setDescription(DisponIFUtils.getJSONString(option, getMatchAvailabilities.RESULT_DESCRIPTION));
+		        		
+		        		JSONObject userObject = availabilityObject.getJSONObject(getMatchAvailabilities.RESULT_USER);
+		        		User user = new User();
+		        		user.setId(DisponIFUtils.getJSONInt(userObject, getMatchAvailabilities.RESULT_USER_ID));
+		        		user.setName(DisponIFUtils.getJSONString(userObject, getMatchAvailabilities.RESULT_USER_NAME));
+		        		user.setSurname(DisponIFUtils.getJSONString(userObject, getMatchAvailabilities.RESULT_USER_SURNAME));
+		        		a.setUser(user);
+		        		
+		        		availabilities.add(a);
+		        	}
+		        	
+		        	return availabilities;
+		        } catch (Exception e) {
+		        	Log.v("ClientJSON - getMatchAvailabilities", e.getMessage());
+		        	errorMessage = e.getMessage();
+		            return null;
+		        } 
+			}
+
+			@Override
+			protected void onPostExecute(ArrayList<Availability> result) {
+				if (result == null) {
+					throwError(errorMessage);
+				}else {
+					mListener.onMatchAvailabilitiesReceive(result, startRow, endRow);
+				}
+				super.onPostExecute(result);
+			}
+		}.execute();
 	}
 }

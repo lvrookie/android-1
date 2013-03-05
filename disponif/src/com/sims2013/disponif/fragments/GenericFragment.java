@@ -194,4 +194,9 @@ public abstract class GenericFragment extends Fragment implements
 	@Override
 	public void onUserAvailabilityRemoved() {
 	}
+	
+	@Override
+	public void onMatchAvailabilitiesReceive(ArrayList<Availability> availabilities, int startRow, int endRow) {
+		
+	}
 }

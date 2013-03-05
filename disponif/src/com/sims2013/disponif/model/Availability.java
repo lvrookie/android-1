@@ -139,7 +139,13 @@ public class Availability {
 
 	@Override
 	public String toString() {
-		return "ID : " + mId + "\nDescription : "+mDescription;
+		String user;
+		if (mUser != null) {
+			user = mUser.toString();
+		} else {
+			user = "me";
+		}
+		return "ID : " + mId + "\nDescription : "+mDescription + "\nUser : " + user;
 	}
 	
 	
