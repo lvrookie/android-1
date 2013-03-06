@@ -18,6 +18,8 @@ public class Availability {
 	private String mEndTime;
 	private String mDescription;
 	
+	private User mUser;
+	
 	public Availability() {
 		
 	}
@@ -40,6 +42,7 @@ public class Availability {
 		this.mOption = mOption;
 		this.mStartTime = mStartTime;
 		this.mEndTime = mEndTime;
+		this.mUser = null;
 	}
 	public int getId() {
 		return mId;
@@ -126,9 +129,24 @@ public class Availability {
 		this.mDescription = mDescription;
 	}
 
+	public User getUser() {
+		return mUser;
+	}
+
+	public void setUser(User mUser) {
+		this.mUser = mUser;
+	}
+
 	@Override
 	public String toString() {
-		return "ID : " + mId + "\nDescription : "+mDescription;
+		String user;
+		if (mUser != null) {
+			user = mUser.toString();
+		} else {
+			user = "me";
+		}
+		return "ID : " + mId + "\nDescription : "+mDescription + "\nUser : " + user;
 	}
+	
 	
 }
