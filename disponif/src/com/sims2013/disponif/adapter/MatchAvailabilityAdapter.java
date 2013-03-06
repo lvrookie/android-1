@@ -76,7 +76,6 @@ public class MatchAvailabilityAdapter extends ArrayAdapter<Availability> {
 					.findViewById(R.id.expandable_toggle_button);
 			holder.mUserName = (TextView) convertView
 					.findViewById(R.id.item_match_availability_name);
-
 			holder.mMoreButton
 					.setOnLongClickListener((OnLongClickListener) mFragment);
 
