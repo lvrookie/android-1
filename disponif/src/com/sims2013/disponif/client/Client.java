@@ -329,9 +329,9 @@ public class Client {
 		        	for (int i = 0; i < cats.length(); ++ i) {
 		        		Category cat = new Category();
 		        		JSONObject catJSON = cats.getJSONObject(i);
-		        		cat.setId(catJSON.getInt(getCategories.RESULT_CATEGORY_ID));
-		        		cat.setRadius(catJSON.getInt(getCategories.RESULT_CATEGORY_RADIUS));
-		        		cat.setName(catJSON.getString(getCategories.RESULT_CATEGORY_NAME));
+		        		cat.setId(DisponIFUtils.getJSONInt(catJSON, getCategories.RESULT_CATEGORY_ID));
+		        		cat.setRadius(DisponIFUtils.getJSONInt(catJSON, getCategories.RESULT_CATEGORY_RADIUS));
+		        		cat.setName(DisponIFUtils.getJSONString(catJSON, getCategories.RESULT_CATEGORY_NAME));
 		        		JSONArray typesArray = catJSON.getJSONArray(getCategories.RESULT_TYPES);
 		        		for (int j = 0; j < typesArray.length(); ++ j) {
 		        			Type type = new Type();
@@ -394,9 +394,14 @@ public class Client {
 		        		JSONObject option = availabilityObject.getJSONObject(getUserAvailabilities.RESULT_OPTION);
 		        		availability.setDescription(DisponIFUtils.getJSONString(option, getUserAvailabilities.RESULT_DESCRIPTION));
 		        		
-		        		JSONObject catObject = availabilityObject.getJSONObject(getUserAvailabilities.RESULT_CATEGORY);
-		        		availability.setCategoryId(DisponIFUtils.getJSONInt(catObject, getUserAvailabilities.RESULT_CATEGORY_ID));
-		        		availability.setCategoryName(DisponIFUtils.getJSONString(catObject, getUserAvailabilities.RESULT_CATEGORY_NAME));
+		        		if (availabilityObject.has(getUserAvailabilities.RESULT_CATEGORY)) {
+			        		JSONObject catObject = availabilityObject.getJSONObject(getUserAvailabilities.RESULT_CATEGORY);
+			        		availability.setCategoryId(DisponIFUtils.getJSONInt(catObject, getUserAvailabilities.RESULT_CATEGORY_ID));
+			        		availability.setCategoryName(DisponIFUtils.getJSONString(catObject, getUserAvailabilities.RESULT_CATEGORY_NAME));
+		        		} else {
+		        			availability.setCategoryId(-1);
+			        		availability.setCategoryName("");
+		        		}
 		        		
 		        		if (availabilityObject.has(getUserAvailabilities.RESULT_TYPE)) {
 		        			JSONObject typeObject = availabilityObject.getJSONObject(getUserAvailabilities.RESULT_TYPE);
@@ -512,9 +517,15 @@ public class Client {
 		        		user.setSurname(DisponIFUtils.getJSONString(userObject, getMatchAvailabilities.RESULT_USER_SURNAME));
 		        		a.setUser(user);
 		        		
-		        		JSONObject catObject = availabilityObject.getJSONObject(getMatchAvailabilities.RESULT_CATEGORY);
-		        		a.setCategoryId(DisponIFUtils.getJSONInt(catObject, getMatchAvailabilities.RESULT_CATEGORY_ID));
-		        		a.setCategoryName(DisponIFUtils.getJSONString(catObject, getMatchAvailabilities.RESULT_CATEGORY_NAME));
+		        		
+		        		if (availabilityObject.has(getMatchAvailabilities.RESULT_CATEGORY)) {
+			        		JSONObject catObject = availabilityObject.getJSONObject(getMatchAvailabilities.RESULT_CATEGORY);
+			        		a.setCategoryId(DisponIFUtils.getJSONInt(catObject, getMatchAvailabilities.RESULT_CATEGORY_ID));
+			        		a.setCategoryName(DisponIFUtils.getJSONString(catObject, getMatchAvailabilities.RESULT_CATEGORY_NAME));
+		        		} else {
+		        			a.setCategoryId(-1);
+			        		a.setCategoryName("");
+		        		}
 		        		
 		        		if (availabilityObject.has(getMatchAvailabilities.RESULT_TYPE)) {
 		        			JSONObject typeObject = availabilityObject.getJSONObject(getMatchAvailabilities.RESULT_TYPE);

@@ -439,6 +439,8 @@ public class AvailabilityFragment extends GenericFragment implements
 					getActivity(), mCategories);
 			mActivitySpinner.setAdapter(adapter);
 			mActivitySpinner.setEnabled(true);
+			mCurrentCategory = mCategories.get(0);
+			mCurrentType = mCurrentCategory.getTypes().get(0);
 		}
 	}
 
