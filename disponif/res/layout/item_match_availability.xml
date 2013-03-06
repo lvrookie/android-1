@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_margin="10dp"
-            android:layout_toRightOf="@id/item_category_icon"
+            android:layout_toRightOf="@id/item_match_availability_profile_picture"
             android:textSize="16sp" />
 
         <Button
