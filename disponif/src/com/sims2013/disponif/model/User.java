@@ -5,6 +5,7 @@ public class User {
 	private int mId;
 	private String mName;
 	private String mSurname;
+	private String mFacebookId;
 	
 	public User() {
 		
@@ -39,6 +40,14 @@ public class User {
 
 	public void setSurname(String mSurname) {
 		this.mSurname = mSurname;
+	}
+	
+	public String getFacebookId() {
+		return mFacebookId;
+	}
+
+	public void setFacebookId(String mFacebookId) {
+		this.mFacebookId = mFacebookId;
 	}
 
 	@Override

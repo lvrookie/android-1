@@ -139,6 +139,7 @@ public class Client {
 		public static final String RESULT_USER_ID = "id";
 		public static final String RESULT_USER_NAME = "name";
 		public static final String RESULT_USER_SURNAME = "surname";
+		public static final String RESULT_USER_FB_ID = "facebookId";
 		
 		public static final String RESULT_CATEGORY = "@category";
 		
@@ -515,6 +516,7 @@ public class Client {
 		        		user.setId(DisponIFUtils.getJSONInt(userObject, getMatchAvailabilities.RESULT_USER_ID));
 		        		user.setName(DisponIFUtils.getJSONString(userObject, getMatchAvailabilities.RESULT_USER_NAME));
 		        		user.setSurname(DisponIFUtils.getJSONString(userObject, getMatchAvailabilities.RESULT_USER_SURNAME));
+		        		user.setFacebookId(DisponIFUtils.getJSONString(userObject, getMatchAvailabilities.RESULT_USER_FB_ID));
 		        		a.setUser(user);
 		        		
 		        		
