@@ -10,74 +10,70 @@
         android:id="@+id/item"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/item_category_icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_margin="10dp"
             android:contentDescription="@string/blank_content_description" />
 
         <TextView
-            android:id="@+id/item_availability_startDate"
+            android:id="@+id/item_availability_type_simple"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_toRightOf="@id/item_category_icon" />
 
         <TextView
-            android:id="@+id/item_availability_endDate"
+            android:id="@+id/item_availability_time_simple"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/item_availability_startDate"
-            android:layout_toRightOf="@id/item_category_icon" />
-
-        <TextView
-            android:id="@+id/item_availability_category_and_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/item_availability_endDate"
-            android:layout_toRightOf="@id/item_category_icon" />
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/item_availability_type_simple"
+            android:textColor="@color/gray_bkg"
+            android:textStyle="bold|italic" />
 
         <Button
             android:id="@+id/expandable_toggle_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/white_bt"
-            android:text="@string/availability_more_button" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@id/item_category_icon"
+            android:background="@drawable/list_item_white_selectable" />
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/expandable"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <!-- <Button -->
-        <!-- android:id="@+id/buttonA" -->
-        <!-- android:layout_width="fill_parent" -->
-        <!-- android:layout_height="fill_parent" -->
-        <!-- android:layout_weight="0.5" -->
-        <!-- android:text="Action A" -->
-        <!-- android:textSize="12dip" /> -->
-
-
-        <!-- <Button -->
-        <!-- android:id="@+id/buttonB" -->
-        <!-- android:layout_width="fill_parent" -->
-        <!-- android:layout_height="fill_parent" -->
-        <!-- android:layout_weight="0.5" -->
-        <!-- android:text="Action B" -->
-        <!-- android:textSize="12dip" /> -->
+        android:background="@drawable/bkg_item_details"
+        android:orientation="vertical" >
 
         <TextView
+            android:id="@+id/item_availability_startDate"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/item_availability_endDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/item_availability_category_and_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Détails"
-            android:textSize="30dp" />
+            android:layout_margin="16dp"
+            android:background="@drawable/white_bt"
+            android:text="Voir les dispos correspondantes" />
     </LinearLayout>
 
 </LinearLayout>

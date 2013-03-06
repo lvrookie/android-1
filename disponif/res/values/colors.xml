@@ -2,8 +2,10 @@
 <resources>
 
     <color name="gray_bkg">#C2C2C2</color>
+    <color name="gray_bkg_light">#F2F2F2</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="red">#FF4444</color>
+    <color name="blue_pressed">#888dd7f2</color>
 
 </resources>

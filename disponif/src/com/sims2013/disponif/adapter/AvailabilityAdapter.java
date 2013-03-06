@@ -3,12 +3,13 @@ package com.sims2013.disponif.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
-import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,17 +24,18 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 		TextView mStartTime;
 		TextView mEndTime;
 		TextView mCategoryAndType;
+		Button mMoreButton;
 	}
 
-	public AvailabilityAdapter(Context context, int textViewResourceId,
+	public AvailabilityAdapter(Fragment context, int textViewResourceId,
 			List<Availability> objects) {
-		super(context, textViewResourceId, objects);
+		super(context.getActivity(), textViewResourceId, objects);
 		mLayout = textViewResourceId;
 		mAvailabilities = (ArrayList<Availability>) objects;
-		mContext = context;
+		mFragment = context;
 	}
 
-	private Context mContext;
+	private Fragment mFragment;
 	private int mLayout;
 	private ArrayList<Availability> mAvailabilities = new ArrayList<Availability>();
 
@@ -62,13 +64,16 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		Holder holder;
 		if (convertView == null) {
-			LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
+			LayoutInflater inflater = (mFragment.getActivity()).getLayoutInflater();
 			convertView = inflater.inflate(mLayout, parent, false);
 			holder = new Holder();
 			holder.mCategoryIcon = (ImageView)convertView.findViewById(R.id.item_category_icon);
 			holder.mStartTime = (TextView)convertView.findViewById(R.id.item_availability_startDate);
 			holder.mEndTime = (TextView)convertView.findViewById(R.id.item_availability_endDate);
 			holder.mCategoryAndType = (TextView)convertView.findViewById(R.id.item_availability_category_and_type);
+			holder.mMoreButton = (Button)convertView.findViewById(R.id.expandable_toggle_button);
+			
+			holder.mMoreButton.setOnLongClickListener((OnLongClickListener) mFragment);
 			
 			convertView.setTag(holder);
 		} else {

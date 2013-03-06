@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
@@ -23,7 +24,7 @@ import com.sims2013.disponif.adapter.AvailabilityAdapter;
 import com.sims2013.disponif.model.Availability;
 import com.tjerkw.slideexpandable.library.ActionSlideExpandableListView;
 
-public class AvailabilityListFragment extends GenericFragment{
+public class AvailabilityListFragment extends GenericFragment implements OnLongClickListener{
 
 	private static final int REQUEST_CODE_ADD_AVAILABILITY = 42;
 	
@@ -73,7 +74,7 @@ public class AvailabilityListFragment extends GenericFragment{
 			mProgressDialog.setTitle(getString(R.string.availability_progress_remove_title));
 			mProgressDialog.setMessage(getString(R.string.availability_progress_remove_message));
 			mProgressDialog.show();
-//			mClient.removeAvailability(DisponifApplication.getAccessToken(), (Availability)mAdapter.getItem(info.position));
+			mClient.removeAvailability(DisponifApplication.getAccessToken(), (Availability)mAdapter.getItem(info.position));
 		}
 		return true;
 	}
@@ -94,18 +95,9 @@ public class AvailabilityListFragment extends GenericFragment{
 			ArrayList<Availability> availabilities) {
 		mProgressDialog.dismiss();
 		if (availabilities != null) {
-//			mAdapter = new AvailabilityAdapter(getActivity(), availabilities);
-
-			final int SIZE = 20;
-			String[] values = new String[SIZE];
-			for(int i=0;i<SIZE;i++) {
-				values[i] = "Item "+i;
-			}
-			mAdapter = new AvailabilityAdapter(getActivity(), R.layout.expandable_list_item, availabilities);
-//			mAdapter = new AvailabilityAdapter(getActivity(), R.layout.item_availability, R.id.item_availability_category_and_type, values);
+			mAdapter = new AvailabilityAdapter(this, R.layout.expandable_list_item, availabilities);
 			
 			mListView.setAdapter(mAdapter);
-//			mListView.setAdapter(buildDummyData());
 			mProgressDialog.dismiss();
 		}
 	}
@@ -153,5 +145,10 @@ public class AvailabilityListFragment extends GenericFragment{
 	@Override
 	public void onUserAvailabilityRemoved() {
 		refresh();
+	}
+
+	@Override
+	public boolean onLongClick(View arg0) {
+		return false;
 	}
 }
