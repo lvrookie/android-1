@@ -473,7 +473,7 @@ public class Client {
 	}
 	
 	// Get match availabilities
-	public void getMatchAvailabilities(final String token, final Availability availability, final int startRow, final int endRow) {
+	public void getMatchAvailabilities(final String token, final int availabilityId, final int startRow, final int endRow) {
 		new AsyncTask<String, Void, ArrayList<Availability>>(){
 
 			String errorMessage;
@@ -483,7 +483,7 @@ public class Client {
 		        try {
 		        	JSONObject JSObjet = new JSONObject();
 		        	JSObjet.put(getMatchAvailabilities.PARAM_TOKEN, token);
-		        	JSObjet.put(getMatchAvailabilities.PARAM_ID, availability.getId());
+		        	JSObjet.put(getMatchAvailabilities.PARAM_ID, availabilityId);
 		        	JSObjet.put(getMatchAvailabilities.PARAM_START_ROW, startRow);
 		        	JSObjet.put(getMatchAvailabilities.PARAM_END_ROW, endRow);
 		        	JSONObject res = mJsonClient.callJSONObject(getMatchAvailabilities.METHOD, JSObjet);

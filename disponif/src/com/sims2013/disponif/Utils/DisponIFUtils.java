@@ -1,5 +1,11 @@
 package com.sims2013.disponif.Utils;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -11,6 +17,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.widget.Toast;
 
 
@@ -61,7 +70,7 @@ public class DisponIFUtils {
 	}
 
 	// Convert a String with the format "yyyy-MM-dd HH:mm:ss" to a French date String
-	// Exemple : "2013-02-20 12:10:30" will be convert to "20 févr 2013"
+	// Exemple : "2013-02-20 12:10:30" will be convert to "20 fï¿½vr 2013"
 	public static String datetimeToFrDate(Context context, String timeToFormat) {
 		String finalDateTime = "";          
 

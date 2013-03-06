@@ -12,4 +12,6 @@
     <string name="availability_context_menu_item_remove">Supprimer</string>
     <string name="availability_more_button">Voir détails</string>
 
+    
+     <string name="availability_match_list_title">Disponibilités correspondantes</string>
 </resources>
