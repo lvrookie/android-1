@@ -29,7 +29,11 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		mCurrentAvailabilityId = getArguments().getInt(AVAILABILITY_ID);
+		if (getArguments().containsKey(AVAILABILITY_ID)) {
+			mCurrentAvailabilityId = getArguments().getInt(AVAILABILITY_ID);
+		} else {
+			mCurrentAvailabilityId = -1;
+		}
 	}
 	
 	@Override
