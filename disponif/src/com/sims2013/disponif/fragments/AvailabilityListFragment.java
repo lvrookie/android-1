@@ -23,6 +23,7 @@ import com.sims2013.disponif.R;
 import com.sims2013.disponif.activities.AvailabilityActivity;
 import com.sims2013.disponif.adapter.AvailabilityAdapter;
 import com.sims2013.disponif.model.Availability;
+import com.tjerkw.slideexpandable.library.ActionSlideExpandableListView;
 
 public class AvailabilityListFragment extends GenericFragment{
 
