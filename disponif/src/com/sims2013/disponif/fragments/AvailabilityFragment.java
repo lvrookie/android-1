@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -63,6 +64,8 @@ public class AvailabilityFragment extends GenericFragment implements
 
 	onAvailabilityAddedListener mListener;
 
+	ProgressDialog mProgressDialog;
+	
 	private enum SubmitErrors {
 		ERROR_NO_PLACE_GIVEN, ERROR_MISSING_INFORMATION, ERROR_END_DATE_BEFORE_START_DATE, ERROR_PAST_START_DATE, ERROR_NO_DESCRIPTION_GIVEN
 	}
@@ -70,7 +73,7 @@ public class AvailabilityFragment extends GenericFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		mProgressDialog = new ProgressDialog(getActivity());
 		mListener = (onAvailabilityAddedListener) getActivity();
 	}
 
@@ -296,9 +299,13 @@ public class AvailabilityFragment extends GenericFragment implements
 	// Method calling the ws to send the new availability
 	@SuppressLint("SimpleDateFormat")
 	private void submitDisponibility() {
+		mProgressDialog.setTitle(getString(R.string.availability_progress_title));
+		mProgressDialog.setMessage(getString(R.string.availability_progress_message));
+		mProgressDialog.show();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Availability av = new Availability();
 		av.setCategoryId(mCurrentCategory.getId());
+		av.setTypeId(mCurrentType.getId());
 		av.setDescription(mDescriptionET.getText().toString());
 
 		av.setStartTime(sdf.format(mDateFrom.getTime()));
@@ -440,6 +447,7 @@ public class AvailabilityFragment extends GenericFragment implements
 	// to refresh the list.
 	@Override
 	public void onAvailabilityAdded(int result) {
+		mProgressDialog.dismiss();
 		if (result != -1) {
 			mListener.onAvailabilityAdded();
 		} else {

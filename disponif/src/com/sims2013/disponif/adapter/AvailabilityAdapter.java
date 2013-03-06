@@ -9,9 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.widget.ProfilePictureView;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.model.Availability;
@@ -19,7 +19,7 @@ import com.sims2013.disponif.model.Availability;
 public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 	
 	static class Holder{
-		ProfilePictureView mProfilePicture;
+		ImageView mCategoryIcon;
 		TextView mStartTime;
 		TextView mEndTime;
 		TextView mCategoryAndType;
@@ -65,7 +65,7 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 			LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
 			convertView = inflater.inflate(mLayout, parent, false);
 			holder = new Holder();
-			holder.mProfilePicture = (ProfilePictureView)convertView.findViewById(R.id.item_availability_user_profile_picture);
+			holder.mCategoryIcon = (ImageView)convertView.findViewById(R.id.item_category_icon);
 			holder.mStartTime = (TextView)convertView.findViewById(R.id.item_availability_startDate);
 			holder.mEndTime = (TextView)convertView.findViewById(R.id.item_availability_endDate);
 			holder.mCategoryAndType = (TextView)convertView.findViewById(R.id.item_availability_category_and_type);
@@ -90,6 +90,22 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 		+ " - "
 		+ DisponIFUtils.datetimeToFrTime(getContext(),
 				av.getEndTime()));
+		
+		switch (av.getCategoryId()) {
+		case 1 :
+			holder.mCategoryIcon.setImageResource(R.drawable.ic_sport);
+			break;
+		case 2 :
+			holder.mCategoryIcon.setImageResource(R.drawable.ic_cinema);
+			break;
+		case 3 :
+			holder.mCategoryIcon.setImageResource(R.drawable.ic_sortie);
+			break;
+		default :
+			holder.mCategoryIcon.setImageBitmap(null);
+			break;
+		}
+		
 		return convertView;
 		
 		

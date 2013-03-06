@@ -25,6 +25,9 @@
     <string name="availability_toast_error_no_description">Vous devez donner une description.</string>
     <string name="availability_dates_error">La date de fin est antérieure à la date de début.</string>
     <string name="availability_past_start_date">La date indiquée est déjà passée.</string>
+    
+    <string name="availability_progress_title">Ajout</string>
+    <string name="availability_progress_message">Ajout d\'une disponibilité &#8230;</string>
 
     <string-array name="dummy_disponibility_type_array">
         <item>Sport</item>

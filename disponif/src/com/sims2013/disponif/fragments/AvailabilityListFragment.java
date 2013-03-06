@@ -15,8 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 
 import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
@@ -94,6 +92,7 @@ public class AvailabilityListFragment extends GenericFragment{
 	@Override
 	public void onUserAvailabilitiesReceive(
 			ArrayList<Availability> availabilities) {
+		mProgressDialog.dismiss();
 		if (availabilities != null) {
 //			mAdapter = new AvailabilityAdapter(getActivity(), availabilities);
 
@@ -109,7 +108,6 @@ public class AvailabilityListFragment extends GenericFragment{
 //			mListView.setAdapter(buildDummyData());
 			mProgressDialog.dismiss();
 		}
-		
 	}
 	
 	@Override
@@ -140,6 +138,9 @@ public class AvailabilityListFragment extends GenericFragment{
 
 	@Override
 	protected void refresh() {
+		mProgressDialog.setTitle(getString(R.string.availability_progress_loading_title));
+		mProgressDialog.setMessage(getString(R.string.availability_progress_loading_message));
+		mProgressDialog.show();
 		mClient.getUserAvailabilities(DisponifApplication.getAccessToken());
 	}
 	
@@ -152,19 +153,5 @@ public class AvailabilityListFragment extends GenericFragment{
 	@Override
 	public void onUserAvailabilityRemoved() {
 		refresh();
-	}
-	
-	public ListAdapter buildDummyData() {
-		final int SIZE = 20;
-		String[] values = new String[SIZE];
-		for(int i=0;i<SIZE;i++) {
-			values[i] = "Item "+i;
-		}
-		return new ArrayAdapter<String>(
-				getActivity(),
-				R.layout.expandable_list_item,
-				R.id.text,
-				values
-		);
 	}
 }
