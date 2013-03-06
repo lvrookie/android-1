@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
@@ -61,14 +60,6 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-//		AvailabilityCellView view;
-//		if (convertView == null) {
-//			view = new AvailabilityCellView(mContext);
-//		} else {
-//			view = (AvailabilityCellView) convertView;
-//		}
-//		view.setObject(mAvailabilities.get(position));
-//		return view;
 		Holder holder;
 		if (convertView == null) {
 			LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
