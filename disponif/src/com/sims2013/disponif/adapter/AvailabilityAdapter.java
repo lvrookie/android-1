@@ -106,7 +106,7 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 		
 		// show The Image
 		new DownloadImageTask(holder.mCategoryIcon)
-		            .execute("http://disponif.darkserver.fr/server/res/category/"+ av.getCategoryId() +"_48x48.png");
+		            .execute("http://disponif.darkserver.fr/server/res/category/"+ av.getCategoryId() +".png");
 		
 		return convertView;
 	}
