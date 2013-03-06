@@ -63,7 +63,7 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 			ArrayList<Availability> availabilities, int startRow, int endRow) {
 		mProgressDialog.dismiss();
 		if (availabilities != null) {
-			mAdapter = new MatchAvailabilityAdapter(this, R.layout.item_availability, availabilities);
+			mAdapter = new MatchAvailabilityAdapter(this, R.layout.item_match_availability, availabilities);
 			
 			mListView.setAdapter(mAdapter);
 		}

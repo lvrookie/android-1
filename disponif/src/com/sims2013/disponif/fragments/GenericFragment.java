@@ -90,7 +90,9 @@ public abstract class GenericFragment extends Fragment implements
 	public void onLogInTokenReceive(String token) {
 		mTokenIsValid = true;
 		DisponifApplication.setAccessToken(token);
-		mDialogFragment.dismiss();
+		if (!mDialogFragment.isDetached()) {
+			mDialogFragment.dismiss();
+		}
 		refresh();
 	}
 
