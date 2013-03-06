@@ -151,7 +151,9 @@ public abstract class GenericFragment extends Fragment implements
 			// if the fragment is already displayed, just show the retry button
 			mDialogFragment.displayServerUnreachable();
 		} else {
-			DisponIFUtils.makeToast(getActivity(), getString(R.string.connection_network_error));
+			if (!isDetached()) {
+				DisponIFUtils.makeToast(getActivity(), getString(R.string.connection_network_error));
+			}
 		}
 	}
 

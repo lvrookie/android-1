@@ -15,23 +15,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 
 import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
-import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.activities.AvailabilityActivity;
 import com.sims2013.disponif.adapter.AvailabilityAdapter;
 import com.sims2013.disponif.model.Availability;
+import com.tjerkw.slideexpandable.library.ActionSlideExpandableListView;
 
-public class AvailabilityListFragment extends GenericFragment implements 
-																OnItemClickListener{
+public class AvailabilityListFragment extends GenericFragment{
 
 	private static final int REQUEST_CODE_ADD_AVAILABILITY = 42;
 	
 	AvailabilityAdapter mAdapter;
-	ListView mListView;
+	ActionSlideExpandableListView mListView;
 	ProgressDialog mProgressDialog;
 	
 	@Override
@@ -58,8 +55,7 @@ public class AvailabilityListFragment extends GenericFragment implements
 		
 		mProgressDialog = new ProgressDialog(getActivity());
 		
-		mListView = (ListView)mView.findViewById(R.id.listFragment);
-		mListView.setOnItemClickListener(this);
+		mListView = (ActionSlideExpandableListView) mView.findViewById(R.id.list);
 		registerForContextMenu(mListView);
 		
 		mProgressDialog.setTitle(getString(R.string.availability_progress_loading_title));
@@ -67,7 +63,6 @@ public class AvailabilityListFragment extends GenericFragment implements
 		mProgressDialog.show();
 		
 		mClient.getUserAvailabilities(DisponifApplication.getAccessToken());
-//		mClient.getUserAvailabilities("qsdqd");
 	}
 	
 	@Override
@@ -78,7 +73,7 @@ public class AvailabilityListFragment extends GenericFragment implements
 			mProgressDialog.setTitle(getString(R.string.availability_progress_remove_title));
 			mProgressDialog.setMessage(getString(R.string.availability_progress_remove_message));
 			mProgressDialog.show();
-			mClient.removeAvailability(DisponifApplication.getAccessToken(), (Availability)mAdapter.getItem(info.position));
+//			mClient.removeAvailability(DisponifApplication.getAccessToken(), (Availability)mAdapter.getItem(info.position));
 		}
 		return true;
 	}
@@ -87,7 +82,7 @@ public class AvailabilityListFragment extends GenericFragment implements
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		
-		if (v.getId() == R.id.listFragment) {
+		if (v.getId() == R.id.list) {
 			menu.setHeaderTitle(getString(R.string.availability_context_menu_title));
 			menu.add(Menu.NONE, 0, 0, getString(R.string.availability_context_menu_item_remove));
 		}
@@ -99,14 +94,20 @@ public class AvailabilityListFragment extends GenericFragment implements
 			ArrayList<Availability> availabilities) {
 		mProgressDialog.dismiss();
 		if (availabilities != null) {
-			mAdapter = new AvailabilityAdapter(getActivity(), availabilities);
-			mListView.setAdapter(mAdapter);
-		}
-	}
+//			mAdapter = new AvailabilityAdapter(getActivity(), availabilities);
 
-	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-		DisponIFUtils.makeToast(getActivity(), mAdapter.getItem(position).toString());
+			final int SIZE = 20;
+			String[] values = new String[SIZE];
+			for(int i=0;i<SIZE;i++) {
+				values[i] = "Item "+i;
+			}
+			mAdapter = new AvailabilityAdapter(getActivity(), R.layout.expandable_list_item, availabilities);
+//			mAdapter = new AvailabilityAdapter(getActivity(), R.layout.item_availability, R.id.item_availability_category_and_type, values);
+			
+			mListView.setAdapter(mAdapter);
+//			mListView.setAdapter(buildDummyData());
+			mProgressDialog.dismiss();
+		}
 	}
 	
 	@Override
