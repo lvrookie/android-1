@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.model.Availability;
+import com.sims2013.disponif.model.User;
 
 public class MatchAvailabilityAdapter extends AvailabilityAdapter {
 
@@ -77,11 +78,18 @@ public class MatchAvailabilityAdapter extends AvailabilityAdapter {
 						+ DisponIFUtils.datetimeToFrTime(getContext(),
 								av.getEndTime()));
 
-		// holder.mUserName.setText(av.getUser().getName() + " " +
-		// av.getUser().getSurname());
-
-		new DisponIFUtils.DownloadImageTask(holder.mProfilePictureView)
-				.execute("http://graph.facebook.com/1299870122/picture?type=large");
+		User user = av.getUser();
+		if (user != null) {
+			holder.mUserName.setText(av.getUser().getName() + " "
+					+ av.getUser().getSurname());
+			new DisponIFUtils.DownloadImageTask(holder.mProfilePictureView)
+					.execute("http://graph.facebook.com/"
+							+ av.getUser().getFacebookId()
+							+ "/picture?type=large");
+		} else {
+			new DisponIFUtils.DownloadImageTask(holder.mProfilePictureView)
+			.execute("http://www.theprprofessional.com/wp-content/uploads/2011/11/facebook-profile-picture.jpg");
+		}
 
 		// holder.mTypeSimple.setText(av.getTypeName());
 		//

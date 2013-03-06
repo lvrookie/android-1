@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.Utils.DisponIFUtils;
+import com.sims2013.disponif.Utils.DisponIFUtils.DownloadImageTask;
 import com.sims2013.disponif.model.Availability;
 
 public class AvailabilityAdapter extends ArrayAdapter<Availability> {
@@ -112,8 +113,8 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 		}
 		
 		// show The Image
-		new DisponIFUtils.DownloadImageTask(holder.mCategoryIcon)
-		            .execute("http://disponif.darkserver.fr/server/res/category/"+ av.getCategoryId() +"_48x48.png");
+		new DownloadImageTask(holder.mCategoryIcon)
+		            .execute("http://disponif.darkserver.fr/server/res/category/"+ av.getCategoryId() +".png");
 		
 		return convertView;
 	}
