@@ -7,6 +7,8 @@ public class Availability {
 	private String mUserId;
 	private int mCategoryId;
 	private int mTypeId;
+	private String mCategoryName;
+	private String mTypeName;
 	private float mLatitude;
 	private float mLongitude;
 	private int mRadius;
@@ -147,6 +149,23 @@ public class Availability {
 		}
 		return "ID : " + mId + "\nDescription : "+mDescription + "\nUser : " + user;
 	}
+
+	public String getCategoryName() {
+		return mCategoryName;
+	}
+
+	public void setCategoryName(String mCategoryName) {
+		this.mCategoryName = mCategoryName;
+	}
+
+	public String getTypeName() {
+		return mTypeName;
+	}
+
+	public void setTypeName(String mTypeName) {
+		this.mTypeName = mTypeName;
+	}
+	
 	
 	
 }

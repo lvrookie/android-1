@@ -97,12 +97,11 @@ public class AvailabilityListFragment extends GenericFragment implements
 	@Override
 	public void onUserAvailabilitiesReceive(
 			ArrayList<Availability> availabilities) {
+		mProgressDialog.dismiss();
 		if (availabilities != null) {
 			mAdapter = new AvailabilityAdapter(getActivity(), availabilities);
 			mListView.setAdapter(mAdapter);
-			mProgressDialog.dismiss();
 		}
-		
 	}
 
 	@Override
@@ -138,6 +137,9 @@ public class AvailabilityListFragment extends GenericFragment implements
 
 	@Override
 	protected void refresh() {
+		mProgressDialog.setTitle(getString(R.string.availability_progress_loading_title));
+		mProgressDialog.setMessage(getString(R.string.availability_progress_loading_message));
+		mProgressDialog.show();
 		mClient.getUserAvailabilities(DisponifApplication.getAccessToken());
 	}
 	

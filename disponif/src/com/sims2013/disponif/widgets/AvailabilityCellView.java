@@ -17,7 +17,7 @@ import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.model.Availability;
 
 public class AvailabilityCellView extends RelativeLayout{
-	ProfilePictureView mProfilePicture;
+	ImageView mCategoryIcon;
 	TextView mCategoryAndType;
 	TextView mStartTime;
 	TextView mEndTime;
@@ -39,7 +39,7 @@ public class AvailabilityCellView extends RelativeLayout{
 		LayoutInflater.from(context).inflate(
 				R.layout.item_availability, this, true);
 		
-		mProfilePicture = (ProfilePictureView) findViewById(R.id.item_availability_user_profile_picture);
+		mCategoryIcon = (ImageView) findViewById(R.id.item_availability_icon_category);
 		mPrivacy= (ImageView) findViewById(R.id.item_availability_privacy);
 		mStartTime = (TextView) findViewById(R.id.item_availability_startDate);
 		mEndTime = (TextView) findViewById(R.id.item_availability_endDate);
@@ -52,35 +52,30 @@ public class AvailabilityCellView extends RelativeLayout{
 	public void setObject(Object object){
 		Availability availability = (Availability) object;
 		
-		Session session = Session.getActiveSession();
-		Request request = Request.newMeRequest(session,
-				new Request.GraphUserCallback() {
-
-					@Override
-					public void onCompleted(GraphUser user, Response response) {
-						// If the response is successful
-							if (user != null) {
-								// Set the id for the ProfilePictureView
-								// view that in turn displays the profile
-								// picture.
-								mProfilePicture.setProfileId(user.getId());
-							}
-						if (response.getError() != null) {
-							// Handle errors, will do so later.
-						}
-					}
-				});
-		request.executeAsync();
-		
 		mStartTime.setText("du " + DisponIFUtils.datetimeToFrDate(getContext(), availability.getStartTime()) + " - " + DisponIFUtils.datetimeToFrTime(getContext(), availability.getStartTime()));
 		mEndTime.setText("au " + DisponIFUtils.datetimeToFrDate(getContext(), availability.getEndTime()) + " - " + DisponIFUtils.datetimeToFrTime(getContext(), availability.getEndTime()));
-		mCategoryAndType.setText("Category : " + availability.getCategoryId() + "     Type : " + availability.getTypeId());
+		mCategoryAndType.setText("Category : " + availability.getCategoryName() + "     Type : " + availability.getTypeName());
 		switch (availability.getPrivacy()) {
 		case 0:
 			mPrivacy.setImageDrawable(getResources().getDrawable(R.drawable.privacy_private)); 
 			break;
 		case 1:
 			mPrivacy.setImageDrawable(getResources().getDrawable(R.drawable.privacy_public)); 
+			break;
+		}
+		
+		switch (availability.getCategoryId()) {
+		case 1 :
+			mCategoryIcon.setImageResource(R.drawable.ic_sport);
+			break;
+		case 2 :
+			mCategoryIcon.setImageResource(R.drawable.ic_cinema);
+			break;
+		case 3 :
+			mCategoryIcon.setImageResource(R.drawable.ic_sortie);
+			break;
+		default :
+			mCategoryIcon.setImageBitmap(null);
 			break;
 		}
 	}

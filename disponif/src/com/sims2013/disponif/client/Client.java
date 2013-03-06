@@ -51,7 +51,7 @@ public class Client {
 		// Parameter keys
 		public static final String PARAM_TOKEN = "token";
 		public static final String PARAM_CATEGORY_ID = "category_id";
-//		public static final String PARAM_TYPE_ID = "type_id";
+		public static final String PARAM_TYPE_ID = "type_id";
 		public static final String PARAM_START_TIME = "startTime";
 		public static final String PARAM_END_TIME = "endTime";
 		public static final String PARAM_DESCRIPTION = "description";
@@ -90,8 +90,6 @@ public class Client {
 		public static final String RESULT_AVAILABILITIES = "availabilities";
 		
 		public static final String RESULT_ID = "id";
-		public static final String RESULT_CATEGORY_ID = "category_id";
-		public static final String RESULT_TYPE_ID = "type_id";
 		public static final String RESULT_START_TIME = "startTime";
 		public static final String RESULT_END_TIME = "endTime";
 		public static final String RESULT_OPTION = "option";
@@ -101,6 +99,16 @@ public class Client {
 		public static final String RESULT_LONGITUDE = "longitude";
 		public static final String RESULT_RADIUS = "radius";
 		public static final String RESULT_PRIVACY = "privacy";
+		
+		public static final String RESULT_CATEGORY = "@category";
+		
+		public static final String RESULT_CATEGORY_ID = "id";
+		public static final String RESULT_CATEGORY_NAME = "name";
+		
+		public static final String RESULT_TYPE = "@type";
+		
+		public static final String RESULT_TYPE_ID = "id";
+		public static final String RESULT_TYPE_NAME = "name";
 		
 	}
 	
@@ -116,8 +124,6 @@ public class Client {
 		public static final String RESULT_AVAILABILITY = "availability";
 		
 		public static final String RESULT_ID = "id";
-		public static final String RESULT_CATEGORY_ID = "category_id";
-		public static final String RESULT_TYPE_ID = "type_id";
 		public static final String RESULT_START_TIME = "startTime";
 		public static final String RESULT_END_TIME = "endTime";
 		public static final String RESULT_OPTION = "option";
@@ -134,6 +140,15 @@ public class Client {
 		public static final String RESULT_USER_NAME = "name";
 		public static final String RESULT_USER_SURNAME = "surname";
 		
+		public static final String RESULT_CATEGORY = "@category";
+		
+		public static final String RESULT_CATEGORY_ID = "id";
+		public static final String RESULT_CATEGORY_NAME = "name";
+		
+		public static final String RESULT_TYPE = "@type";
+		
+		public static final String RESULT_TYPE_ID = "id";
+		public static final String RESULT_TYPE_NAME = "name";
 	}
 	
 	private class removeAvailability {
@@ -259,7 +274,7 @@ public class Client {
 		        	JSONObject JSObjet = new JSONObject();
 		        	JSObjet.put(addAvailability.PARAM_TOKEN, token);
 		        	JSObjet.put(addAvailability.PARAM_CATEGORY_ID, availability.getCategoryId());
-//		        	JSObjet.put(addAvailability.PARAM_TYPE_ID, availability.getTypeId());
+		        	JSObjet.put(addAvailability.PARAM_TYPE_ID, availability.getTypeId());
 		        	JSObjet.put(addAvailability.PARAM_START_TIME, availability.getStartTime());
 		        	JSObjet.put(addAvailability.PARAM_END_TIME, availability.getEndTime());
 		        	JSObjet.put(addAvailability.PARAM_DESCRIPTION, availability.getDescription());
@@ -366,8 +381,8 @@ public class Client {
 		        		JSONObject availabilityObject = availailitiesArray.getJSONObject(i);
 		        		Availability availability = new Availability();
 		        		availability.setId(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_ID));
-		        		availability.setCategoryId(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_CATEGORY_ID));
-		        		availability.setTypeId(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_TYPE_ID));
+//		        		availability.setCategoryId(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_CATEGORY_ID));
+//		        		availability.setTypeId(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_TYPE_ID));
 		        		availability.setStartTime(DisponIFUtils.getJSONString(availabilityObject, getUserAvailabilities.RESULT_START_TIME));
 		        		availability.setEndTime(DisponIFUtils.getJSONString(availabilityObject, getUserAvailabilities.RESULT_END_TIME));
 		        		availability.setMaxParticipant(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_MAX_PARTICIPANT));
@@ -378,6 +393,19 @@ public class Client {
 		        		
 		        		JSONObject option = availabilityObject.getJSONObject(getUserAvailabilities.RESULT_OPTION);
 		        		availability.setDescription(DisponIFUtils.getJSONString(option, getUserAvailabilities.RESULT_DESCRIPTION));
+		        		
+		        		JSONObject catObject = availabilityObject.getJSONObject(getUserAvailabilities.RESULT_CATEGORY);
+		        		availability.setCategoryId(DisponIFUtils.getJSONInt(catObject, getUserAvailabilities.RESULT_CATEGORY_ID));
+		        		availability.setCategoryName(DisponIFUtils.getJSONString(catObject, getUserAvailabilities.RESULT_CATEGORY_NAME));
+		        		
+		        		if (availabilityObject.has(getUserAvailabilities.RESULT_TYPE)) {
+		        			JSONObject typeObject = availabilityObject.getJSONObject(getUserAvailabilities.RESULT_TYPE);
+		        			availability.setTypeId(DisponIFUtils.getJSONInt(typeObject, getUserAvailabilities.RESULT_TYPE_ID));
+		        			availability.setTypeName(DisponIFUtils.getJSONString(typeObject, getUserAvailabilities.RESULT_TYPE_NAME));
+		        		} else {
+		        			availability.setTypeId(-1);
+		        			availability.setTypeName("");
+		        		}
 		        		
 		        		availabilitiesList.add(availability);
 		        	}    	
@@ -464,8 +492,8 @@ public class Client {
 		        		Availability a = new Availability();
 		        		
 		        		a.setId(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_ID));
-		        		a.setCategoryId(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_CATEGORY_ID));
-		        		a.setTypeId(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_TYPE_ID));
+//		        		a.setCategoryId(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_CATEGORY_ID));
+//		        		a.setTypeId(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_TYPE_ID));
 		        		a.setStartTime(DisponIFUtils.getJSONString(availabilityObject, getMatchAvailabilities.RESULT_START_TIME));
 		        		a.setEndTime(DisponIFUtils.getJSONString(availabilityObject, getMatchAvailabilities.RESULT_END_TIME));
 		        		a.setMaxParticipant(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_MAX_PARTICIPANT));
@@ -483,6 +511,19 @@ public class Client {
 		        		user.setName(DisponIFUtils.getJSONString(userObject, getMatchAvailabilities.RESULT_USER_NAME));
 		        		user.setSurname(DisponIFUtils.getJSONString(userObject, getMatchAvailabilities.RESULT_USER_SURNAME));
 		        		a.setUser(user);
+		        		
+		        		JSONObject catObject = availabilityObject.getJSONObject(getMatchAvailabilities.RESULT_CATEGORY);
+		        		a.setCategoryId(DisponIFUtils.getJSONInt(catObject, getMatchAvailabilities.RESULT_CATEGORY_ID));
+		        		a.setCategoryName(DisponIFUtils.getJSONString(catObject, getMatchAvailabilities.RESULT_CATEGORY_NAME));
+		        		
+		        		if (availabilityObject.has(getMatchAvailabilities.RESULT_TYPE)) {
+		        			JSONObject typeObject = availabilityObject.getJSONObject(getMatchAvailabilities.RESULT_TYPE);
+		        			a.setTypeId(DisponIFUtils.getJSONInt(typeObject, getMatchAvailabilities.RESULT_TYPE_ID));
+		        			a.setTypeName(DisponIFUtils.getJSONString(typeObject, getMatchAvailabilities.RESULT_TYPE_NAME));
+		        		} else {
+		        			a.setTypeId(-1);
+		        			a.setTypeName("");
+		        		}
 		        		
 		        		availabilities.add(a);
 		        	}
