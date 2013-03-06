@@ -1,17 +1,10 @@
 package com.sims2013.disponif.adapter;
 
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.support.v4.app.Fragment;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
@@ -27,12 +20,15 @@ import com.sims2013.disponif.model.Availability;
 
 public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 	
-	static class Holder{
+	private static class AvailabilityHolder{
 		ImageView mCategoryIcon;
+		TextView mTypeSimple;
+		TextView mTimeSimple;
 		TextView mStartTime;
 		TextView mEndTime;
-		TextView mCategoryAndType;
+		TextView mDescription;
 		Button mMoreButton;
+		Button mMatchAvailabilitiesButton;
 	}
 
 	public AvailabilityAdapter(Fragment context, int textViewResourceId,
@@ -43,15 +39,9 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 		mFragment = context;
 	}
 
-	private Fragment mFragment;
-	private int mLayout;
-	private ArrayList<Availability> mAvailabilities = new ArrayList<Availability>();
-
-//	public AvailabilityAdapter(Context context, ArrayList<Availability> items) {
-//		super(context, items);
-//		mContext = context;
-//		mAvailabilities = items;
-//	}
+	protected Fragment mFragment;
+	protected int mLayout;
+	protected ArrayList<Availability> mAvailabilities = new ArrayList<Availability>();
 
 	@Override
 	public int getCount() {
@@ -70,27 +60,30 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Holder holder;
+		AvailabilityHolder holder;
 		if (convertView == null) {
 			LayoutInflater inflater = (mFragment.getActivity()).getLayoutInflater();
 			convertView = inflater.inflate(mLayout, parent, false);
-			holder = new Holder();
+			holder = new AvailabilityHolder();
 			holder.mCategoryIcon = (ImageView)convertView.findViewById(R.id.item_category_icon);
 			holder.mStartTime = (TextView)convertView.findViewById(R.id.item_availability_startDate);
 			holder.mEndTime = (TextView)convertView.findViewById(R.id.item_availability_endDate);
-			holder.mCategoryAndType = (TextView)convertView.findViewById(R.id.item_availability_category_and_type);
+			holder.mDescription = (TextView)convertView.findViewById(R.id.item_availability_description);
 			holder.mMoreButton = (Button)convertView.findViewById(R.id.expandable_toggle_button);
+			holder.mTypeSimple = (TextView)convertView.findViewById(R.id.item_availability_type_simple);
+			holder.mTimeSimple = (TextView)convertView.findViewById(R.id.item_availability_time_simple);
+			holder.mMatchAvailabilitiesButton = (Button)convertView.findViewById(R.id.item_match_availibilities_button);
 			
 			holder.mMoreButton.setOnLongClickListener((OnLongClickListener) mFragment);
 			
 			convertView.setTag(holder);
 		} else {
-			holder = (Holder) convertView.getTag();
+			holder = (AvailabilityHolder) convertView.getTag();
 		}
 		
 		Availability av = mAvailabilities.get(position);
 		
-		holder.mCategoryAndType.setText(av.getDescription());
+		holder.mDescription.setText(av.getDescription());
 		holder.mStartTime.setText("du "
 				+ DisponIFUtils.datetimeToFrDate(getContext(),
 						av.getStartTime())
@@ -104,35 +97,28 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 		+ DisponIFUtils.datetimeToFrTime(getContext(),
 				av.getEndTime()));
 		
+		holder.mTypeSimple.setText(av.getTypeName());
+		
+		Date startDate = DisponIFUtils.stringToDate(av.getStartTime());
+		Date today = new Date();
+		
+		int diffInDays = (int)( (startDate.getTime() - today.getTime()) 
+                / (1000 * 60 * 60 * 24) );
+                
+		if (diffInDays == 0) {
+			holder.mTimeSimple.setText("Aujourd'hui");
+		} else {
+			holder.mTimeSimple.setText("Dans " + diffInDays + " jours");
+		}
+		
 		// show The Image
-		new DownloadImageTask(holder.mCategoryIcon)
+		new DisponIFUtils.DownloadImageTask(holder.mCategoryIcon)
 		            .execute("http://disponif.darkserver.fr/server/res/category/"+ av.getCategoryId() +"_48x48.png");
 		
 		return convertView;
 	}
+	
+	
 
-	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-	    ImageView bmImage;
-
-	    public DownloadImageTask(ImageView bmImage) {
-	        this.bmImage = bmImage;
-	    }
-
-	    protected Bitmap doInBackground(String... urls) {
-	        String urldisplay = urls[0];
-	        Bitmap mIcon11 = null;
-	        try {
-	            InputStream in = new java.net.URL(urldisplay).openStream();
-	            mIcon11 = BitmapFactory.decodeStream(in);
-	        } catch (Exception e) {
-	            Log.e("Error", e.getMessage());
-	            e.printStackTrace();
-	        }
-	        return mIcon11;
-	    }
-
-	    protected void onPostExecute(Bitmap result) {
-	        bmImage.setImageBitmap(result);
-	    }
-	}
+	
 }

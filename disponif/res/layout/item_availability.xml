@@ -27,14 +27,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/item_category_icon" />
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@id/item_category_icon"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/item_availability_time_simple"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/item_availability_type_simple"
+            android:layout_margin="10dp"
             android:textColor="@color/gray_bkg"
             android:textStyle="bold|italic" />
 
@@ -64,16 +67,17 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/item_availability_category_and_type"
+            android:id="@+id/item_availability_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <Button
+            android:id="@+id/item_match_availibilities_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:background="@drawable/white_bt"
-            android:text="Voir les dispos correspondantes" />
+            android:text="@string/match_availabilities_search_bt" />
     </LinearLayout>
 
 </LinearLayout>
