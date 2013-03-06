@@ -54,8 +54,6 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 		refresh();
 	}
 	
-	
-	
 	@Override
 	public void onMatchAvailabilitiesReceive(
 			ArrayList<Availability> availabilities, int startRow, int endRow) {
@@ -64,8 +62,6 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 			mAdapter = new MatchAvailabilityAdapter(this, R.layout.expandable_list_item, availabilities);
 			
 			mListView.setAdapter(mAdapter);
-			mProgressDialog.dismiss();
-			
 		}
 	}
 	
