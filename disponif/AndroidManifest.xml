@@ -21,7 +21,7 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen"
             android:windowSoftInputMode="stateHidden" >
-             <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -44,12 +44,15 @@
             android:theme="@style/MyActionBarTheme"
             android:windowSoftInputMode="stateHidden" >
         </activity>
-
         <activity
             android:name="com.sims2013.disponif.client.ClientTestActivity"
             android:configChanges="keyboard|orientation|screenSize"
             android:label="@string/title_activity_client_test" >
-           
+        </activity>
+        <activity
+            android:name="com.sims2013.disponif.activities.MatchAvailabilityListActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:theme="@style/MyActionBarTheme" >
         </activity>
 
         <meta-data

@@ -21,7 +21,6 @@ import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.activities.AvailabilityActivity;
 import com.sims2013.disponif.adapter.AvailabilityAdapter;
-import com.sims2013.disponif.adapter.MatchAvailabilityAdapter;
 import com.sims2013.disponif.model.Availability;
 import com.tjerkw.slideexpandable.library.ActionSlideExpandableListView;
 
@@ -29,8 +28,8 @@ public class AvailabilityListFragment extends GenericFragment implements OnLongC
 
 	private static final int REQUEST_CODE_ADD_AVAILABILITY = 42;
 	
-//	AvailabilityAdapter mAdapter;
-	MatchAvailabilityAdapter mAdapter;
+	AvailabilityAdapter mAdapter;
+//	MatchAvailabilityAdapter mAdapter;
 	ActionSlideExpandableListView mListView;
 	ProgressDialog mProgressDialog;
 	
@@ -97,8 +96,8 @@ public class AvailabilityListFragment extends GenericFragment implements OnLongC
 			ArrayList<Availability> availabilities) {
 		mProgressDialog.dismiss();
 		if (availabilities != null) {
-			mAdapter = new MatchAvailabilityAdapter(this, R.layout.item_match_availability, availabilities);
-//			mAdapter = new AvailabilityAdapter(this, R.layout.item_availability, availabilities);
+//			mAdapter = new MatchAvailabilityAdapter(this, R.layout.item_match_availability, availabilities);
+			mAdapter = new AvailabilityAdapter(this, R.layout.item_availability, availabilities);
 			
 			mListView.setAdapter(mAdapter);
 		}
@@ -153,4 +152,5 @@ public class AvailabilityListFragment extends GenericFragment implements OnLongC
 	public boolean onLongClick(View arg0) {
 		return false;
 	}
+
 }

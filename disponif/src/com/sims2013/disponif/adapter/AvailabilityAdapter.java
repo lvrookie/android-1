@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.content.Intent;
+import android.sax.StartElementListener;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -17,6 +20,8 @@ import android.widget.TextView;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.Utils.DisponIFUtils.DownloadImageTask;
+import com.sims2013.disponif.activities.MatchAvailabilityListActivity;
+import com.sims2013.disponif.fragments.MatchAvailabilityListFragment;
 import com.sims2013.disponif.model.Availability;
 
 public class AvailabilityAdapter extends ArrayAdapter<Availability> {
@@ -60,7 +65,7 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		AvailabilityHolder holder;
 		if (convertView == null) {
 			LayoutInflater inflater = (mFragment.getActivity()).getLayoutInflater();
@@ -74,6 +79,19 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 			holder.mTypeSimple = (TextView)convertView.findViewById(R.id.item_availability_type_simple);
 			holder.mTimeSimple = (TextView)convertView.findViewById(R.id.item_availability_time_simple);
 			holder.mMatchAvailabilitiesButton = (Button)convertView.findViewById(R.id.item_match_availibilities_button);
+			
+			holder.mMatchAvailabilitiesButton.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+
+					if (v.getId() == R.id.item_match_availibilities_button){
+						Intent intent = new Intent(mFragment.getActivity(), MatchAvailabilityListActivity.class);
+						intent.putExtra(MatchAvailabilityListFragment.AVAILABILITY_ID, mAvailabilities.get(position).getId());
+						mFragment.getActivity().startActivity(intent);
+					}
+				}
+			});
 			
 			holder.mMoreButton.setOnLongClickListener((OnLongClickListener) mFragment);
 			

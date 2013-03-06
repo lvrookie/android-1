@@ -18,7 +18,7 @@ import com.tjerkw.slideexpandable.library.ActionSlideExpandableListView;
 public class MatchAvailabilityListFragment extends GenericFragment implements 
 																		OnLongClickListener{
 
-	static final String AVAILABILITY_ID = "availability_id";
+	public static final String AVAILABILITY_ID = "availability_id";
 	
 	MatchAvailabilityAdapter mAdapter;
 	ActionSlideExpandableListView mListView;
