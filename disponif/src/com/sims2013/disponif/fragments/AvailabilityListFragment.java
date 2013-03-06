@@ -101,7 +101,6 @@ public class AvailabilityListFragment extends GenericFragment implements OnLongC
 //			mAdapter = new AvailabilityAdapter(this, R.layout.item_availability, availabilities);
 			
 			mListView.setAdapter(mAdapter);
-			mProgressDialog.dismiss();
 		}
 	}
 	
