@@ -1,9 +1,17 @@
 package com.sims2013.disponif.adapter;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.support.v4.app.Fragment;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
@@ -96,23 +104,35 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 		+ DisponIFUtils.datetimeToFrTime(getContext(),
 				av.getEndTime()));
 		
-		switch (av.getCategoryId()) {
-		case 1 :
-			holder.mCategoryIcon.setImageResource(R.drawable.ic_sport);
-			break;
-		case 2 :
-			holder.mCategoryIcon.setImageResource(R.drawable.ic_cinema);
-			break;
-		case 3 :
-			holder.mCategoryIcon.setImageResource(R.drawable.ic_sortie);
-			break;
-		default :
-			holder.mCategoryIcon.setImageBitmap(null);
-			break;
-		}
+		// show The Image
+		new DownloadImageTask(holder.mCategoryIcon)
+		            .execute("http://disponif.darkserver.fr/server/res/category/"+ av.getCategoryId() +"_48x48.png");
 		
 		return convertView;
-		
-		
+	}
+
+	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+	    ImageView bmImage;
+
+	    public DownloadImageTask(ImageView bmImage) {
+	        this.bmImage = bmImage;
+	    }
+
+	    protected Bitmap doInBackground(String... urls) {
+	        String urldisplay = urls[0];
+	        Bitmap mIcon11 = null;
+	        try {
+	            InputStream in = new java.net.URL(urldisplay).openStream();
+	            mIcon11 = BitmapFactory.decodeStream(in);
+	        } catch (Exception e) {
+	            Log.e("Error", e.getMessage());
+	            e.printStackTrace();
+	        }
+	        return mIcon11;
+	    }
+
+	    protected void onPostExecute(Bitmap result) {
+	        bmImage.setImageBitmap(result);
+	    }
 	}
 }
