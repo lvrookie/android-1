@@ -2,6 +2,7 @@ package com.sims2013.disponif.fragments;
 
 import java.util.ArrayList;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,8 +31,9 @@ public abstract class GenericFragment extends Fragment implements
 	protected boolean mTokenIsValid = false;
 	protected boolean mConnectedToFacebook = false;
 
-	protected ConnectionDialogFragment mDialogFragment;
-	
+	protected ConnectionDialogFragment mConnectionDialogFragment;
+	ProgressDialog mProgressDialog;
+
 	protected View mView;
 
 	private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -82,17 +84,18 @@ public abstract class GenericFragment extends Fragment implements
 		uiHelper.onSaveInstanceState(outState);
 	}
 
-	protected void initUI(){
-		
+	protected void initUI() {
+		mProgressDialog = new ProgressDialog(getActivity());
 	}
-	
+
 	@Override
 	public void onLogInTokenReceive(String token) {
 		mTokenIsValid = true;
 		DisponifApplication.setAccessToken(token);
-		if (!mDialogFragment.isDetached()) {
-			mDialogFragment.dismiss();
+		if (!mConnectionDialogFragment.isDetached()) {
+			mConnectionDialogFragment.dismiss();
 		}
+		shouldShowProgressDialog(false);
 		refresh();
 	}
 
@@ -102,15 +105,18 @@ public abstract class GenericFragment extends Fragment implements
 
 	@Override
 	public void onCategoriesReceive(ArrayList<Category> categories) {
+		shouldShowProgressDialog(false);
 	}
 
 	@Override
 	public void onAvailabilityAdded(int id) {
+		shouldShowProgressDialog(false);
 	}
 
 	@Override
 	public void onUserAvailabilitiesReceive(
 			ArrayList<Availability> availbilities) {
+		shouldShowProgressDialog(false);
 	}
 
 	// This method handle the case where the user is connected to facebook
@@ -124,9 +130,8 @@ public abstract class GenericFragment extends Fragment implements
 		mConnectedToFacebook = false;
 	}
 
-
 	public void onRetryClick() {
-		mDialogFragment.displayTryingToReachServer();
+		mConnectionDialogFragment.displayTryingToReachServer();
 		mClient.logIn(DisponifApplication.getAccessToken());
 	}
 
@@ -144,52 +149,64 @@ public abstract class GenericFragment extends Fragment implements
 			onFacebookSessionClosed();
 		}
 	}
-	
+
 	protected abstract void refresh();
 
 	@Override
 	public void onNetworkError(String errorMessage) {
-		if (mDialogFragment!=null && mDialogFragment.isShowing()) {
+		shouldShowProgressDialog(false);
+		if (mConnectionDialogFragment != null
+				&& !mConnectionDialogFragment.isDetached()
+				&& mConnectionDialogFragment.isShowing()) {
 			// if the fragment is already displayed, just show the retry button
-			mDialogFragment.displayServerUnreachable();
+			mConnectionDialogFragment.displayServerUnreachable();
 		} else {
 			if (!isDetached()) {
-				DisponIFUtils.makeToast(getActivity(), getString(R.string.connection_network_error));
+				DisponIFUtils.makeToast(getActivity(),
+						getString(R.string.connection_network_error));
 			}
 		}
 	}
 
 	@Override
 	public void onTokenExpired() {
+		shouldShowProgressDialog(false);
 		mTokenIsValid = false;
-		if (mDialogFragment!=null && mDialogFragment.isShowing()) {
+		if (mConnectionDialogFragment != null
+				&& mConnectionDialogFragment.isShowing()) {
 			// if the fragment is already displayed, just show the retry button
-			mDialogFragment.displayServerUnreachable();
+			mConnectionDialogFragment.displayServerUnreachable();
 		} else {
-			// the fragment is not displayed. We have to ask the server for another 
-			// token using the facebook session. 
-			// Note : facebook session loss is handled by onSessionStateChanged, 
+			// the fragment is not displayed. We have to ask the server for
+			// another
+			// token using the facebook session.
+			// Note : facebook session loss is handled by onSessionStateChanged,
 			// so no check needed here.
-			
+
 			// First, display the connection dialog fragment
-			FragmentManager fm= getActivity().getSupportFragmentManager();
-			mDialogFragment = (ConnectionDialogFragment) fm
+			FragmentManager fm = getActivity().getSupportFragmentManager();
+			mConnectionDialogFragment = (ConnectionDialogFragment) fm
 					.findFragmentByTag(ConnectionDialogFragment.TAG);
-			if (mDialogFragment == null) {
+			if (mConnectionDialogFragment == null) {
 				Bundle b = new Bundle();
-				b.putString(ConnectionDialogFragment.EXTRA_DIALOG_TITLE, getString(R.string.connection_session_lost));
-				mDialogFragment = ConnectionDialogFragment.newInstance(b);
+				b.putString(ConnectionDialogFragment.EXTRA_DIALOG_TITLE,
+						getString(R.string.connection_session_lost));
+				mConnectionDialogFragment = ConnectionDialogFragment
+						.newInstance(b);
 			}
-			if (!getActivity().isFinishing() && !mDialogFragment.isDetached()) {
-				mDialogFragment.show(fm, ConnectionDialogFragment.TAG);
+			if (!getActivity().isFinishing()
+					&& !mConnectionDialogFragment.isDetached()) {
+				mConnectionDialogFragment
+						.show(fm, ConnectionDialogFragment.TAG);
 			} else {
 				if (DEBUG_MODE) {
-					Log.e(TAG, "activity isFinishing() impossible to show dialog ");
+					Log.e(TAG,
+							"activity isFinishing() impossible to show dialog ");
 				}
 			}
-			
+
 			// Display the message "Your session is lost"
-			
+
 			// Then call the ws to log in and get a new access token
 			mClient.logIn(Session.getActiveSession().getAccessToken());
 		}
@@ -197,10 +214,34 @@ public abstract class GenericFragment extends Fragment implements
 
 	@Override
 	public void onUserAvailabilityRemoved() {
+		shouldShowProgressDialog(false);
 	}
-	
+
 	@Override
-	public void onMatchAvailabilitiesReceive(ArrayList<Availability> availabilities, int startRow, int endRow) {
-		
+	public void onMatchAvailabilitiesReceive(
+			ArrayList<Availability> availabilities, int startRow, int endRow) {
+		shouldShowProgressDialog(false);
+
+	}
+
+	protected void shouldShowProgressDialog(boolean shouldShow) {
+		if (shouldShow) {
+			shouldShowProgressDialog(true,
+					getString(R.string.availability_progress_loading_title),
+					getString(R.string.availability_progress_loading_message));
+		} else {
+			mProgressDialog.hide();
+		}
+	}
+
+	protected void shouldShowProgressDialog(boolean shouldShow, String title,
+			String message) {
+		if (shouldShow) {
+			mProgressDialog.setTitle(title);
+			mProgressDialog.setMessage(message);
+			mProgressDialog.show();
+		} else {
+			mProgressDialog.hide();
+		}
 	}
 }

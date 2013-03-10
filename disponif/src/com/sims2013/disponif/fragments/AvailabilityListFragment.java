@@ -3,7 +3,6 @@ package com.sims2013.disponif.fragments;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -24,19 +23,18 @@ import com.sims2013.disponif.adapter.AvailabilityAdapter;
 import com.sims2013.disponif.model.Availability;
 import com.tjerkw.slideexpandable.library.ActionSlideExpandableListView;
 
-public class AvailabilityListFragment extends GenericFragment implements OnLongClickListener{
+public class AvailabilityListFragment extends GenericFragment implements
+		OnLongClickListener {
 
 	private static final int REQUEST_CODE_ADD_AVAILABILITY = 42;
-	
+
 	AvailabilityAdapter mAdapter;
-//	MatchAvailabilityAdapter mAdapter;
 	ActionSlideExpandableListView mListView;
-	ProgressDialog mProgressDialog;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setHasOptionsMenu(true);
 	}
 
@@ -45,37 +43,33 @@ public class AvailabilityListFragment extends GenericFragment implements OnLongC
 			Bundle savedInstanceState) {
 
 		super.onCreateView(inflater, container, savedInstanceState);
-		
-		mView = inflater.inflate(R.layout.fragment_list_availability, container, false);
+
+		mView = inflater.inflate(R.layout.fragment_list_availability,
+				container, false);
 		initUI();
 		return mView;
 	}
-	
+
 	@Override
 	protected void initUI() {
 		super.initUI();
-		
-		mProgressDialog = new ProgressDialog(getActivity());
-		
-		mListView = (ActionSlideExpandableListView) mView.findViewById(R.id.list);
+		mListView = (ActionSlideExpandableListView) mView
+				.findViewById(R.id.list);
 		registerForContextMenu(mListView);
-		
-		mProgressDialog.setTitle(getString(R.string.availability_progress_loading_title));
-		mProgressDialog.setMessage(getString(R.string.availability_progress_loading_message));
-		mProgressDialog.show();
-		
 		mClient.getUserAvailabilities(DisponifApplication.getAccessToken());
 	}
-	
+
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
+				.getMenuInfo();
 		int menuItemIndex = item.getItemId();
 		if (menuItemIndex == 0) {
-			mProgressDialog.setTitle(getString(R.string.availability_progress_remove_title));
-			mProgressDialog.setMessage(getString(R.string.availability_progress_remove_message));
-			mProgressDialog.show();
-			mClient.removeAvailability(DisponifApplication.getAccessToken(), (Availability)mAdapter.getItem(info.position));
+			shouldShowProgressDialog(true,
+					getString(R.string.availability_progress_remove_title),
+					getString(R.string.availability_progress_remove_message));
+			mClient.removeAvailability(DisponifApplication.getAccessToken(),
+					(Availability) mAdapter.getItem(info.position));
 		}
 		return true;
 	}
@@ -83,33 +77,36 @@ public class AvailabilityListFragment extends GenericFragment implements OnLongC
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
-		
+
 		if (v.getId() == R.id.list) {
 			menu.setHeaderTitle(getString(R.string.availability_context_menu_title));
-			menu.add(Menu.NONE, 0, 0, getString(R.string.availability_context_menu_item_remove));
+			menu.add(Menu.NONE, 0, 0,
+					getString(R.string.availability_context_menu_item_remove));
 		}
-		
+
 	}
 
 	@Override
 	public void onUserAvailabilitiesReceive(
 			ArrayList<Availability> availabilities) {
-		mProgressDialog.dismiss();
+		shouldShowProgressDialog(false);
 		if (availabilities != null) {
-//			mAdapter = new MatchAvailabilityAdapter(this, R.layout.item_match_availability, availabilities);
-			mAdapter = new AvailabilityAdapter(this, R.layout.item_availability, availabilities);
-			
+			// mAdapter = new MatchAvailabilityAdapter(this,
+			// R.layout.item_match_availability, availabilities);
+			mAdapter = new AvailabilityAdapter(this,
+					R.layout.item_availability, availabilities);
+
 			mListView.setAdapter(mAdapter);
 		}
 	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 
 		inflater.inflate(R.menu.activity_list_menu, menu);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.addAvailabilityMenu) {
@@ -131,12 +128,10 @@ public class AvailabilityListFragment extends GenericFragment implements OnLongC
 
 	@Override
 	protected void refresh() {
-		mProgressDialog.setTitle(getString(R.string.availability_progress_loading_title));
-		mProgressDialog.setMessage(getString(R.string.availability_progress_loading_message));
-		mProgressDialog.show();
+		shouldShowProgressDialog(true);
 		mClient.getUserAvailabilities(DisponifApplication.getAccessToken());
 	}
-	
+
 	@Override
 	public void onLogInTokenReceive(String token) {
 		super.onLogInTokenReceive(token);

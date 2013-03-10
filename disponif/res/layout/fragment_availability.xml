@@ -1,251 +1,245 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/scrollView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollView1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="10dp" >
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/availability_activity_label"
-        android:textStyle="bold" />
-
-    <Spinner
-        android:id="@+id/availability_spinner_activity"
-        style="@android:style/Widget.Spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/spinner_gray"
-        android:padding="12dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/availability_type_label"
-        android:textStyle="bold" />
-
-    <Spinner
-        android:id="@+id/availability_spinner_type"
-        style="@android:style/Widget.Spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/spinner_gray"
-        android:padding="12dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="@string/availability_date_label"
-        android:textStyle="bold" />
-
-    <!-- <LinearLayout -->
-    <!-- android:layout_width="match_parent" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- android:orientation="horizontal" > -->
-
-
-    <!-- <TextView -->
-    <!-- android:layout_width="0dp" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- android:layout_weight="1" -->
-    <!-- android:gravity="center_horizontal" -->
-    <!-- android:text="@string/availability_date_from" /> -->
-
-
-    <!-- <View -->
-    <!-- android:layout_width="1dp" -->
-    <!-- android:layout_height="match_parent" -->
-    <!-- android:background="@color/black" /> -->
-
-
-    <!-- <TextView -->
-    <!-- android:layout_width="0dp" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- android:layout_weight="1" -->
-    <!-- android:gravity="center_horizontal" -->
-    <!-- android:text="@string/availability_date_to" /> -->
-    <!-- </LinearLayout> -->
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:text="@string/availability_label_from_date" />
-
-        <Button
-            android:id="@+id/availability_button_date_from"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@drawable/white_bt"
-            android:gravity="center"
-            android:text="@string/availability_choose_date_from" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center_vertical|right"
-            android:text="@string/availability_label_hour" />
-
-        <Button
-            android:id="@+id/availability_button_hour_from"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@drawable/white_bt"
-            android:enabled="false"
-            android:gravity="center"
-            android:text="@string/availability_choose_hour_from" />
-
-        <ImageView
-            android:id="@+id/availability_error_date_from"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="3dp"
-            android:contentDescription="@string/blank_content_description"
-            android:src="@drawable/ic_error_input"
-            android:visibility="invisible" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:text="@string/availability_label_to_date" />
-
-        <Button
-            android:id="@+id/availability_button_date_to"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@drawable/white_bt"
-            android:gravity="center"
-            android:text="@string/availability_choose_date_to" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center_vertical|right"
-            android:text="@string/availability_label_hour" />
-
-        <Button
-            android:id="@+id/availability_button_hour_to"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@drawable/white_bt"
-            android:enabled="false"
-            android:gravity="center"
-            android:text="@string/availability_choose_hour_to" />
-
-        <ImageView
-            android:id="@+id/availability_error_date_to"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="3dp"
-            android:contentDescription="@string/blank_content_description"
-            android:src="@drawable/ic_error_input"
-            android:visibility="invisible" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/availability_error_dates"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         android:gravity="center_horizontal"
-        android:text="@string/availability_dates_error"
-        android:textColor="@color/red"
-        android:textStyle="bold"
-        android:visibility="invisible" />
+        android:orientation="vertical"
+        android:padding="10dp" >
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/availability_place_label"
-        android:textStyle="bold" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/availability_activity_label"
+            android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/availability_place_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bkg_edit"
-        android:hint="@string/availability_place_hint"
-        android:inputType="text"
-        android:padding="5dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@color/gray_bkg"
+            android:padding="1dp" >
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/availability_description_label"
-        android:textStyle="bold" />
+            <Spinner
+                android:id="@+id/availability_spinner_category"
+                style="@android:style/Widget.Spinner.DropDown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_gray"
+                android:dropDownVerticalOffset="0dip"
+                android:dropDownWidth="match_parent"
+                android:popupBackground="@drawable/bkg_white_gray_border" />
+        </LinearLayout>
 
-    <EditText
-        android:id="@+id/availability_description_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bkg_edit"
-        android:gravity="top"
-        android:hint="@string/availability_description_hint"
-        android:inputType="textMultiLine"
-        android:lines="5"
-        android:padding="5dp"
-        android:scrollHorizontally="false" />
+        <LinearLayout
+            android:id="@+id/availability_spinner_type_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical" >
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />    
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/availability_type_label"
+                android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/availability_button_submit"
-        style="@style/blue_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text="@string/submit_availability"
-        android:textColor="@color/white" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@color/gray_bkg"
+                android:padding="1dp" >
 
-</LinearLayout>
+                <Spinner
+                    android:id="@+id/availability_spinner_type"
+                    style="@android:style/Widget.Spinner.DropDown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner_gray"
+                    android:dropDownVerticalOffset="0dip"
+                    android:dropDownWidth="match_parent"
+                    android:popupBackground="@drawable/bkg_white_gray_border" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/availability_date_label"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:text="@string/availability_label_from_date" />
+
+            <Button
+                android:id="@+id/availability_button_date_from"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/white_bt_square"
+                android:gravity="center"
+                android:text="@string/availability_choose_date_from" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center_vertical|right"
+                android:text="@string/availability_label_hour" />
+
+            <Button
+                android:id="@+id/availability_button_hour_from"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/white_bt_square"
+                android:enabled="false"
+                android:gravity="center"
+                android:text="@string/availability_choose_hour_from" />
+
+            <ImageView
+                android:id="@+id/availability_error_date_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="3dp"
+                android:contentDescription="@string/blank_content_description"
+                android:src="@drawable/ic_error_input"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:text="@string/availability_label_to_date" />
+
+            <Button
+                android:id="@+id/availability_button_date_to"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/white_bt_square"
+                android:gravity="center"
+                android:text="@string/availability_choose_date_to" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center_vertical|right"
+                android:text="@string/availability_label_hour" />
+
+            <Button
+                android:id="@+id/availability_button_hour_to"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/white_bt_square"
+                android:enabled="false"
+                android:gravity="center"
+                android:text="@string/availability_choose_hour_to" />
+
+            <ImageView
+                android:id="@+id/availability_error_date_to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="3dp"
+                android:contentDescription="@string/blank_content_description"
+                android:src="@drawable/ic_error_input"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/availability_error_dates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/availability_dates_error"
+            android:textColor="@color/red"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/availability_place_label"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/availability_place_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bkg_edit"
+            android:hint="@string/availability_place_hint"
+            android:inputType="text"
+            android:padding="5dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/availability_description_label"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/availability_description_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bkg_edit"
+            android:gravity="top"
+            android:hint="@string/availability_description_hint"
+            android:inputType="textMultiLine"
+            android:lines="5"
+            android:padding="5dp"
+            android:scrollHorizontally="false" />
+
+        <Button
+            android:id="@+id/availability_button_submit"
+            style="@style/blue_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/submit_availability"
+            android:textColor="@color/white" />
+    </LinearLayout>
 
 </ScrollView>

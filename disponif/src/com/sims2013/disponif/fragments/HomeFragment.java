@@ -122,15 +122,15 @@ public class HomeFragment extends GenericFragment implements OnClickListener {
 		super.onFacebookSessionOpened(session);
 
 		FragmentManager fm = getActivity().getSupportFragmentManager();
-		mDialogFragment = (ConnectionDialogFragment) fm
+		mConnectionDialogFragment = (ConnectionDialogFragment) fm
 				.findFragmentByTag(ConnectionDialogFragment.TAG);
-		if (mDialogFragment == null) {
+		if (mConnectionDialogFragment == null) {
 			Bundle b = new Bundle();
 			b.putString(ConnectionDialogFragment.EXTRA_DIALOG_TITLE, getString(R.string.connection_logging));
-			mDialogFragment = ConnectionDialogFragment.newInstance(b);
+			mConnectionDialogFragment = ConnectionDialogFragment.newInstance(b);
 		}
-		if (!getActivity().isFinishing() && !mDialogFragment.isDetached()) {
-			mDialogFragment.show(fm, ConnectionDialogFragment.TAG);
+		if (!getActivity().isFinishing() && !mConnectionDialogFragment.isDetached()) {
+			mConnectionDialogFragment.show(fm, ConnectionDialogFragment.TAG);
 		} else {
 			if (DEBUG_MODE) {
 				Log.e(TAG, "activity isFinishing() impossible to show dialog ");
