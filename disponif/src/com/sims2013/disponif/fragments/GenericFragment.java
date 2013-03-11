@@ -237,7 +237,7 @@ public abstract class GenericFragment extends Fragment implements
 					getString(R.string.availability_progress_loading_title),
 					getString(R.string.availability_progress_loading_message));
 		} else {
-			mProgressDialog.hide();
+			mProgressDialog.dismiss();
 		}
 	}
 
@@ -248,7 +248,7 @@ public abstract class GenericFragment extends Fragment implements
 			mProgressDialog.setMessage(message);
 			mProgressDialog.show();
 		} else {
-			mProgressDialog.hide();
+			mProgressDialog.dismiss();
 		}
 	}
 }
