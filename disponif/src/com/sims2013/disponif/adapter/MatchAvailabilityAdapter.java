@@ -23,8 +23,7 @@ public class MatchAvailabilityAdapter extends ArrayAdapter<Availability> {
 	private static class MatchAvailabilityHolder {
 		ImageView mProfilePictureView;
 		TextView mUserName;
-		TextView mStartTime;
-		TextView mEndTime;
+		TextView mDate;
 		TextView mDescription;
 		Button mMoreButton;
 	}
@@ -66,10 +65,8 @@ public class MatchAvailabilityAdapter extends ArrayAdapter<Availability> {
 			holder = new MatchAvailabilityHolder();
 			holder.mProfilePictureView = (ImageView) convertView
 					.findViewById(R.id.item_match_availability_profile_picture);
-			holder.mStartTime = (TextView) convertView
-					.findViewById(R.id.item_match_availability_startDate);
-			holder.mEndTime = (TextView) convertView
-					.findViewById(R.id.item_match_availability_endDate);
+			holder.mDate = (TextView) convertView
+					.findViewById(R.id.item_match_availability_date);
 			holder.mDescription = (TextView) convertView
 					.findViewById(R.id.item_match_availability_description);
 			holder.mMoreButton = (Button) convertView
@@ -87,17 +84,15 @@ public class MatchAvailabilityAdapter extends ArrayAdapter<Availability> {
 		Availability av = mAvailabilities.get(position);
 
 		holder.mDescription.setText(av.getDescription());
-		holder.mStartTime.setText("du "
+		holder.mDate.setText("Du "
 				+ DisponIFUtils.datetimeToFrDate(getContext(),
 						av.getStartTime())
-				+ " - "
+				+ " à "
 				+ DisponIFUtils.datetimeToFrTime(getContext(),
-						av.getStartTime()));
-		holder.mEndTime
-				.setText("au "
+						av.getStartTime()) + " au "
 						+ DisponIFUtils.datetimeToFrDate(getContext(),
 								av.getEndTime())
-						+ " - "
+						+ " à "
 						+ DisponIFUtils.datetimeToFrTime(getContext(),
 								av.getEndTime()));
 

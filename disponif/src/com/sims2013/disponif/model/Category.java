@@ -2,14 +2,11 @@ package com.sims2013.disponif.model;
 
 import java.util.ArrayList;
 
-import android.graphics.Bitmap;
-
 public class Category {
 
 	private int mId;
 	private String mName;
 	private int mRadius;
-	private Bitmap mIcon;
 	ArrayList<Type> mTypes;
 	
 	public Category() {
@@ -63,13 +60,5 @@ public class Category {
 	@Override
 	public String toString() {
 		return mName;
-	}
-	
-	public Bitmap getIcon() {
-		return mIcon;
-	}
-	
-	public void setIcon(Bitmap mIcon) {
-		this.mIcon = mIcon;
 	}
 }

@@ -1,6 +1,5 @@
 package com.sims2013.disponif.client;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import org.alexd.jsonrpc.JSONRPCClient;
@@ -8,8 +7,6 @@ import org.alexd.jsonrpc.JSONRPCParams.Versions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -242,6 +239,7 @@ public class Client {
 		        try {
 		        	JSONObject JSObjet = new JSONObject();
 		        	JSObjet.put(logIn.PARAM_TOKEN, token);
+		        	Log.v("ClientJSON - Calling webservice ", logIn.METHOD);
 		        	JSONObject res = mJsonClient.callJSONObject(logIn.METHOD, JSObjet);
 		        	Log.v("ClientJSON - logIn", res.toString());
 		        	return res.getString(logIn.RESULT_TOKEN);
@@ -287,6 +285,7 @@ public class Client {
 //		        	JSObjet.put(addAvailability.PARAM_LONGITUDE, availability.getLongitude());
 //		        	JSObjet.put(addAvailability.PARAM_RADIUS, availability.getRadius());
 //		        	JSObjet.put(addAvailability.PARAM_PRIVACY, availability.getPrivacy());
+		        	Log.v("ClientJSON - Calling webservice ", addAvailability.METHOD);
 		        	JSONObject res = mJsonClient.callJSONObject(addAvailability.METHOD, JSObjet);
 		        	Log.v("ClientJSON - addAvailability", res.toString());
 		        	Boolean state = res.getBoolean(addAvailability.RESULT_STATE);
@@ -326,6 +325,7 @@ public class Client {
 		        try {
 		        	JSONObject JSObjet = new JSONObject();
 		        	JSObjet.put(getCategories.PARAM_TOKEN, token);
+		        	Log.v("ClientJSON - Calling webservice ", getCategories.METHOD);
 		        	JSONObject res = mJsonClient.callJSONObject(getCategories.METHOD, JSObjet);
 		        	Log.v("ClientJSON - getCategories", res.toString());
 		        	JSONArray cats = res.getJSONArray(getCategories.RESULT_CATEGORIES);
@@ -336,13 +336,6 @@ public class Client {
 		        		cat.setId(DisponIFUtils.getJSONInt(catJSON, getCategories.RESULT_CATEGORY_ID));
 		        		cat.setRadius(DisponIFUtils.getJSONInt(catJSON, getCategories.RESULT_CATEGORY_RADIUS));
 		        		cat.setName(DisponIFUtils.getJSONString(catJSON, getCategories.RESULT_CATEGORY_NAME));
-		        		
-		    	            InputStream in = new java.net.URL("http://disponif.darkserver.fr/server/res/category/"
-		    						+ cat.getId() + ".png").openStream();
-		    	            Bitmap mIcon11 = BitmapFactory.decodeStream(in);
-		    	            
-		    	            cat.setIcon(mIcon11);
-		    	            
 		        		JSONArray typesArray = catJSON.getJSONArray(getCategories.RESULT_TYPES);
 		        		for (int j = 0; j < typesArray.length(); ++ j) {
 		        			Type type = new Type();
@@ -384,6 +377,7 @@ public class Client {
 		        try {
 		        	JSONObject JSObjet = new JSONObject();
 		        	JSObjet.put(getUserAvailabilities.PARAM_TOKEN, token);
+		        	Log.v("ClientJSON - Calling webservice ", getUserAvailabilities.METHOD);
 		        	JSONObject res = mJsonClient.callJSONObject(getUserAvailabilities.METHOD, JSObjet);
 		        	Log.v("ClientJSON - getUserAvailabilities", res.toString());
 		        	ArrayList<Availability> availabilitiesList = new ArrayList<Availability>();
@@ -457,6 +451,7 @@ public class Client {
 		        	JSONObject JSObjet = new JSONObject();
 		        	JSObjet.put(removeAvailability.PARAM_TOKEN, token);
 		        	JSObjet.put(removeAvailability.PARAM_ID, availability.getId());
+		        	Log.v("ClientJSON - Calling webservice ", removeAvailability.METHOD);
 		        	JSONObject res = mJsonClient.callJSONObject(removeAvailability.METHOD, JSObjet);
 		        	Log.v("ClientJSON - removeAvailability", res.toString());
 		        	Boolean state = res.getBoolean(removeAvailability.RESULT_STATE);
@@ -497,6 +492,7 @@ public class Client {
 		        	JSObjet.put(getMatchAvailabilities.PARAM_ID, availabilityId);
 		        	JSObjet.put(getMatchAvailabilities.PARAM_START_ROW, startRow);
 		        	JSObjet.put(getMatchAvailabilities.PARAM_END_ROW, endRow);
+		        	Log.v("ClientJSON - Calling webservice ", getMatchAvailabilities.METHOD);
 		        	JSONObject res = mJsonClient.callJSONObject(getMatchAvailabilities.METHOD, JSObjet);
 		        	Log.v("ClientJSON - getMatchAvailabilities", res.toString());
 		        	JSONArray avArray = res.getJSONArray(getMatchAvailabilities.RESULT_AVAILABILITIES);

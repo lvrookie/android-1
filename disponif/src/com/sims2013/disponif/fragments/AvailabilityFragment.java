@@ -442,7 +442,7 @@ public class AvailabilityFragment extends GenericFragment implements
 			// DisponIFUtils.makeToast(getActivity(), "receive categories");
 			mCategories = categories;
 			mCategoryAdapter = new CategorySpinnerAdapter(
-					getActivity(), R.layout.spin_layout, mCategories);
+					getActivity(), mCategories);
 			mActivitySpinner.setAdapter(mCategoryAdapter);
 			mActivitySpinner.setEnabled(true);
 			mCurrentCategory = mCategories.get(0);
