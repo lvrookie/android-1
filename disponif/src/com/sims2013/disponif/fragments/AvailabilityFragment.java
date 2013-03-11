@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
@@ -74,6 +76,7 @@ public class AvailabilityFragment extends GenericFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getActivity().getWindow().getAttributes().windowAnimations = R.style.slideRight;
 		mListener = (onAvailabilityAddedListener) getActivity();
 	}
 
@@ -476,11 +479,42 @@ public class AvailabilityFragment extends GenericFragment implements
 	
 	public void shouldHideTypeSpinner(boolean shouldHide){
 		mShouldHideTypeSpinner = shouldHide;
+		Animation a;
 		if (shouldHide) {
-			mTypeSpinnerLayout.setVisibility(View.GONE);
+//			mTypeSpinnerLayout.setVisibility(View.GONE);
+			a = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_left);
+			a.setFillAfter(true);
+			a.setAnimationListener(new Animation.AnimationListener() {
+				@Override
+				public void onAnimationStart(Animation animation) {}
+				@Override
+				public void onAnimationRepeat(Animation animation) {}
+				@Override
+				public void onAnimationEnd(Animation animation) {
+					mTypeSpinnerLayout.setVisibility(View.GONE);
+				}
+			});
+			if (mTypeSpinnerLayout.getVisibility() != View.GONE) {
+				mTypeSpinnerLayout.startAnimation(a);
+			}
 		} else {
-			mTypeSpinnerLayout.setVisibility(View.VISIBLE);
-			mCurrentType = mCurrentCategory.getTypes().get(0);
+//			mTypeSpinnerLayout.setVisibility(View.VISIBLE);
+			a = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_in_left);
+			a.setFillAfter(true);
+			a.setAnimationListener(new Animation.AnimationListener() {
+				@Override
+				public void onAnimationStart(Animation animation) {
+					mTypeSpinnerLayout.setVisibility(View.VISIBLE);
+				}
+				@Override
+				public void onAnimationRepeat(Animation animation) {}
+				@Override
+				public void onAnimationEnd(Animation animation) {}
+			});
+			if (mTypeSpinnerLayout.getVisibility() != View.VISIBLE) {
+				mTypeSpinnerLayout.startAnimation(a);
+				mCurrentType = mCurrentCategory.getTypes().get(0);
+			}
 		}
 	}
 

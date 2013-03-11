@@ -33,6 +33,14 @@ public class HomeFragment extends GenericFragment implements OnClickListener {
 	private ProfilePictureView mProfilePictureView;
 	private Button mDisponibilityButton;
 
+	
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		getActivity().getWindow().getAttributes().windowAnimations = R.style.slideRight;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

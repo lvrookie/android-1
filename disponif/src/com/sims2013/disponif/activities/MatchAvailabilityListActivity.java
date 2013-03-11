@@ -1,6 +1,7 @@
 package com.sims2013.disponif.activities;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.fragments.MatchAvailabilityListFragment;
