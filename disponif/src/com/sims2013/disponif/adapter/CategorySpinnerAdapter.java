@@ -53,7 +53,7 @@ public class CategorySpinnerAdapter extends BaseAdapter implements
 		ViewHolder holder;
 		if (convertView == null) {
 			LayoutInflater inflater = mActivity.getLayoutInflater();
-			convertView = inflater.inflate(R.layout.spin_layout, parent, false);
+			convertView = inflater.inflate(R.layout.item_spinner_type_layout, parent, false);
 			holder = new ViewHolder();
 			holder.name = (TextView) convertView
 					.findViewById(R.id.spinnerTextView);
@@ -74,7 +74,7 @@ public class CategorySpinnerAdapter extends BaseAdapter implements
 		ViewHolder holder;
 		if (convertView == null) {
 			LayoutInflater inflater = mActivity.getLayoutInflater();
-			convertView = inflater.inflate(R.layout.spin_layout, parent, false);
+			convertView = inflater.inflate(R.layout.item_spinner_type_layout, parent, false);
 			holder = new ViewHolder();
 			holder.name = (TextView) convertView
 					.findViewById(R.id.spinnerTextView);

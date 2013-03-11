@@ -46,7 +46,7 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 
 		super.onCreateView(inflater, container, savedInstanceState);
 		
-		mView = inflater.inflate(R.layout.fragment_list_availability, container, false);
+		mView = inflater.inflate(R.layout.fragment_list_match_availability, container, false);
 		initUI();
 		return mView;
 	}
