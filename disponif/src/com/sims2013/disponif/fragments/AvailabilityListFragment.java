@@ -98,6 +98,7 @@ public class AvailabilityListFragment extends GenericFragment implements
 
 			mListView.setAdapter(mAdapter);
 		}
+		mListView.setEmptyView(mView.findViewById(R.id.empty_list));
 	}
 
 	@Override
