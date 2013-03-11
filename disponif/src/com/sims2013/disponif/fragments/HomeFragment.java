@@ -1,5 +1,7 @@
 package com.sims2013.disponif.fragments;
 
+import java.util.ArrayList;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -17,8 +19,11 @@ import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
+import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
+import com.sims2013.disponif.Utils.BitmapManager;
 import com.sims2013.disponif.activities.AvailabilityListActivity;
+import com.sims2013.disponif.model.Category;
 
 public class HomeFragment extends GenericFragment implements OnClickListener {
 
@@ -163,11 +168,22 @@ public class HomeFragment extends GenericFragment implements OnClickListener {
 	@Override
 	protected void refresh() {
 		if (mConnectedToFacebook && mTokenIsValid) {
-			connectedToServer();
+			shouldShowProgressDialog(true, "Chargement", "Chargement des ressources ...");
+			mClient.getAllCategories(DisponifApplication.getAccessToken());
+//			connectedToServer();
 		} else if (!mConnectedToFacebook) {
 			onFacebookSessionClosed();
 		} else if (mConnectedToFacebook && !mTokenIsValid) {
 			mClient.logIn(Session.getActiveSession().getAccessToken());
 		}
+	}
+	
+	@Override
+	public void onCategoriesReceive(ArrayList<Category> categories) {
+		for (Category cat : categories) {
+			BitmapManager.cacheBitmap("http://disponif.darkserver.fr/server/res/category/"+ cat.getId() +".png");
+		}
+		connectedToServer();
+		super.onCategoriesReceive(categories);
 	}
 }

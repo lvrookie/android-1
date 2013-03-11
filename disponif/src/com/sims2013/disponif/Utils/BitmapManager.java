@@ -15,16 +15,7 @@ public class BitmapManager {
 	
 	public static void setBitmap(final ImageView imgView, final String URL) {
 		
-		if (mMemoryCache == null) {
-			final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-		    final int cacheSize = maxMemory / 8;
-		    mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
-		        @Override
-		        protected int sizeOf(String key, Bitmap bitmap) {
-		            return bitmap.getByteCount() / 1024;
-		        }
-		    };
-		}
+		initMemoryCache();
 		
 		if (getBitmapFromMemCache(URL) == null) {
 			new BitmapWorkerTask(imgView).execute(URL);
@@ -36,8 +27,24 @@ public class BitmapManager {
 	}
 	
 	public static void cacheBitmap(final String URL) {
+		
+		initMemoryCache();
+		
 		if (getBitmapFromMemCache(URL) == null) {
 			new BitmapWorkerTask(null).execute(URL);
+		}
+	}
+	
+	private static void initMemoryCache() {
+		if (mMemoryCache == null) {
+			final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+		    final int cacheSize = maxMemory / 8;
+		    mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+		        @Override
+		        protected int sizeOf(String key, Bitmap bitmap) {
+		            return bitmap.getByteCount() / 1024;
+		        }
+		    };
 		}
 	}
 	
