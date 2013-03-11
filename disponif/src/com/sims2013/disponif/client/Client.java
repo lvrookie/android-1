@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.sims2013.disponif.Utils.DisponIFUtils;
+import com.sims2013.disponif.model.Activity;
 import com.sims2013.disponif.model.Availability;
 import com.sims2013.disponif.model.Category;
 import com.sims2013.disponif.model.Type;
@@ -121,7 +122,6 @@ public class Client {
 		public static final String PARAM_END_ROW = "endRow";
 		
 		public static final String RESULT_AVAILABILITIES = "availabilities";
-		public static final String RESULT_AVAILABILITY = "availability";
 		
 		public static final String RESULT_ID = "id";
 		public static final String RESULT_START_TIME = "startTime";
@@ -161,6 +161,25 @@ public class Client {
 		public static final String RESULT_STATE = "state";
 	}
 	
+	// Namespace for joinActivity method
+		private class joinActivity {
+			// Method name
+			public static final String METHOD = "joinActivity";
+			// Parameter keys
+			public static final String PARAM_TOKEN = "accessToken";
+			public static final String PARAM_AVAILABILITY_ID = "id";
+			public static final String PARAM_REQUESTED_AVAILABILITY_ID = "requested_id";
+			// Result keys
+			public static final String RESULT_ACTIVITY = "activity";
+			public static final String RESULT_ID = "id";
+			public static final String RESULT_STATUS = "status";
+			public static final String RESULT_USERS = "@users";
+			public static final String RESULT_USER_ID = "id";
+			public static final String RESULT_USER_NAME = "name";
+			public static final String RESULT_USER_SURNAME = "surname";
+			public static final String RESULT_USER_FB_ID = "facebookId";
+		}
+	
 	// Response listener interface
 	public interface onReceiveListener {
 		public void onPingReceive(String result);
@@ -172,6 +191,7 @@ public class Client {
 		public void onMatchAvailabilitiesReceive(ArrayList<Availability> availabilities, int startRow, int endRow);
 		public void onNetworkError(String errorMessage);
 		public void onTokenExpired();
+		public void onActivityJoined(Activity result);
 	}
 	
 	// API Path
@@ -276,7 +296,9 @@ public class Client {
 		        	JSONObject JSObjet = new JSONObject();
 		        	JSObjet.put(addAvailability.PARAM_TOKEN, token);
 		        	JSObjet.put(addAvailability.PARAM_CATEGORY_ID, availability.getCategoryId());
-		        	JSObjet.put(addAvailability.PARAM_TYPE_ID, availability.getTypeId());
+		        	if (availability.getTypeId() != Availability.TYPE_NO_TYPE) {
+			        	JSObjet.put(addAvailability.PARAM_TYPE_ID, availability.getTypeId());
+					}
 		        	JSObjet.put(addAvailability.PARAM_START_TIME, availability.getStartTime());
 		        	JSObjet.put(addAvailability.PARAM_END_TIME, availability.getEndTime());
 		        	JSObjet.put(addAvailability.PARAM_DESCRIPTION, availability.getDescription());
@@ -562,6 +584,61 @@ public class Client {
 					throwError(errorMessage);
 				}else {
 					mListener.onMatchAvailabilitiesReceive(result, startRow, endRow);
+				}
+				super.onPostExecute(result);
+			}
+		}.execute();
+	}
+	
+	// JoinActivity
+	public void joinActivity(final String token, final int availabilityId, final int requestedAvailabilityId) {
+		new AsyncTask<String, Void, Activity>(){
+
+			String errorMessage;
+			
+			@Override
+			protected Activity doInBackground(String... params) {
+		        try {
+		        	JSONObject JSObjet = new JSONObject();
+		        	JSObjet.put(joinActivity.PARAM_TOKEN, token);
+		        	JSObjet.put(joinActivity.PARAM_AVAILABILITY_ID, availabilityId);
+		        	JSObjet.put(joinActivity.PARAM_REQUESTED_AVAILABILITY_ID, requestedAvailabilityId);
+		        	
+		        	Log.v("ClientJSON - Calling webservice ", joinActivity.METHOD);
+		        	JSONObject res = mJsonClient.callJSONObject(joinActivity.METHOD, JSObjet);
+		        	Log.v("ClientJSON - joinActivity", res.toString());
+		        	JSONObject activityJson = res.getJSONObject(joinActivity.RESULT_ACTIVITY);
+		        	Activity activity = new Activity();
+		        	activity.setId(activityJson.getInt(joinActivity.RESULT_ID));
+		        	activity.setStatus(activityJson.getString(joinActivity.RESULT_STATUS));
+		        	
+		        	JSONArray usersArray = activityJson.getJSONArray(joinActivity.RESULT_USERS);
+		        	ArrayList<User> users = new ArrayList<User>();
+		        	User tempUser;
+		        	for(int i = 0; i < usersArray.length(); ++i){
+		        		JSONObject tempObject = (JSONObject) usersArray.get(i);
+		        		tempUser = new User();
+		        		tempUser.setId(tempObject.getInt(joinActivity.RESULT_USER_ID));
+		        		tempUser.setName(tempObject.getString(joinActivity.RESULT_USER_NAME));
+		        		tempUser.setSurname(tempObject.getString(joinActivity.RESULT_USER_SURNAME));
+		        		tempUser.setFacebookId(tempObject.getString(joinActivity.RESULT_USER_FB_ID));
+		        		users.add(tempUser);
+		        	}
+		        	activity.setUsers(users);
+		        	return activity;
+		        } catch (Exception e) {
+		        	Log.v("ClientJSON - removeAvailability - error", e.getMessage());
+		        	errorMessage = e.getMessage();
+		            return null;
+		        }
+			}
+
+			@Override
+			protected void onPostExecute(Activity result) {
+				if (result == null) {
+					throwError(errorMessage);
+				} else {
+					mListener.onActivityJoined(result);
 				}
 				super.onPostExecute(result);
 			}

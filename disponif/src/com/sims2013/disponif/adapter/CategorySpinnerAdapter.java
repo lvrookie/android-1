@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.sims2013.disponif.R;
+import com.sims2013.disponif.Utils.BitmapManager;
 import com.sims2013.disponif.model.Category;
 
 public class CategorySpinnerAdapter extends BaseAdapter implements
@@ -25,7 +27,7 @@ public class CategorySpinnerAdapter extends BaseAdapter implements
 
 	private static class ViewHolder {
 		TextView name;
-//		ImageView icon;
+		ImageView icon;
 	}
 
 	private Activity mActivity;
@@ -55,13 +57,14 @@ public class CategorySpinnerAdapter extends BaseAdapter implements
 			holder = new ViewHolder();
 			holder.name = (TextView) convertView
 					.findViewById(R.id.spinnerTextView);
-//			holder.icon = (ImageView) convertView
-//					.findViewById(R.id.item_category_icon);
+			holder.icon = (ImageView) convertView
+					.findViewById(R.id.item_category_icon);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
+		BitmapManager.setBitmap(holder.icon, "http://disponif.darkserver.fr/server/res/category/"+ mItems.get(position).getId() +".png");
 		holder.name.setText(mItems.get(position).getName());
 		return convertView;
 	}
@@ -75,14 +78,14 @@ public class CategorySpinnerAdapter extends BaseAdapter implements
 			holder = new ViewHolder();
 			holder.name = (TextView) convertView
 					.findViewById(R.id.spinnerTextView);
-//			holder.icon = (ImageView) convertView
-//					.findViewById(R.id.item_category_icon);
-
+			holder.icon = (ImageView) convertView
+					.findViewById(R.id.item_category_icon);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
+		BitmapManager.setBitmap(holder.icon, "http://disponif.darkserver.fr/server/res/category/"+ mItems.get(position).getId() +".png");
 		holder.name.setText(mItems.get(position).getName());
 
 		return convertView;

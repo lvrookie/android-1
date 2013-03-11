@@ -3,6 +3,8 @@ package com.sims2013.disponif.model;
 
 public class Availability {
 
+	public static final int TYPE_NO_TYPE = -1;
+	
 	private int mId;
 	private String mUserId;
 	private int mCategoryId;
@@ -165,7 +167,4 @@ public class Availability {
 	public void setTypeName(String mTypeName) {
 		this.mTypeName = mTypeName;
 	}
-	
-	
-	
 }

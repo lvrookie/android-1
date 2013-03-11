@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.Utils.BitmapManager;
 import com.sims2013.disponif.Utils.DisponIFUtils;
-import com.sims2013.disponif.Utils.DisponIFUtils.DownloadImageTask;
 import com.sims2013.disponif.activities.MatchAvailabilityListActivity;
 import com.sims2013.disponif.fragments.MatchAvailabilityListFragment;
 import com.sims2013.disponif.model.Availability;
@@ -131,8 +130,4 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 		
 		return convertView;
 	}
-	
-	
-
-	
 }

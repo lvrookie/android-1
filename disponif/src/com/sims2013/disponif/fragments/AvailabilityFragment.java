@@ -64,6 +64,7 @@ public class AvailabilityFragment extends GenericFragment implements
 
 	onAvailabilityAddedListener mListener;
 	private CategorySpinnerAdapter mCategoryAdapter;
+	private boolean mShouldHideTypeSpinner;
 
 
 	private enum SubmitErrors {
@@ -179,10 +180,9 @@ public class AvailabilityFragment extends GenericFragment implements
 						mTypeSpinner.setAdapter(adapter);
 						mTypeSpinner.setEnabled(true);
 						if (mCurrentCategory.getTypes() ==null || mCurrentCategory.getTypes().isEmpty()) {
-							mTypeSpinnerLayout.setVisibility(View.GONE);
+							shouldHideTypeSpinner(true);
 						} else {
-							mTypeSpinnerLayout.setVisibility(View.VISIBLE);
-							mCurrentType = mCurrentCategory.getTypes().get(0);
+							shouldHideTypeSpinner(false);
 						}
 					}
 
@@ -308,7 +308,11 @@ public class AvailabilityFragment extends GenericFragment implements
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Availability av = new Availability();
 		av.setCategoryId(mCurrentCategory.getId());
-		av.setTypeId(mCurrentType.getId());
+		if (!mShouldHideTypeSpinner) {
+			av.setTypeId(mCurrentType.getId());
+		} else {
+			av.setTypeId(Availability.TYPE_NO_TYPE);
+		}
 		av.setDescription(mDescriptionET.getText().toString());
 
 		av.setStartTime(sdf.format(mDateFrom.getTime()));
@@ -447,10 +451,9 @@ public class AvailabilityFragment extends GenericFragment implements
 			mActivitySpinner.setEnabled(true);
 			mCurrentCategory = mCategories.get(0);
 			if (mCurrentCategory.getTypes() == null || mCurrentCategory.getTypes().size() == 0) {
-				mTypeSpinnerLayout.setVisibility(View.GONE);
+				shouldHideTypeSpinner(true);
 			} else {
-				mTypeSpinnerLayout.setVisibility(View.VISIBLE);
-				mCurrentType = mCurrentCategory.getTypes().get(0);
+				shouldHideTypeSpinner(false);
 			}
 		}
 	}
@@ -466,6 +469,16 @@ public class AvailabilityFragment extends GenericFragment implements
 		} else {
 			DisponIFUtils.makeToast(getActivity(),
 					"Erreur pendant l'ajout de la dispo");
+		}
+	}
+	
+	public void shouldHideTypeSpinner(boolean shouldHide){
+		mShouldHideTypeSpinner = shouldHide;
+		if (shouldHide) {
+			mTypeSpinnerLayout.setVisibility(View.GONE);
+		} else {
+			mTypeSpinnerLayout.setVisibility(View.VISIBLE);
+			mCurrentType = mCurrentCategory.getTypes().get(0);
 		}
 	}
 

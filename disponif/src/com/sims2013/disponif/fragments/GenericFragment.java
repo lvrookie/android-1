@@ -17,6 +17,7 @@ import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.client.Client;
+import com.sims2013.disponif.model.Activity;
 import com.sims2013.disponif.model.Availability;
 import com.sims2013.disponif.model.Category;
 
@@ -223,6 +224,11 @@ public abstract class GenericFragment extends Fragment implements
 			ArrayList<Availability> availabilities, int startRow, int endRow) {
 		shouldShowProgressDialog(false);
 
+	}
+	
+	@Override
+	public void onActivityJoined(Activity result) {
+		shouldShowProgressDialog(false);
 	}
 
 	protected void shouldShowProgressDialog(boolean shouldShow) {
