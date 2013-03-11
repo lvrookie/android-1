@@ -544,6 +544,7 @@ public class Client {
 		        	return availabilities;
 		        } catch (Exception e) {
 		        	Log.v("ClientJSON - getMatchAvailabilities", e.getMessage());
+		        	Log.v("ClientJSON - getMatchAvailabilities", e.getCause().getMessage());
 		        	errorMessage = e.getMessage();
 		            return null;
 		        } 
