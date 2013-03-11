@@ -20,6 +20,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_margin="10dp"
+            android:background="@drawable/img_download"
             android:contentDescription="@string/blank_content_description" />
 
         <TextView
@@ -28,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_margin="10dp"
-            android:layout_toRightOf="@id/item_category_icon"
+            android:layout_toRightOf="@id/item_match_availability_profile_picture"
             android:textSize="16sp" />
 
         <Button
@@ -57,7 +58,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/item_match_description"
+            android:id="@+id/item_match_availability_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>

@@ -2,14 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="8dp" >
+
+    <ImageView
+        android:id="@+id/item_category_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:contentDescription="@string/blank_content_description" />
+    <!-- android:background="@drawable/img_download" -->
+
 
     <TextView
         android:id="@+id/spinnerTextView"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:textSize="20sp"
+        android:layout_marginLeft="10dp"
         android:gravity="center_vertical|left"
-        android:layout_marginLeft="10dp"/>
+        android:textSize="20sp" />
 
 </LinearLayout>

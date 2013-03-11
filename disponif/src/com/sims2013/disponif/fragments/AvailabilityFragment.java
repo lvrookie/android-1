@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -21,6 +20,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -47,7 +47,7 @@ public class AvailabilityFragment extends GenericFragment implements
 	Spinner mTypeSpinner;
 	EditText mPlaceET;
 	EditText mDescriptionET;
-
+	LinearLayout mTypeSpinnerLayout;
 	TextView mErrorDatesTv;
 
 	ImageView mDateFromErrorImage;
@@ -63,9 +63,9 @@ public class AvailabilityFragment extends GenericFragment implements
 	ArrayList<SubmitErrors> checkFieldsErrors;
 
 	onAvailabilityAddedListener mListener;
+	private CategorySpinnerAdapter mCategoryAdapter;
 
-	ProgressDialog mProgressDialog;
-	
+
 	private enum SubmitErrors {
 		ERROR_NO_PLACE_GIVEN, ERROR_MISSING_INFORMATION, ERROR_END_DATE_BEFORE_START_DATE, ERROR_PAST_START_DATE, ERROR_NO_DESCRIPTION_GIVEN
 	}
@@ -73,7 +73,6 @@ public class AvailabilityFragment extends GenericFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mProgressDialog = new ProgressDialog(getActivity());
 		mListener = (onAvailabilityAddedListener) getActivity();
 	}
 
@@ -88,6 +87,7 @@ public class AvailabilityFragment extends GenericFragment implements
 
 	@Override
 	protected void initUI() {
+		super.initUI();
 		mCurrentCategory = null;
 		mCurrentType = null;
 
@@ -105,9 +105,10 @@ public class AvailabilityFragment extends GenericFragment implements
 		mDescriptionET = (EditText) mView
 				.findViewById(R.id.availability_description_et);
 		mActivitySpinner = (Spinner) mView
-				.findViewById(R.id.availability_spinner_activity);
+				.findViewById(R.id.availability_spinner_category);
 		mTypeSpinner = (Spinner) mView
 				.findViewById(R.id.availability_spinner_type);
+		mTypeSpinnerLayout = (LinearLayout) mView.findViewById(R.id.availability_spinner_type_ll);
 
 		mSubmitButton.setOnClickListener(this);
 		mDateButtonFrom.setOnClickListener(this);
@@ -162,7 +163,6 @@ public class AvailabilityFragment extends GenericFragment implements
 			}
 		});
 
-
 		mActivitySpinner.setEnabled(false);
 		mTypeSpinner.setEnabled(false);
 
@@ -178,7 +178,12 @@ public class AvailabilityFragment extends GenericFragment implements
 										.getTypes());
 						mTypeSpinner.setAdapter(adapter);
 						mTypeSpinner.setEnabled(true);
-						mCurrentType = mCurrentCategory.getTypes().get(0);
+						if (mCurrentCategory.getTypes() ==null || mCurrentCategory.getTypes().isEmpty()) {
+							mTypeSpinnerLayout.setVisibility(View.GONE);
+						} else {
+							mTypeSpinnerLayout.setVisibility(View.VISIBLE);
+							mCurrentType = mCurrentCategory.getTypes().get(0);
+						}
 					}
 
 					@Override
@@ -200,9 +205,10 @@ public class AvailabilityFragment extends GenericFragment implements
 			}
 
 		});
-		
+
 		// Call ws to get all the categories to fill the spinners.
 		mClient.getAllCategories(DisponifApplication.getAccessToken());
+		shouldShowProgressDialog(true);
 	}
 
 	@Override
@@ -299,9 +305,6 @@ public class AvailabilityFragment extends GenericFragment implements
 	// Method calling the ws to send the new availability
 	@SuppressLint("SimpleDateFormat")
 	private void submitDisponibility() {
-		mProgressDialog.setTitle(getString(R.string.availability_progress_title));
-		mProgressDialog.setMessage(getString(R.string.availability_progress_message));
-		mProgressDialog.show();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Availability av = new Availability();
 		av.setCategoryId(mCurrentCategory.getId());
@@ -314,7 +317,8 @@ public class AvailabilityFragment extends GenericFragment implements
 		mClient.addAvailability(DisponifApplication.getAccessToken(), av);
 	}
 
-	// Method used to check the validity of the fields before calling the ws to send it
+	// Method used to check the validity of the fields before calling the ws to
+	// send it
 	private boolean checkFields() {
 		boolean isValid = true;
 
@@ -429,27 +433,34 @@ public class AvailabilityFragment extends GenericFragment implements
 		}
 	}
 
-	// Method called when the user receive all the categories to fill the sppinners.
+	// Method called when the user receive all the categories to fill the
+	// sppinners.
 	@Override
 	public void onCategoriesReceive(ArrayList<Category> categories) {
+		super.onCategoriesReceive(categories);
 		if (categories != null && categories.size() > 0) {
-//			DisponIFUtils.makeToast(getActivity(), "receive categories");
+			// DisponIFUtils.makeToast(getActivity(), "receive categories");
 			mCategories = categories;
-			CategorySpinnerAdapter adapter = new CategorySpinnerAdapter(
-					getActivity(), mCategories);
-			mActivitySpinner.setAdapter(adapter);
+			mCategoryAdapter = new CategorySpinnerAdapter(
+					getActivity(), R.layout.spin_layout, mCategories);
+			mActivitySpinner.setAdapter(mCategoryAdapter);
 			mActivitySpinner.setEnabled(true);
 			mCurrentCategory = mCategories.get(0);
-			mCurrentType = mCurrentCategory.getTypes().get(0);
+			if (mCurrentCategory.getTypes() == null || mCurrentCategory.getTypes().size() == 0) {
+				mTypeSpinnerLayout.setVisibility(View.GONE);
+			} else {
+				mTypeSpinnerLayout.setVisibility(View.VISIBLE);
+				mCurrentType = mCurrentCategory.getTypes().get(0);
+			}
 		}
 	}
 
-	// Method called when the user's availability has been added. 
-	// it has to be implemented by the availability list fragment 
+	// Method called when the user's availability has been added.
+	// it has to be implemented by the availability list fragment
 	// to refresh the list.
 	@Override
 	public void onAvailabilityAdded(int result) {
-		mProgressDialog.dismiss();
+		super.onAvailabilityAdded(result);
 		if (result != -1) {
 			mListener.onAvailabilityAdded();
 		} else {

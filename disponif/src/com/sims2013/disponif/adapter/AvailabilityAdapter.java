@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import android.content.Intent;
-import android.sax.StartElementListener;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;

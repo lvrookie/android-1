@@ -157,6 +157,7 @@ public class DisponIFUtils {
 	    }
 
 	    protected void onPostExecute(Bitmap result) {
+	        this.bmImage.setBackgroundResource(0);
 	        bmImage.setImageBitmap(result);
 	    }
 	}

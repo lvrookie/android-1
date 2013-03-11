@@ -1,5 +1,6 @@
 package com.sims2013.disponif.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.support.v4.app.Fragment;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,9 +18,9 @@ import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.model.Availability;
 import com.sims2013.disponif.model.User;
 
-public class MatchAvailabilityAdapter extends AvailabilityAdapter {
+public class MatchAvailabilityAdapter extends ArrayAdapter<Availability> {
 
-	private static class AvailabilityHolder {
+	private static class MatchAvailabilityHolder {
 		ImageView mProfilePictureView;
 		TextView mUserName;
 		TextView mStartTime;
@@ -29,17 +31,39 @@ public class MatchAvailabilityAdapter extends AvailabilityAdapter {
 
 	public MatchAvailabilityAdapter(Fragment context, int textViewResourceId,
 			List<Availability> objects) {
-		super(context, textViewResourceId, objects);
+		super(context.getActivity(), textViewResourceId, objects);
+		mLayout = textViewResourceId;
+		mAvailabilities = (ArrayList<Availability>) objects;
+		mFragment = context;
+	}
+
+	protected Fragment mFragment;
+	protected int mLayout;
+	protected ArrayList<Availability> mAvailabilities = new ArrayList<Availability>();
+	
+	@Override
+	public int getCount() {
+		return mAvailabilities.size();
+	}
+
+	@Override
+	public Availability getItem(int i) {
+		return mAvailabilities.get(i);
+	}
+
+	@Override
+	public long getItemId(int index) {
+		return mAvailabilities.get(index).getId();
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		AvailabilityHolder holder;
+		MatchAvailabilityHolder holder;
 		if (convertView == null) {
 			LayoutInflater inflater = (mFragment.getActivity())
 					.getLayoutInflater();
 			convertView = inflater.inflate(mLayout, parent, false);
-			holder = new AvailabilityHolder();
+			holder = new MatchAvailabilityHolder();
 			holder.mProfilePictureView = (ImageView) convertView
 					.findViewById(R.id.item_match_availability_profile_picture);
 			holder.mStartTime = (TextView) convertView
@@ -47,7 +71,7 @@ public class MatchAvailabilityAdapter extends AvailabilityAdapter {
 			holder.mEndTime = (TextView) convertView
 					.findViewById(R.id.item_match_availability_endDate);
 			holder.mDescription = (TextView) convertView
-					.findViewById(R.id.item_match_description);
+					.findViewById(R.id.item_match_availability_description);
 			holder.mMoreButton = (Button) convertView
 					.findViewById(R.id.expandable_toggle_button);
 			holder.mUserName = (TextView) convertView
@@ -57,7 +81,7 @@ public class MatchAvailabilityAdapter extends AvailabilityAdapter {
 
 			convertView.setTag(holder);
 		} else {
-			holder = (AvailabilityHolder) convertView.getTag();
+			holder = (MatchAvailabilityHolder) convertView.getTag();
 		}
 
 		Availability av = mAvailabilities.get(position);
