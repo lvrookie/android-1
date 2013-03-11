@@ -101,6 +101,7 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 			mAdapter = new MatchAvailabilityAdapter(this, R.layout.item_match_availability, availabilities);
 			mListView.setAdapter(mAdapter);
 		}
+		mListView.setEmptyView(mView.findViewById(R.id.empty_list));
 		getActivity().invalidateOptionsMenu();
 	}
 	
