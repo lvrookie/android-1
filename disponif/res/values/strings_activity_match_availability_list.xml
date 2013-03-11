@@ -4,6 +4,7 @@
     <string name="availability_my_list_title">Mes disponibilités</string>
     <string name="availability_list_no_availabilities">Aucune disponibilité ne correspond à vos critères</string>
     <string name="add_availability_menu">Ajouter une disponibilité</string>
+    <string name="refresh_menu">Rafraîchir</string>
     <string name="availability_progress_loading_title">Chargement</string>
     <string name="availability_progress_loading_message">Récupération des disponibilités &#8230;</string>
     <string name="availability_progress_remove_title">Suppression</string>
@@ -11,7 +12,6 @@
     <string name="availability_context_menu_title">Menu</string>
     <string name="availability_context_menu_item_remove">Supprimer</string>
     <string name="availability_more_button">Voir détails</string>
+    <string name="availability_match_list_title">Disponibilités correspondantes</string>
 
-    
-     <string name="availability_match_list_title">Disponibilités correspondantes</string>
 </resources>

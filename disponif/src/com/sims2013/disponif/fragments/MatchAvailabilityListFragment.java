@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
@@ -22,6 +25,8 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 	MatchAvailabilityAdapter mAdapter;
 	ActionSlideExpandableListView mListView;
 	int mCurrentAvailabilityId;
+
+	private boolean mRefreshingList;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,7 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 		} else {
 			mCurrentAvailabilityId = -1;
 		}
+		setHasOptionsMenu(true);
 	}
 	
 	@Override
@@ -53,18 +59,56 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 	}
 	
 	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		
+		MenuItem refreshMenuItem = menu.findItem(R.id.menu_item_refresh);
+
+		if (getRefreshMode()) {
+			refreshMenuItem
+					.setActionView(R.layout.action_bar_indeterminate_progress); 
+		} else {
+			refreshMenuItem.setActionView(null);
+			// Default
+		}
+	}
+	
+	private boolean getRefreshMode() {
+		return mRefreshingList;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.menu_item_refresh) {
+			refresh();
+		}
+		return true;
+	}
+	
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.activity_match_availability_list_menu, menu);
+	}
+	
+	@Override
 	public void onMatchAvailabilitiesReceive(
 			ArrayList<Availability> availabilities, int startRow, int endRow) {
+		mRefreshingList = false;
 		shouldShowProgressDialog(false);
 		if (availabilities != null) {
 			mAdapter = new MatchAvailabilityAdapter(this, R.layout.item_match_availability, availabilities);
 			mListView.setAdapter(mAdapter);
 		}
 		mListView.setEmptyView(mView.findViewById(R.id.empty_list));
+		getActivity().invalidateOptionsMenu();
 	}
 	
 	@Override
 	protected void refresh() {
+		mRefreshingList = true;
+		getActivity().invalidateOptionsMenu();
 		shouldShowProgressDialog(true);
 		mClient.getMatchAvailabilities(DisponifApplication.getAccessToken(), mCurrentAvailabilityId, 0, 10);
 	}

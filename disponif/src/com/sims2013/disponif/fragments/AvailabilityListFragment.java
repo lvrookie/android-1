@@ -115,7 +115,7 @@ public class AvailabilityListFragment extends GenericFragment implements
 					AvailabilityActivity.class);
 			startActivityForResult(intent, REQUEST_CODE_ADD_AVAILABILITY);
 		}
-		return false;
+		return true;
 	}
 
 	@Override
