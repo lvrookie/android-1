@@ -319,6 +319,7 @@ public class AvailabilityFragment extends GenericFragment implements
 		av.setEndTime(sdf.format(mDateTo.getTime()));
 
 		mClient.addAvailability(DisponifApplication.getAccessToken(), av);
+		shouldShowProgressDialog(true, "Ajout", "Ajout de la disponibilité ...");
 	}
 
 	// Method used to check the validity of the fields before calling the ws to
@@ -463,6 +464,7 @@ public class AvailabilityFragment extends GenericFragment implements
 	// to refresh the list.
 	@Override
 	public void onAvailabilityAdded(int result) {
+		shouldShowProgressDialog(false);
 		super.onAvailabilityAdded(result);
 		if (result != -1) {
 			mListener.onAvailabilityAdded();
