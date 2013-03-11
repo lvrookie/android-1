@@ -1,5 +1,6 @@
 package com.sims2013.disponif.client;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import org.alexd.jsonrpc.JSONRPCClient;
@@ -7,6 +8,8 @@ import org.alexd.jsonrpc.JSONRPCParams.Versions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -333,6 +336,13 @@ public class Client {
 		        		cat.setId(DisponIFUtils.getJSONInt(catJSON, getCategories.RESULT_CATEGORY_ID));
 		        		cat.setRadius(DisponIFUtils.getJSONInt(catJSON, getCategories.RESULT_CATEGORY_RADIUS));
 		        		cat.setName(DisponIFUtils.getJSONString(catJSON, getCategories.RESULT_CATEGORY_NAME));
+		        		
+		    	            InputStream in = new java.net.URL("http://disponif.darkserver.fr/server/res/category/"
+		    						+ cat.getId() + ".png").openStream();
+		    	            Bitmap mIcon11 = BitmapFactory.decodeStream(in);
+		    	            
+		    	            cat.setIcon(mIcon11);
+		    	            
 		        		JSONArray typesArray = catJSON.getJSONArray(getCategories.RESULT_TYPES);
 		        		for (int j = 0; j < typesArray.length(); ++ j) {
 		        			Type type = new Type();

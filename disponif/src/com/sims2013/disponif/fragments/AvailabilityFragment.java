@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -46,7 +47,7 @@ public class AvailabilityFragment extends GenericFragment implements
 	Spinner mTypeSpinner;
 	EditText mPlaceET;
 	EditText mDescriptionET;
-
+	LinearLayout mTypeSpinnerLayout;
 	TextView mErrorDatesTv;
 
 	ImageView mDateFromErrorImage;
@@ -62,6 +63,7 @@ public class AvailabilityFragment extends GenericFragment implements
 	ArrayList<SubmitErrors> checkFieldsErrors;
 
 	onAvailabilityAddedListener mListener;
+	private CategorySpinnerAdapter mCategoryAdapter;
 
 
 	private enum SubmitErrors {
@@ -106,6 +108,7 @@ public class AvailabilityFragment extends GenericFragment implements
 				.findViewById(R.id.availability_spinner_category);
 		mTypeSpinner = (Spinner) mView
 				.findViewById(R.id.availability_spinner_type);
+		mTypeSpinnerLayout = (LinearLayout) mView.findViewById(R.id.availability_spinner_type_ll);
 
 		mSubmitButton.setOnClickListener(this);
 		mDateButtonFrom.setOnClickListener(this);
@@ -175,7 +178,10 @@ public class AvailabilityFragment extends GenericFragment implements
 										.getTypes());
 						mTypeSpinner.setAdapter(adapter);
 						mTypeSpinner.setEnabled(true);
-						if (!mCurrentCategory.getTypes().isEmpty()) {
+						if (mCurrentCategory.getTypes() ==null || mCurrentCategory.getTypes().isEmpty()) {
+							mTypeSpinnerLayout.setVisibility(View.GONE);
+						} else {
+							mTypeSpinnerLayout.setVisibility(View.VISIBLE);
 							mCurrentType = mCurrentCategory.getTypes().get(0);
 						}
 					}
@@ -435,12 +441,17 @@ public class AvailabilityFragment extends GenericFragment implements
 		if (categories != null && categories.size() > 0) {
 			// DisponIFUtils.makeToast(getActivity(), "receive categories");
 			mCategories = categories;
-			CategorySpinnerAdapter adapter = new CategorySpinnerAdapter(
-					getActivity(), mCategories);
-			mActivitySpinner.setAdapter(adapter);
+			mCategoryAdapter = new CategorySpinnerAdapter(
+					getActivity(), R.layout.spin_layout, mCategories);
+			mActivitySpinner.setAdapter(mCategoryAdapter);
 			mActivitySpinner.setEnabled(true);
 			mCurrentCategory = mCategories.get(0);
-			mCurrentType = mCurrentCategory.getTypes().get(0);
+			if (mCurrentCategory.getTypes() == null || mCurrentCategory.getTypes().size() == 0) {
+				mTypeSpinnerLayout.setVisibility(View.GONE);
+			} else {
+				mTypeSpinnerLayout.setVisibility(View.VISIBLE);
+				mCurrentType = mCurrentCategory.getTypes().get(0);
+			}
 		}
 	}
 
