@@ -416,7 +416,7 @@ public class Client {
 		        		availability.setLatitude(DisponIFUtils.getJSONFloat(availabilityObject, getUserAvailabilities.RESULT_LATITUDE));
 		        		availability.setLongitude(DisponIFUtils.getJSONFloat(availabilityObject, getUserAvailabilities.RESULT_LONGITUDE));
 		        		availability.setRadius(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_RADIUS));
-		        		availability.setPrivacy(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_PRIVACY));
+//		        		availability.setPrivacy(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_PRIVACY));
 		        		
 		        		JSONObject option = availabilityObject.getJSONObject(getUserAvailabilities.RESULT_OPTION);
 		        		availability.setDescription(DisponIFUtils.getJSONString(option, getUserAvailabilities.RESULT_DESCRIPTION));
@@ -534,7 +534,7 @@ public class Client {
 		        		a.setLatitude(DisponIFUtils.getJSONFloat(availabilityObject, getMatchAvailabilities.RESULT_LATITUDE));
 		        		a.setLongitude(DisponIFUtils.getJSONFloat(availabilityObject, getMatchAvailabilities.RESULT_LONGITUDE));
 		        		a.setRadius(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_RADIUS));
-		        		a.setPrivacy(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_PRIVACY));
+//		        		a.setPrivacy(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_PRIVACY));
 		        		
 		        		JSONObject option = availabilityObject.getJSONObject(getMatchAvailabilities.RESULT_OPTION);
 		        		a.setDescription(DisponIFUtils.getJSONString(option, getMatchAvailabilities.RESULT_DESCRIPTION));

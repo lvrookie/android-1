@@ -31,6 +31,7 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getActivity().getWindow().getAttributes().windowAnimations = R.style.slideRight;
 		setHasOptionsMenu(true);
 		if (getArguments().containsKey(AVAILABILITY_ID)) {
 			mCurrentAvailabilityId = getArguments().getInt(AVAILABILITY_ID);

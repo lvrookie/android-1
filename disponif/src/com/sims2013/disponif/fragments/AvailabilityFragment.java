@@ -74,6 +74,7 @@ public class AvailabilityFragment extends GenericFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getActivity().getWindow().getAttributes().windowAnimations = R.style.slideRight;
 		mListener = (onAvailabilityAddedListener) getActivity();
 	}
 
