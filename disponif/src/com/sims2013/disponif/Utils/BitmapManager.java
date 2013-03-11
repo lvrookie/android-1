@@ -23,7 +23,6 @@ public class BitmapManager {
 			imgView.setBackgroundResource(0);
 			imgView.setImageBitmap(getBitmapFromMemCache(URL));
 		}
-		
 	}
 	
 	public static void cacheBitmap(final String URL) {
@@ -33,7 +32,7 @@ public class BitmapManager {
 		if (getBitmapFromMemCache(URL) == null) {
 			new BitmapWorkerTask(null).execute(URL);
 		}
-	}
+	}   
 	
 	private static void initMemoryCache() {
 		if (mMemoryCache == null) {
