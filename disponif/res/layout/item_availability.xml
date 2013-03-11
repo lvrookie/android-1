@@ -23,14 +23,27 @@
             android:contentDescription="@string/blank_content_description" />
 
         <TextView
+            android:id="@+id/item_availability_cat_simple"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toRightOf="@id/item_category_icon"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/item_availability_type_simple"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_margin="10dp"
-            android:layout_toRightOf="@id/item_category_icon"
-            android:textSize="16sp" />
-
+            android:layout_marginLeft="0dp"
+            android:layout_toRightOf="@id/item_availability_cat_simple"
+            android:textSize="16sp"
+            android:textAlignment="viewStart" />
+        
         <TextView
             android:id="@+id/item_availability_time_simple"
             android:layout_width="wrap_content"

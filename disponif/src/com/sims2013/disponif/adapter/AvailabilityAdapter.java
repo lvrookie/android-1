@@ -27,6 +27,7 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 	
 	private static class AvailabilityHolder{
 		ImageView mCategoryIcon;
+		TextView mCatSimple;
 		TextView mTypeSimple;
 		TextView mTimeSimple;
 		TextView mDate;
@@ -73,6 +74,7 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 			holder.mDate = (TextView)convertView.findViewById(R.id.item_availability_date);
 			holder.mDescription = (TextView)convertView.findViewById(R.id.item_availability_description);
 			holder.mMoreButton = (Button)convertView.findViewById(R.id.expandable_toggle_button);
+			holder.mCatSimple = (TextView)convertView.findViewById(R.id.item_availability_cat_simple);
 			holder.mTypeSimple = (TextView)convertView.findViewById(R.id.item_availability_type_simple);
 			holder.mTimeSimple = (TextView)convertView.findViewById(R.id.item_availability_time_simple);
 			holder.mMatchAvailabilitiesButton = (Button)convertView.findViewById(R.id.item_match_availibilities_button);
@@ -112,6 +114,11 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 		+ DisponIFUtils.datetimeToFrTime(getContext(),
 				av.getEndTime()));
 		
+		String catTxt = av.getCategoryName();
+		if (!av.getTypeName().isEmpty()) {
+			catTxt += " - ";
+		}
+		holder.mCatSimple.setText(catTxt);
 		holder.mTypeSimple.setText(av.getTypeName());
 		
 		Date startDate = DisponIFUtils.stringToDate(av.getStartTime());

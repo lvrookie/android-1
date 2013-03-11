@@ -14,8 +14,8 @@
 
         <ImageView
             android:id="@+id/item_match_availability_profile_picture"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_margin="10dp"
