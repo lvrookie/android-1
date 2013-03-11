@@ -10,9 +10,8 @@
         android:id="@+id/item_category_icon"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:background="@drawable/img_download"
         android:contentDescription="@string/blank_content_description" />
-    <!-- android:background="@drawable/img_download" -->
-
 
     <TextView
         android:id="@+id/spinnerTextView"

@@ -56,7 +56,7 @@ public class AvailabilityListFragment extends GenericFragment implements
 		mListView = (ActionSlideExpandableListView) mView
 				.findViewById(R.id.list);
 		registerForContextMenu(mListView);
-		mClient.getUserAvailabilities(DisponifApplication.getAccessToken());
+		refresh();
 	}
 
 	@Override

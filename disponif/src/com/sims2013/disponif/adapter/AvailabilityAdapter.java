@@ -29,8 +29,7 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 		ImageView mCategoryIcon;
 		TextView mTypeSimple;
 		TextView mTimeSimple;
-		TextView mStartTime;
-		TextView mEndTime;
+		TextView mDate;
 		TextView mDescription;
 		Button mMoreButton;
 		Button mMatchAvailabilitiesButton;
@@ -71,8 +70,7 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 			convertView = inflater.inflate(mLayout, parent, false);
 			holder = new AvailabilityHolder();
 			holder.mCategoryIcon = (ImageView)convertView.findViewById(R.id.item_category_icon);
-			holder.mStartTime = (TextView)convertView.findViewById(R.id.item_availability_startDate);
-			holder.mEndTime = (TextView)convertView.findViewById(R.id.item_availability_endDate);
+			holder.mDate = (TextView)convertView.findViewById(R.id.item_availability_date);
 			holder.mDescription = (TextView)convertView.findViewById(R.id.item_availability_description);
 			holder.mMoreButton = (Button)convertView.findViewById(R.id.expandable_toggle_button);
 			holder.mTypeSimple = (TextView)convertView.findViewById(R.id.item_availability_type_simple);
@@ -102,16 +100,15 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 		Availability av = mAvailabilities.get(position);
 		
 		holder.mDescription.setText(av.getDescription());
-		holder.mStartTime.setText("du "
+		holder.mDate.setText("Du "
 				+ DisponIFUtils.datetimeToFrDate(getContext(),
 						av.getStartTime())
-		+ " - "
+		+ " à "
 		+ DisponIFUtils.datetimeToFrTime(getContext(),
-				av.getStartTime()));
-		holder.mEndTime.setText("au "
+				av.getStartTime()) + " au "
 				+ DisponIFUtils.datetimeToFrDate(getContext(),
 				av.getEndTime())
-		+ " - "
+		+ " à "
 		+ DisponIFUtils.datetimeToFrTime(getContext(),
 				av.getEndTime()));
 		

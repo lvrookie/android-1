@@ -86,13 +86,14 @@ public abstract class GenericFragment extends Fragment implements
 
 	protected void initUI() {
 		mProgressDialog = new ProgressDialog(getActivity());
+		mProgressDialog.setCancelable(false);
 	}
 
 	@Override
 	public void onLogInTokenReceive(String token) {
 		mTokenIsValid = true;
 		DisponifApplication.setAccessToken(token);
-		if (!mConnectionDialogFragment.isDetached()) {
+		if (mConnectionDialogFragment!= null && !mConnectionDialogFragment.isDetached()) {
 			mConnectionDialogFragment.dismiss();
 		}
 		shouldShowProgressDialog(false);
