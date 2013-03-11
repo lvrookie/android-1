@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sims2013.disponif.R;
+import com.sims2013.disponif.Utils.BitmapManager;
 import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.Utils.DisponIFUtils.DownloadImageTask;
 import com.sims2013.disponif.activities.MatchAvailabilityListActivity;
@@ -126,9 +127,7 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 			holder.mTimeSimple.setText("Dans " + diffInDays + " jours");
 		}
 		
-		// show The Image
-		new DownloadImageTask(holder.mCategoryIcon)
-		            .execute("http://disponif.darkserver.fr/server/res/category/"+ av.getCategoryId() +".png");
+		BitmapManager.setBitmap(holder.mCategoryIcon, "http://disponif.darkserver.fr/server/res/category/"+ av.getCategoryId() +".png");
 		
 		return convertView;
 	}
