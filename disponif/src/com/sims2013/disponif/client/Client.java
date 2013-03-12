@@ -14,6 +14,7 @@ import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.model.Activity;
 import com.sims2013.disponif.model.Availability;
 import com.sims2013.disponif.model.Category;
+import com.sims2013.disponif.model.Comment;
 import com.sims2013.disponif.model.Type;
 import com.sims2013.disponif.model.User;
 
@@ -162,23 +163,62 @@ public class Client {
 	}
 	
 	// Namespace for joinActivity method
-		private class joinActivity {
-			// Method name
-			public static final String METHOD = "joinActivity";
-			// Parameter keys
-			public static final String PARAM_TOKEN = "accessToken";
-			public static final String PARAM_AVAILABILITY_ID = "id";
-			public static final String PARAM_REQUESTED_AVAILABILITY_ID = "requested_id";
-			// Result keys
-			public static final String RESULT_ACTIVITY = "activity";
-			public static final String RESULT_ID = "id";
-			public static final String RESULT_STATUS = "status";
-			public static final String RESULT_USERS = "@users";
-			public static final String RESULT_USER_ID = "id";
-			public static final String RESULT_USER_NAME = "name";
-			public static final String RESULT_USER_SURNAME = "surname";
-			public static final String RESULT_USER_FB_ID = "facebookId";
-		}
+	private class joinActivity {
+		// Method name
+		public static final String METHOD = "joinActivity";
+		// Parameter keys
+		public static final String PARAM_TOKEN = "token";
+		public static final String PARAM_AVAILABILITY_ID = "id";
+		public static final String PARAM_REQUESTED_AVAILABILITY_ID = "requested_id";
+		// Result keys
+		public static final String RESULT_ACTIVITY = "activity";
+		public static final String RESULT_ID = "id";
+		public static final String RESULT_STATUS = "status";
+		
+		public static final String RESULT_COMMENT = "comment";
+		public static final String RESULT_COMMENT_MESSAGE = "message";
+		public static final String RESULT_COMMENT_DATE = "date";
+		
+		public static final String RESULT_USERS = "@users";
+		public static final String RESULT_USER_ID = "id";
+		public static final String RESULT_USER_NAME = "name";
+		public static final String RESULT_USER_SURNAME = "surname";
+		public static final String RESULT_USER_FB_ID = "facebookId";
+	}
+		
+	// Namespace for addComment method
+	private class addComment {
+		// Method name
+		public static final String METHOD = "addComment";
+		// Parameter keys
+		public static final String PARAM_TOKEN = "token";
+		public static final String PARAM_ACTIVITY_ID = "id";
+		public static final String PARAM_MESSAGE = "message";
+		// Result keys
+		public static final String RESULT_STATE = "state";
+	}
+	
+	private class getActivity {
+		// Method name
+		public static final String METHOD = "getActivityByAvailabilityId";
+		// Parameter keys
+		public static final String PARAM_TOKEN = "token";
+		public static final String PARAM_AVAILABILITY_ID = "id";
+		// Result keys
+		public static final String RESULT_ACTIVITY = "activity";
+		public static final String RESULT_ID = "id";
+		public static final String RESULT_STATUS = "status";
+		
+		public static final String RESULT_COMMENT = "comment";
+		public static final String RESULT_COMMENT_MESSAGE = "message";
+		public static final String RESULT_COMMENT_DATE = "date";
+		
+		public static final String RESULT_USERS = "@users";
+		public static final String RESULT_USER_ID = "id";
+		public static final String RESULT_USER_NAME = "name";
+		public static final String RESULT_USER_SURNAME = "surname";
+		public static final String RESULT_USER_FB_ID = "facebookId";
+	}
 	
 	// Response listener interface
 	public interface onReceiveListener {
@@ -191,7 +231,8 @@ public class Client {
 		public void onMatchAvailabilitiesReceive(ArrayList<Availability> availabilities, int startRow, int endRow);
 		public void onNetworkError(String errorMessage);
 		public void onTokenExpired();
-		public void onActivityJoined(Activity result);
+		public void onActivityReceive(Activity result);
+		public void onCommentAdded(Boolean state);
 	}
 	
 	// API Path
@@ -616,7 +657,7 @@ public class Client {
 		        	ArrayList<User> users = new ArrayList<User>();
 		        	User tempUser;
 		        	for(int i = 0; i < usersArray.length(); ++i){
-		        		JSONObject tempObject = (JSONObject) usersArray.get(i);
+		        		JSONObject tempObject = usersArray.getJSONObject(i);
 		        		tempUser = new User();
 		        		tempUser.setId(tempObject.getInt(joinActivity.RESULT_USER_ID));
 		        		tempUser.setName(tempObject.getString(joinActivity.RESULT_USER_NAME));
@@ -625,9 +666,33 @@ public class Client {
 		        		users.add(tempUser);
 		        	}
 		        	activity.setUsers(users);
+		        	
+		        	JSONArray commentArray = activityJson.getJSONArray(joinActivity.RESULT_COMMENT);
+		        	ArrayList<Comment> comments = new ArrayList<Comment>();
+		        	Comment tempComment;
+		        	User tempCommentUser;
+		        	for(int i = 0; i < commentArray.length(); ++i) {
+		        		JSONObject tempComObject = commentArray.getJSONObject(i);
+		        		JSONObject tempUsrObject = tempComObject.getJSONObject(joinActivity.RESULT_USERS);
+		        		tempComment = new Comment();
+		        		tempCommentUser = new User();
+		        		
+		        		tempCommentUser.setId(tempUsrObject.getInt(joinActivity.RESULT_USER_ID));
+		        		tempCommentUser.setName(tempUsrObject.getString(joinActivity.RESULT_USER_NAME));
+		        		tempCommentUser.setSurname(tempUsrObject.getString(joinActivity.RESULT_USER_SURNAME));
+		        		tempCommentUser.setFacebookId(tempUsrObject.getString(joinActivity.RESULT_USER_FB_ID));
+		        		
+		        		tempComment.setUser(tempCommentUser);
+		        		tempComment.setMessage(tempComObject.getString(joinActivity.RESULT_COMMENT_MESSAGE));
+		        		tempComment.setDate(tempComObject.getString(joinActivity.RESULT_COMMENT_DATE));
+		        		
+		        		comments.add(tempComment);
+		        	}
+		        	activity.setComments(comments);
+		        	
 		        	return activity;
 		        } catch (Exception e) {
-		        	Log.v("ClientJSON - removeAvailability - error", e.getMessage());
+		        	Log.v("ClientJSON - joinActivity - error", e.getMessage());
 		        	errorMessage = e.getMessage();
 		            return null;
 		        }
@@ -638,10 +703,127 @@ public class Client {
 				if (result == null) {
 					throwError(errorMessage);
 				} else {
-					mListener.onActivityJoined(result);
+					mListener.onActivityReceive(result);
 				}
 				super.onPostExecute(result);
 			}
 		}.execute();
 	}
+	
+	// addComment
+	public void addComment(final String token, final int activityId, final String message) {
+		new AsyncTask<Void, Void, Boolean>(){
+
+			String errorMessage;
+			
+			@Override
+			protected Boolean doInBackground(Void... params) {
+		        try {
+		        	JSONObject JSObjet = new JSONObject();
+		        	JSObjet.put(addComment.PARAM_TOKEN, token);
+		        	JSObjet.put(addComment.PARAM_ACTIVITY_ID, activityId);
+		        	JSObjet.put(addComment.PARAM_MESSAGE, message);
+		        	
+		        	Log.v("ClientJSON - Calling webservice ", addComment.METHOD);
+		        	JSONObject res = mJsonClient.callJSONObject(addComment.METHOD, JSObjet);
+		        	Log.v("ClientJSON - addComment", res.toString());
+		        	JSONObject resultJson = res.getJSONObject(addComment.RESULT_STATE);
+		        	return resultJson.getBoolean(addComment.RESULT_STATE);
+		        } catch (Exception e) {
+		        	Log.v("ClientJSON - joinActivity - error", e.getMessage());
+		        	errorMessage = e.getMessage();
+		            return null;
+		        }
+			}
+
+			@Override
+			protected void onPostExecute(Boolean result) {
+				if (result == null) {
+					throwError(errorMessage);
+				} else {
+					mListener.onCommentAdded(result);
+				}
+				super.onPostExecute(result);
+			}
+		}.execute();
+	}
+	
+	// getActivity
+	public void getActivity(final String token, final int availabilityId) {
+		new AsyncTask<String, Void, Activity>(){
+
+			String errorMessage;
+			
+			@Override
+			protected Activity doInBackground(String... params) {
+		        try {
+		        	JSONObject JSObjet = new JSONObject();
+		        	JSObjet.put(getActivity.PARAM_TOKEN, token);
+		        	JSObjet.put(getActivity.PARAM_AVAILABILITY_ID, availabilityId);
+		        	
+		        	Log.v("ClientJSON - Calling webservice ", getActivity.METHOD);
+		        	JSONObject res = mJsonClient.callJSONObject(getActivity.METHOD, JSObjet);
+		        	Log.v("ClientJSON - getActivity", res.toString());
+		        	JSONObject activityJson = res.getJSONObject(getActivity.RESULT_ACTIVITY);
+		        	Activity activity = new Activity();
+		        	activity.setId(activityJson.getInt(getActivity.RESULT_ID));
+		        	activity.setStatus(activityJson.getString(getActivity.RESULT_STATUS));
+		        	
+		        	JSONArray usersArray = activityJson.getJSONArray(getActivity.RESULT_USERS);
+		        	ArrayList<User> users = new ArrayList<User>();
+		        	User tempUser;
+		        	for(int i = 0; i < usersArray.length(); ++i){
+		        		JSONObject tempObject = (JSONObject) usersArray.get(i);
+		        		tempUser = new User();
+		        		tempUser.setId(tempObject.getInt(getActivity.RESULT_USER_ID));
+		        		tempUser.setName(tempObject.getString(getActivity.RESULT_USER_NAME));
+		        		tempUser.setSurname(tempObject.getString(getActivity.RESULT_USER_SURNAME));
+		        		tempUser.setFacebookId(tempObject.getString(getActivity.RESULT_USER_FB_ID));
+		        		users.add(tempUser);
+		        	}
+		        	activity.setUsers(users);
+		        	
+		        	JSONArray commentArray = activityJson.getJSONArray(getActivity.RESULT_COMMENT);
+		        	ArrayList<Comment> comments = new ArrayList<Comment>();
+		        	Comment tempComment;
+		        	User tempCommentUser;
+		        	for(int i = 0; i < commentArray.length(); ++i) {
+		        		JSONObject tempComObject = commentArray.getJSONObject(i);
+		        		JSONObject tempUsrObject = tempComObject.getJSONObject(getActivity.RESULT_USERS);
+		        		tempComment = new Comment();
+		        		tempCommentUser = new User();
+		        		
+		        		tempCommentUser.setId(tempUsrObject.getInt(getActivity.RESULT_USER_ID));
+		        		tempCommentUser.setName(tempUsrObject.getString(getActivity.RESULT_USER_NAME));
+		        		tempCommentUser.setSurname(tempUsrObject.getString(getActivity.RESULT_USER_SURNAME));
+		        		tempCommentUser.setFacebookId(tempUsrObject.getString(getActivity.RESULT_USER_FB_ID));
+		        		
+		        		tempComment.setUser(tempCommentUser);
+		        		tempComment.setMessage(tempComObject.getString(getActivity.RESULT_COMMENT_MESSAGE));
+		        		tempComment.setDate(tempComObject.getString(getActivity.RESULT_COMMENT_DATE));
+		        		
+		        		comments.add(tempComment);
+		        	}
+		        	activity.setComments(comments);
+		        	
+		        	return activity;
+		        } catch (Exception e) {
+		        	Log.v("ClientJSON - joinActivity - error", e.getMessage());
+		        	errorMessage = e.getMessage();
+		            return null;
+		        }
+			}
+
+			@Override
+			protected void onPostExecute(Activity result) {
+				if (result == null) {
+					throwError(errorMessage);
+				} else {
+					mListener.onActivityReceive(result);
+				}
+				super.onPostExecute(result);
+			}
+		}.execute();
+	}
+	
 }
