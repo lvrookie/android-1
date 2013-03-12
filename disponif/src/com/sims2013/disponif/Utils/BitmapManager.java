@@ -95,7 +95,9 @@ public class BitmapManager {
 	        		mIcon11 = getBitmapFromMemCache(urldisplay);
 	        	}
 	        } catch (Exception e) {
-	            Log.e("Error", e.getMessage());
+	        	if (e.getMessage() != null) {
+		            Log.e("Error", e.getMessage());
+				}
 	            e.printStackTrace();
 	        }
 	        return mIcon11;

@@ -179,7 +179,7 @@ public class Client {
 		public static final String RESULT_COMMENT_MESSAGE = "message";
 		public static final String RESULT_COMMENT_DATE = "date";
 		
-		public static final String RESULT_USERS = "@users";
+		public static final String RESULT_USERS = "@user";
 		public static final String RESULT_USER_ID = "id";
 		public static final String RESULT_USER_NAME = "name";
 		public static final String RESULT_USER_SURNAME = "surname";
@@ -231,7 +231,7 @@ public class Client {
 		public void onMatchAvailabilitiesReceive(ArrayList<Availability> availabilities, int startRow, int endRow);
 		public void onNetworkError(String errorMessage);
 		public void onTokenExpired();
-		public void onActivityReceive(Activity result);
+		public void onActivityReceived(Activity result);
 		public void onCommentAdded(Boolean state);
 	}
 	
@@ -613,7 +613,9 @@ public class Client {
 		        	return availabilities;
 		        } catch (Exception e) {
 		        	Log.v("ClientJSON - getMatchAvailabilities", e.getMessage());
-		        	Log.v("ClientJSON - getMatchAvailabilities", e.getCause().getMessage());
+		        	if (e.getCause() != null) {
+			        	Log.v("ClientJSON - getMatchAvailabilities", e.getCause().getMessage());	
+					}
 		        	errorMessage = e.getMessage();
 		            return null;
 		        } 
@@ -703,7 +705,7 @@ public class Client {
 				if (result == null) {
 					throwError(errorMessage);
 				} else {
-					mListener.onActivityReceive(result);
+					mListener.onActivityReceived(result);
 				}
 				super.onPostExecute(result);
 			}
@@ -727,10 +729,10 @@ public class Client {
 		        	Log.v("ClientJSON - Calling webservice ", addComment.METHOD);
 		        	JSONObject res = mJsonClient.callJSONObject(addComment.METHOD, JSObjet);
 		        	Log.v("ClientJSON - addComment", res.toString());
-		        	JSONObject resultJson = res.getJSONObject(addComment.RESULT_STATE);
-		        	return resultJson.getBoolean(addComment.RESULT_STATE);
+//		        	boolean resultJson = res.getBoolean(addComment.RESULT_STATE);
+		        	return res.getBoolean(addComment.RESULT_STATE);
 		        } catch (Exception e) {
-		        	Log.v("ClientJSON - joinActivity - error", e.getMessage());
+		        	Log.v("ClientJSON - addComment - error", e.getMessage());
 		        	errorMessage = e.getMessage();
 		            return null;
 		        }
@@ -808,7 +810,7 @@ public class Client {
 		        	
 		        	return activity;
 		        } catch (Exception e) {
-		        	Log.v("ClientJSON - joinActivity - error", e.getMessage());
+		        	Log.v("ClientJSON - getActivity - error", e.getMessage());
 		        	errorMessage = e.getMessage();
 		            return null;
 		        }
@@ -819,7 +821,7 @@ public class Client {
 				if (result == null) {
 					throwError(errorMessage);
 				} else {
-					mListener.onActivityReceive(result);
+					mListener.onActivityReceived(result);
 				}
 				super.onPostExecute(result);
 			}

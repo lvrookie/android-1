@@ -21,6 +21,11 @@ import android.widget.Toast;
 
 
 public class DisponIFUtils {
+	
+	public static int dipToPixel(int dips, float scale){
+		return (int) (dips * scale + 0.5f);
+	}
+	
 	public static void makeToast(Context context, String text) {
 		makeToast(context, text,Toast.LENGTH_LONG);
 	}

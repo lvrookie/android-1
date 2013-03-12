@@ -17,7 +17,6 @@ import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.client.Client;
-import com.sims2013.disponif.model.Activity;
 import com.sims2013.disponif.model.Availability;
 import com.sims2013.disponif.model.Category;
 
@@ -249,12 +248,10 @@ public abstract class GenericFragment extends Fragment implements
 	
 	@Override
 	public void onCommentAdded(Boolean state) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
-	public void onActivityReceive(com.sims2013.disponif.model.Activity result) {
+	public void onActivityReceived(com.sims2013.disponif.model.Activity result) {
 		shouldShowProgressDialog(false);
 	}
 }

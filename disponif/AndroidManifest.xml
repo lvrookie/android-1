@@ -54,6 +54,12 @@
             android:configChanges="keyboard|orientation|screenSize"
             android:theme="@style/MyActionBarTheme" >
         </activity>
+        <activity
+            android:name="com.sims2013.disponif.activities.ActivityActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:theme="@style/MyActionBarTheme"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

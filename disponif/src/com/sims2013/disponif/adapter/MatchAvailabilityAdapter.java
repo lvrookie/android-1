@@ -6,6 +6,7 @@ import java.util.List;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -39,6 +40,10 @@ public class MatchAvailabilityAdapter extends ArrayAdapter<Availability> {
 		mFragment = context;
 	}
 
+	public interface onJoinActivityClickedListener {
+		public void onJoinActivityClicked(int requestedAvailabilityPosition);
+	}
+	
 	protected Fragment mFragment;
 	protected int mLayout;
 	protected ArrayList<Availability> mAvailabilities = new ArrayList<Availability>();
@@ -59,7 +64,7 @@ public class MatchAvailabilityAdapter extends ArrayAdapter<Availability> {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		MatchAvailabilityHolder holder;
 		if (convertView == null) {
 			LayoutInflater inflater = (mFragment.getActivity())
@@ -80,8 +85,15 @@ public class MatchAvailabilityAdapter extends ArrayAdapter<Availability> {
 					.setOnLongClickListener((OnLongClickListener) mFragment);
 			holder.mJoinActivity = (ImageButton) convertView
 					.findViewById(R.id.item_availability_join_activity);
-			holder.mJoinActivity
-					.setOnLongClickListener((OnLongClickListener) mFragment);
+			holder.mJoinActivity.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					if (v.getId() == R.id.item_availability_join_activity) {
+						((onJoinActivityClickedListener) mFragment).onJoinActivityClicked(position);
+					}
+				}
+			});
 
 			convertView.setTag(holder);
 		} else {

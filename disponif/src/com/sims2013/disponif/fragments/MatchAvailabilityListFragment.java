@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,12 +21,14 @@ import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.Utils.BitmapManager;
 import com.sims2013.disponif.Utils.DisponIFUtils;
+import com.sims2013.disponif.activities.ActivityActivity;
 import com.sims2013.disponif.adapter.MatchAvailabilityAdapter;
+import com.sims2013.disponif.adapter.MatchAvailabilityAdapter.onJoinActivityClickedListener;
 import com.sims2013.disponif.model.Availability;
 import com.tjerkw.slideexpandable.library.ActionSlideExpandableListView;
 
 public class MatchAvailabilityListFragment extends GenericFragment implements
-		OnLongClickListener {
+		OnLongClickListener, onJoinActivityClickedListener {
 
 	public static final String EXTRA_AVAILABILITY_ID = "com.sims2013.disponif.fragments.MatchAvailabilityListFragment.EXTRA_AVAILABILITY_ID";
 	public static final String EXTRA_CATEGORY_ID = "com.sims2013.disponif.fragments.MatchAvailabilityListFragment.EXTRA_CATEGORY_ID";
@@ -48,7 +51,7 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 
 	// UI references
 	ImageView mProfilePicture;
-	ImageView mCategoryIcon; 
+	ImageView mCategoryIcon;
 	ImageView mLiveIcon;
 	TextView mCategoryNameTv;
 	TextView mDescriptionTv;
@@ -60,7 +63,7 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getActivity().getWindow().getAttributes().windowAnimations = R.style.slideRight; 
+		getActivity().getWindow().getAttributes().windowAnimations = R.style.slideRight;
 		setHasOptionsMenu(true);
 		mCurrentAvailabilityId = getArguments().getInt(EXTRA_AVAILABILITY_ID,
 				-1);
@@ -87,66 +90,74 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 	@Override
 	protected void initUI() {
 		super.initUI();
-		
+
 		mListView = (ActionSlideExpandableListView) mView
 				.findViewById(R.id.list);
-		
-		mCategoryNameTv = (TextView) mView.findViewById(R.id.selected_availability_category_type);
-		mDateSimpleTv = (TextView) mView.findViewById(R.id.selected_availability_time_simple);
-		mDateTv = (TextView) mView.findViewById(R.id.selected_availability_date);
-		mDescriptionTv = (TextView) mView.findViewById(R.id.selected_availability_description);
-		mProfilePicture = (ImageView) mView.findViewById(R.id.selected_availability_profile_picture);
-		mCategoryIcon = (ImageView) mView.findViewById(R.id.selected_availability_category_icon);
-		mLiveIcon = (ImageView) mView.findViewById(R.id.selected_availability_live_icon);
-		
+
+		mCategoryNameTv = (TextView) mView
+				.findViewById(R.id.selected_availability_category_type);
+		mDateSimpleTv = (TextView) mView
+				.findViewById(R.id.selected_availability_time_simple);
+		mDateTv = (TextView) mView
+				.findViewById(R.id.selected_availability_date);
+		mDescriptionTv = (TextView) mView
+				.findViewById(R.id.selected_availability_description);
+		mProfilePicture = (ImageView) mView
+				.findViewById(R.id.selected_availability_profile_picture);
+		mCategoryIcon = (ImageView) mView
+				.findViewById(R.id.selected_availability_category_icon);
+		mLiveIcon = (ImageView) mView
+				.findViewById(R.id.selected_availability_live_icon);
+
 		BitmapManager.setBitmap(mProfilePicture, "http://graph.facebook.com/"
-				+ DisponifApplication.getFacebookId()
-				+ "/picture?type=large", R.drawable.bkg_white_gray_border);
-		
-		BitmapManager.setBitmap(mCategoryIcon, "http://disponif.darkserver.fr/server/res/category/"+ mCategoryId +".png");
+				+ DisponifApplication.getFacebookId() + "/picture?type=large",
+				R.drawable.bkg_white_gray_border);
+
+		BitmapManager.setBitmap(mCategoryIcon,
+				"http://disponif.darkserver.fr/server/res/category/"
+						+ mCategoryId + ".png");
 		String catTxt = mCategoryName;
 		if (mTypeName != null && !mTypeName.isEmpty()) {
 			catTxt += " - " + mTypeName;
 		}
 		mCategoryNameTv.setText(catTxt);
-		
+
 		Date startDate = DisponIFUtils.stringToDate(mStartTime);
 		Date today = new Date();
-		int diffInDays = (int)( (startDate.getTime() - today.getTime()) 
-                / (1000 * 60 * 60 * 24) );
-		int diffInHours = Math.round(( (startDate.getTime() - today.getTime()) 
-                / (1000 * 60 * 60) )) + 1; 
-		
+		int diffInDays = (int) ((startDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+		int diffInHours = Math
+				.round(((startDate.getTime() - today.getTime()) / (1000 * 60 * 60))) + 1;
+
 		Calendar calendar = GregorianCalendar.getInstance();
-		calendar.setTime(today);   
+		calendar.setTime(today);
 		int currHour = calendar.get(Calendar.HOUR_OF_DAY);
-		
+
 		if (diffInHours <= 0) {
 			mDateSimpleTv.setVisibility(View.GONE);
 			mLiveIcon.setVisibility(View.VISIBLE);
-		} else if (diffInHours<(24-currHour)) {
+		} else if (diffInHours < (24 - currHour)) {
 			mLiveIcon.setVisibility(View.GONE);
-			mDateSimpleTv.setText(getString(R.string.availability_date_simple_today));
-		} else if (diffInDays == 0){
+			mDateSimpleTv
+					.setText(getString(R.string.availability_date_simple_today));
+		} else if (diffInDays == 0) {
 			mLiveIcon.setVisibility(View.GONE);
-			mDateSimpleTv.setText(getString(R.string.availability_date_simple, 1)); 
+			mDateSimpleTv.setText(getString(R.string.availability_date_simple,
+					1));
 		} else {
 			mLiveIcon.setVisibility(View.GONE);
-			mDateSimpleTv.setText(getString(R.string.availability_date_simple, diffInDays));
+			mDateSimpleTv.setText(getString(R.string.availability_date_simple,
+					diffInDays));
 		}
-		
+
 		mDateTv.setText("Du "
-				+ DisponIFUtils.datetimeToFrDate(getActivity(),
-						mStartTime)
-		+ " à "
-		+ DisponIFUtils.datetimeToFrTime(getActivity(),
-				mStartTime) + " au "
-				+ DisponIFUtils.datetimeToFrDate(getActivity(),
-				mEndTime)
-		+ " à "
-		+ DisponIFUtils.datetimeToFrTime(getActivity(),
-				mEndTime));
-		
+				+ DisponIFUtils.datetimeToFrDate(getActivity(), mStartTime)
+				+ " à "
+				+ DisponIFUtils.datetimeToFrTime(getActivity(), mStartTime)
+				+ " au "
+				+ DisponIFUtils.datetimeToFrDate(getActivity(), mEndTime)
+				+ " à "
+				+ DisponIFUtils.datetimeToFrTime(getActivity(), mEndTime));
+
 		mDescriptionTv.setText(mDescription);
 		refresh();
 	}
@@ -216,6 +227,24 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 	@Override
 	public boolean onLongClick(View arg0) {
 		return false;
+	}
+
+	@Override
+	public void onJoinActivityClicked(int requestedAvailabilityPosition) {
+
+		Intent intent = new Intent(getActivity(), ActivityActivity.class);
+		intent.putExtra(
+				ActivityActivity.EXTRA_ACTIVITY_NAME,
+				mAdapter.getItem(requestedAvailabilityPosition)
+						.getCategoryName()
+						+ " - "
+						+ mAdapter.getItem(requestedAvailabilityPosition)
+								.getTypeName());
+		intent.putExtra(ActivityActivity.EXTRA_REQUESTED_AVAILABILITY_ID,
+				mAdapter.getItem(requestedAvailabilityPosition).getId());
+		intent.putExtra(ActivityActivity.EXTRA_AVAILABILITY_ID,
+				mCurrentAvailabilityId);
+		getActivity().startActivity(intent);
 	}
 
 }

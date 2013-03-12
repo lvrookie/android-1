@@ -27,6 +27,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="96dp"
+            android:layout_marginRight="20dp"
             android:layout_marginTop="96dp" />
 
         <ImageView
@@ -44,7 +45,7 @@
             android:layout_alignBottom="@id/activity_category_icon"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_margin="20dp"
+            android:layout_marginTop="20dp"
             android:layout_toRightOf="@id/activity_category_icon"
             android:orientation="vertical" >
 
@@ -126,7 +127,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:text="Utilisateurs"
+        android:text="Participants"
         android:textColor="@color/blue"
         android:textStyle="bold" />
 
@@ -140,13 +141,21 @@
 
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" >
 
         <LinearLayout
             android:id="@+id/activity_users_layout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/activity_current_user_picture"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="1dp" />
         </LinearLayout>
     </HorizontalScrollView>
 
@@ -166,29 +175,44 @@
         android:layout_marginRight="10dp"
         android:background="@color/blue" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/bkg_white_gray_border"
-        android:orientation="vertical" >
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:layout_weight="1"
+        android:background="@drawable/bkg_white_gray_border" >
 
         <ListView
             android:id="@+id/activity_comments_list"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="1dp"
-            android:layout_weight="1" />
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/separator"
+            android:layout_alignParentTop="true"
+            android:layout_margin="1dp" />
+
+        <TextView
+            android:id="@+id/empty_comment_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:text="Aucun commentaire"
+            android:textColor="@color/gray_bkg"
+            android:textStyle="bold|italic"
+            android:visibility="gone" />
 
         <View
+            android:id="@+id/separator"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_above="@+id/activity_add_comments_ll"
             android:background="@color/gray_bkg" />
 
         <LinearLayout
+            android:id="@+id/activity_add_comments_ll"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
             android:layout_marginBottom="1dp"
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
@@ -202,17 +226,21 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/bkg_edit"
-                android:inputType="text" />
+                android:inputType="text"
+                android:padding="2dp" />
 
             <Button
                 android:id="@+id/activity_comments_add_bt"
-                style="@style/blue_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="3dp"
+                android:background="@drawable/blue_button_square"
+                android:gravity="center"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
                 android:text="Envoyer"
                 android:textColor="@color/white" />
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

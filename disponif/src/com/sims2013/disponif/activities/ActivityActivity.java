@@ -6,7 +6,9 @@ import com.sims2013.disponif.fragments.ActivityFragment;
 
 public class ActivityActivity extends GenericActivity {
 
-	private static final String EXTRA_ACTIVITY_NAME = "com.sims2013.disponif.activities.ActivityActivity.EXTRA_ACTIVITY_NAME";
+	public static final String EXTRA_ACTIVITY_NAME = "com.sims2013.disponif.activities.ActivityActivity.EXTRA_ACTIVITY_NAME";
+	public static final String EXTRA_REQUESTED_AVAILABILITY_ID = "com.sims2013.disponif.activities.ActivityActivity.EXTRA_REQUESTED_AVAILABILITY_ID";
+	public static final String EXTRA_AVAILABILITY_ID = "com.sims2013.disponif.activities.ActivityActivity.EXTRA_AVAILABILITY_ID";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
