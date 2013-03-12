@@ -147,12 +147,15 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 			holder.mLiveIcon.setVisibility(View.VISIBLE);
 		} else if (diffInHours<(24-currHour)) {
 			holder.mLiveIcon.setVisibility(View.GONE);
+			holder.mTimeSimple.setVisibility(View.VISIBLE);
 			holder.mTimeSimple.setText(mFragment.getString(R.string.availability_date_simple_today));
 		} else if (diffInDays == 0){
 			holder.mLiveIcon.setVisibility(View.GONE);
+			holder.mTimeSimple.setVisibility(View.VISIBLE);
 			holder.mTimeSimple.setText(mFragment.getString(R.string.availability_date_simple, 1)); 
 		} else {
 			holder.mLiveIcon.setVisibility(View.GONE);
+			holder.mTimeSimple.setVisibility(View.VISIBLE);
 			holder.mTimeSimple.setText(mFragment.getString(R.string.availability_date_simple, diffInDays));
 		}
 		
