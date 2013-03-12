@@ -48,7 +48,7 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 
 	// UI references
 	ImageView mProfilePicture;
-	ImageView mCategoryIcon;
+	ImageView mCategoryIcon; 
 	ImageView mLiveIcon;
 	TextView mCategoryNameTv;
 	TextView mDescriptionTv;
