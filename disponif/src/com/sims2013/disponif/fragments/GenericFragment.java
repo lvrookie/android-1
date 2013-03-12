@@ -225,11 +225,6 @@ public abstract class GenericFragment extends Fragment implements
 		shouldShowProgressDialog(false);
 
 	}
-	
-	@Override
-	public void onActivityJoined(Activity result) {
-		shouldShowProgressDialog(false);
-	}
 
 	protected void shouldShowProgressDialog(boolean shouldShow) {
 		if (shouldShow) {
@@ -250,5 +245,16 @@ public abstract class GenericFragment extends Fragment implements
 		} else {
 			mProgressDialog.dismiss();
 		}
+	}
+	
+	@Override
+	public void onCommentAdded(Boolean state) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onActivityReceive(com.sims2013.disponif.model.Activity result) {
+		shouldShowProgressDialog(false);
 	}
 }

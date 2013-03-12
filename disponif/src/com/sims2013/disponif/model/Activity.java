@@ -6,6 +6,11 @@ public class Activity {
 	private int mId;
 	private String mStatus;
 	private ArrayList<User> mUsers;
+	private ArrayList<Comment> mComments;
+	
+	public Activity() {
+		
+	}
 	
 	public String getStatus() {
 		return mStatus;
@@ -25,4 +30,12 @@ public class Activity {
 	public void setUsers(ArrayList<User> mUsers) {
 		this.mUsers = mUsers;
 	}
+	public ArrayList<Comment> getComments() {
+		return mComments;
+	}
+	public void setComments(ArrayList<Comment> mComments) {
+		this.mComments = mComments;
+	}
+	
+	
 }
