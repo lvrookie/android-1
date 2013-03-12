@@ -45,7 +45,6 @@ public class HomeFragment extends GenericFragment implements OnClickListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		
 		mView = inflater.inflate(R.layout.fragment_home, container, false);
 		initUI();
 		return mView;
@@ -81,7 +80,7 @@ public class HomeFragment extends GenericFragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == mDisponibilityButton.getId()) {
-
+			
 			Intent intent = new Intent(getActivity(),
 					AvailabilityListActivity.class);
 			startActivity(intent);
