@@ -91,7 +91,7 @@ public class DisponIFUtils {
 	            flags |= android.text.format.DateUtils.FORMAT_SHOW_YEAR;
 
 	            finalDateTime = android.text.format.DateUtils.formatDateTime(context,
-	            when + TimeZone.getDefault().getOffset(when), flags);               
+	            when, flags);               
 	        }
 	    }
 	    return finalDateTime;
@@ -119,7 +119,7 @@ public class DisponIFUtils {
 	            flags |= android.text.format.DateUtils.FORMAT_SHOW_TIME;
 
 	            finalDateTime = android.text.format.DateUtils.formatDateTime(context,
-	            when + TimeZone.getDefault().getOffset(when), flags);               
+	            when, flags);               
 	        }
 	    }
 	    return finalDateTime;

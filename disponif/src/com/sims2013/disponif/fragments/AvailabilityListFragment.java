@@ -148,5 +148,7 @@ public class AvailabilityListFragment extends GenericFragment implements
 	public boolean onLongClick(View arg0) {
 		return false;
 	}
+	
+	
 
 }
