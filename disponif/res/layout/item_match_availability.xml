@@ -93,6 +93,12 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp" />
+
+        <ImageButton
+            android:id="@+id/item_availability_join_activity"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@android:drawable/ic_menu_add" />
     </LinearLayout>
 
 </LinearLayout>
