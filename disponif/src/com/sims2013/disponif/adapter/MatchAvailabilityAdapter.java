@@ -105,7 +105,7 @@ public class MatchAvailabilityAdapter extends ArrayAdapter<Availability> {
 					+ av.getUser().getSurname());
 			BitmapManager.setBitmap(holder.mProfilePictureView,
 					"http://graph.facebook.com/" + av.getUser().getFacebookId()
-							+ "/picture?type=large");
+							+ "/picture?type=large", R.drawable.bkg_white_gray_border);
 		} else {
 			BitmapManager
 					.setBitmap(
