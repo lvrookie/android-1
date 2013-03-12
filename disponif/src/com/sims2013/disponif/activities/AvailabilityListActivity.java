@@ -21,4 +21,11 @@ public class AvailabilityListActivity extends GenericActivity{
 		setTitle(getResources().getString(R.string.availability_my_list_title));
 	}
 
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+	}
+	
+	
+
 }

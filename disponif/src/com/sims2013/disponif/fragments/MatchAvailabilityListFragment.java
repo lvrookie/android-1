@@ -1,7 +1,9 @@
 package com.sims2013.disponif.fragments;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -112,16 +114,25 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 		Date today = new Date();
 		int diffInDays = (int)( (startDate.getTime() - today.getTime()) 
                 / (1000 * 60 * 60 * 24) );
-                
-		if (diffInDays < 0) {
+		int diffInHours = Math.round(( (startDate.getTime() - today.getTime()) 
+                / (1000 * 60 * 60) )) + 1; 
+		
+		Calendar calendar = GregorianCalendar.getInstance();
+		calendar.setTime(today);   
+		int currHour = calendar.get(Calendar.HOUR_OF_DAY);
+		
+		if (diffInHours <= 0) {
 			mDateSimpleTv.setVisibility(View.GONE);
 			mLiveIcon.setVisibility(View.VISIBLE);
-		} else if (diffInDays == 0) {
+		} else if (diffInHours<(24-currHour)) {
 			mLiveIcon.setVisibility(View.GONE);
 			mDateSimpleTv.setText(getString(R.string.availability_date_simple_today));
+		} else if (diffInDays == 0){
+			mLiveIcon.setVisibility(View.GONE);
+			mDateSimpleTv.setText(getString(R.string.availability_date_simple, 1)); 
 		} else {
 			mLiveIcon.setVisibility(View.GONE);
-			mDateSimpleTv.setText(getString(R.string.availability_date_simple, diffInDays)); 
+			mDateSimpleTv.setText(getString(R.string.availability_date_simple, diffInDays));
 		}
 		
 		mDateTv.setText("Du "

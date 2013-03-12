@@ -1,11 +1,14 @@
 package com.sims2013.disponif.adapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -133,16 +136,25 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 		Date today = new Date();
 		int diffInDays = (int)( (startDate.getTime() - today.getTime()) 
                 / (1000 * 60 * 60 * 24) );
-                
-		if (diffInDays < 0) {
+		int diffInHours = Math.round(( (startDate.getTime() - today.getTime()) 
+                / (1000 * 60 * 60) )) + 1; 
+		
+		Calendar calendar = GregorianCalendar.getInstance();
+		calendar.setTime(today);   
+		int currHour = calendar.get(Calendar.HOUR_OF_DAY);
+		
+		if (diffInHours <= 0) {
 			holder.mTimeSimple.setVisibility(View.GONE);
 			holder.mLiveIcon.setVisibility(View.VISIBLE);
-		} else if (diffInDays == 0) {
+		} else if (diffInHours<(24-currHour)) {
 			holder.mLiveIcon.setVisibility(View.GONE);
 			holder.mTimeSimple.setText(mFragment.getString(R.string.availability_date_simple_today));
+		} else if (diffInDays == 0){
+			holder.mLiveIcon.setVisibility(View.GONE);
+			holder.mTimeSimple.setText(mFragment.getString(R.string.availability_date_simple, 1)); 
 		} else {
 			holder.mLiveIcon.setVisibility(View.GONE);
-			holder.mTimeSimple.setText(mFragment.getString(R.string.availability_date_simple, diffInDays)); 
+			holder.mTimeSimple.setText(mFragment.getString(R.string.availability_date_simple, diffInDays));
 		}
 		
 		BitmapManager.setBitmap(holder.mCategoryIcon, "http://disponif.darkserver.fr/server/res/category/"+ av.getCategoryId() +".png");
