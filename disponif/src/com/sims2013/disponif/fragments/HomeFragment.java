@@ -63,6 +63,7 @@ public class HomeFragment extends GenericFragment implements OnClickListener {
 								// Set the id for the ProfilePictureView
 								// view that in turn displays the profile
 								// picture.
+								DisponifApplication.setFacebookId(user.getId());
 								mProfilePictureView.setProfileId(user.getId());
 								// Set the Textview's text to the user's name.
 								mWelcomeMessage.setText(getString(

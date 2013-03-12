@@ -40,7 +40,7 @@ public class MatchAvailabilityAdapter extends ArrayAdapter<Availability> {
 	protected Fragment mFragment;
 	protected int mLayout;
 	protected ArrayList<Availability> mAvailabilities = new ArrayList<Availability>();
-	
+
 	@Override
 	public int getCount() {
 		return mAvailabilities.size();
@@ -85,12 +85,14 @@ public class MatchAvailabilityAdapter extends ArrayAdapter<Availability> {
 		Availability av = mAvailabilities.get(position);
 
 		holder.mDescription.setText(av.getDescription());
-		holder.mDate.setText("Du "
-				+ DisponIFUtils.datetimeToFrDate(getContext(),
-						av.getStartTime())
-				+ " à "
-				+ DisponIFUtils.datetimeToFrTime(getContext(),
-						av.getStartTime()) + " au "
+		holder.mDate
+				.setText("Du "
+						+ DisponIFUtils.datetimeToFrDate(getContext(),
+								av.getStartTime())
+						+ " à "
+						+ DisponIFUtils.datetimeToFrTime(getContext(),
+								av.getStartTime())
+						+ " au "
 						+ DisponIFUtils.datetimeToFrDate(getContext(),
 								av.getEndTime())
 						+ " à "
@@ -101,11 +103,14 @@ public class MatchAvailabilityAdapter extends ArrayAdapter<Availability> {
 		if (user != null) {
 			holder.mUserName.setText(av.getUser().getName() + " "
 					+ av.getUser().getSurname());
-			BitmapManager.setBitmap(holder.mProfilePictureView, "http://graph.facebook.com/"
-							+ av.getUser().getFacebookId()
+			BitmapManager.setBitmap(holder.mProfilePictureView,
+					"http://graph.facebook.com/" + av.getUser().getFacebookId()
 							+ "/picture?type=large");
 		} else {
-			BitmapManager.setBitmap(holder.mProfilePictureView, "http://www.theprprofessional.com/wp-content/uploads/2011/11/facebook-profile-picture.jpg");
+			BitmapManager
+					.setBitmap(
+							holder.mProfilePictureView,
+							"http://www.theprprofessional.com/wp-content/uploads/2011/11/facebook-profile-picture.jpg");
 		}
 
 		// holder.mTypeSimple.setText(av.getTypeName());

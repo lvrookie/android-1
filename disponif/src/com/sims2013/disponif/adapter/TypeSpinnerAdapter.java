@@ -43,7 +43,8 @@ public class TypeSpinnerAdapter extends BaseAdapter implements SpinnerAdapter{
 		View spinView;
 	    if( convertView == null ){
 	        LayoutInflater inflater = mActivity.getLayoutInflater();
-	        spinView = inflater.inflate(R.layout.spin_layout, null);
+	        spinView = inflater.inflate(R.layout.item_spinner_type_layout, null);
+	        spinView.findViewById(R.id.item_category_icon).setVisibility(View.GONE);
 	    } else {
 	         spinView = convertView;
 	    }

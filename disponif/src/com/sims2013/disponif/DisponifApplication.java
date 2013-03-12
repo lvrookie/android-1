@@ -9,6 +9,7 @@ public class DisponifApplication extends Application {
 	private static final String TAG = "com.sims2013.disponif.DisponifApplication";
 	
 	private static String mAccessToken;
+	private static String mFacebookId;
 	
 	public static void setAccessToken(String token){
 		if (DEBUG_MODE) {
@@ -19,5 +20,13 @@ public class DisponifApplication extends Application {
 	
 	public static String getAccessToken(){
 		return mAccessToken;
+	}
+	
+	public static String getFacebookId(){
+		return mFacebookId;
+	}
+	
+	public static void setFacebookId(String id){
+		mFacebookId = id;
 	}
 }

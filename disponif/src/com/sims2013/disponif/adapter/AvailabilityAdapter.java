@@ -32,6 +32,7 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 		TextView mTimeSimple;
 		TextView mDate;
 		TextView mDescription;
+		ImageView mLiveIcon;
 		Button mMoreButton;
 		Button mMatchAvailabilitiesButton;
 	}
@@ -78,6 +79,7 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 			holder.mTypeSimple = (TextView)convertView.findViewById(R.id.item_availability_type_simple);
 			holder.mTimeSimple = (TextView)convertView.findViewById(R.id.item_availability_time_simple);
 			holder.mMatchAvailabilitiesButton = (Button)convertView.findViewById(R.id.item_match_availibilities_button);
+			holder.mLiveIcon = (ImageView)convertView.findViewById(R.id.item_availability_simple_live);
 			
 			holder.mMatchAvailabilitiesButton.setOnClickListener(new OnClickListener() {
 				
@@ -86,7 +88,13 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 
 					if (v.getId() == R.id.item_match_availibilities_button){
 						Intent intent = new Intent(mFragment.getActivity(), MatchAvailabilityListActivity.class);
-						intent.putExtra(MatchAvailabilityListFragment.AVAILABILITY_ID, mAvailabilities.get(position).getId());
+						intent.putExtra(MatchAvailabilityListFragment.EXTRA_AVAILABILITY_ID, mAvailabilities.get(position).getId());
+						intent.putExtra(MatchAvailabilityListFragment.EXTRA_CATEGORY_NAME, mAvailabilities.get(position).getCategoryName());
+						intent.putExtra(MatchAvailabilityListFragment.EXTRA_DESCRIPTION, mAvailabilities.get(position).getDescription());
+						intent.putExtra(MatchAvailabilityListFragment.EXTRA_CATEGORY_ID, mAvailabilities.get(position).getCategoryId());
+						intent.putExtra(MatchAvailabilityListFragment.EXTRA_END_TIME, mAvailabilities.get(position).getEndTime());
+						intent.putExtra(MatchAvailabilityListFragment.EXTRA_START_TIME, mAvailabilities.get(position).getStartTime());
+						intent.putExtra(MatchAvailabilityListFragment.EXTRA_TYPE_NAME, mAvailabilities.get(position).getTypeName());
 						mFragment.getActivity().startActivity(intent);
 					}
 				}
@@ -123,14 +131,18 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 		
 		Date startDate = DisponIFUtils.stringToDate(av.getStartTime());
 		Date today = new Date();
-		
 		int diffInDays = (int)( (startDate.getTime() - today.getTime()) 
                 / (1000 * 60 * 60 * 24) );
                 
-		if (diffInDays == 0) {
-			holder.mTimeSimple.setText("Aujourd'hui");
+		if (diffInDays < 0) {
+			holder.mTimeSimple.setVisibility(View.GONE);
+			holder.mLiveIcon.setVisibility(View.VISIBLE);
+		} else if (diffInDays == 0) {
+			holder.mLiveIcon.setVisibility(View.GONE);
+			holder.mTimeSimple.setText(mFragment.getString(R.string.availability_date_simple_today));
 		} else {
-			holder.mTimeSimple.setText("Dans " + diffInDays + " jours");
+			holder.mLiveIcon.setVisibility(View.GONE);
+			holder.mTimeSimple.setText(mFragment.getString(R.string.availability_date_simple, diffInDays)); 
 		}
 		
 		BitmapManager.setBitmap(holder.mCategoryIcon, "http://disponif.darkserver.fr/server/res/category/"+ av.getCategoryId() +".png");

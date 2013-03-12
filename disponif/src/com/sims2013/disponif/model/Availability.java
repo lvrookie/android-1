@@ -14,7 +14,7 @@ public class Availability {
 	private float mLatitude;
 	private float mLongitude;
 	private int mRadius;
-	private int mPrivacy;
+	private String mPrivacy;
 	private String mStatus;
 	private int mMaxParticipant;
 	private String mOption;
@@ -29,7 +29,7 @@ public class Availability {
 	}
 	
 	public Availability(int mId, String mUserId, int mCategoryId, int mTypeId,
-			float mLatitude, float mLongitude, int mRadius, int mPrivacy,
+			float mLatitude, float mLongitude, int mRadius, String mPrivacy,
 			String mStatus, int mMaxParticipant, String mOption,
 			String mStartTime, String mEndTime) {
 		super();
@@ -90,10 +90,10 @@ public class Availability {
 	public void setRadius(int mRadius) {
 		this.mRadius = mRadius;
 	}
-	public int getPrivacy() {
+	public String getPrivacy() {
 		return mPrivacy;
 	}
-	public void setPrivacy(int mPrivacy) {
+	public void setPrivacy(String mPrivacy) {
 		this.mPrivacy = mPrivacy;
 	}
 	public String getStatus() {

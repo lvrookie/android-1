@@ -25,6 +25,18 @@ public class BitmapManager {
 		}
 	}
 	
+	public static void setBitmap(final ImageView imgView, final String URL, int background) {
+		
+		initMemoryCache();
+		
+		if (getBitmapFromMemCache(URL) == null) {
+			new BitmapWorkerTask(imgView, background).execute(URL);
+		} else {
+			imgView.setBackgroundResource(background);
+			imgView.setImageBitmap(getBitmapFromMemCache(URL));
+		}
+	}
+	
 	public static void cacheBitmap(final String URL) {
 		
 		initMemoryCache();
@@ -59,9 +71,16 @@ public class BitmapManager {
 	
 	private static class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
 	    ImageView bmImage;
+	    int ressourceId;
 
 	    public BitmapWorkerTask(ImageView bmImage) {
 	        this.bmImage = bmImage;
+	        this.ressourceId = 0;
+	    }
+	    
+	    public BitmapWorkerTask(ImageView bmImage, int ressource) {
+	        this.bmImage = bmImage;
+	        this.ressourceId = ressource;
 	    }
 
 	    protected Bitmap doInBackground(String... urls) {
@@ -84,7 +103,7 @@ public class BitmapManager {
 
 	    protected void onPostExecute(Bitmap result) {
 	    	if (bmImage != null) {
-	    		bmImage.setBackgroundResource(0);
+	    		bmImage.setBackgroundResource(ressourceId);
 		        bmImage.setImageBitmap(result);
 	    	}
 	    }
