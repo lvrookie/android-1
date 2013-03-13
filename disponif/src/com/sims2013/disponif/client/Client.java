@@ -204,7 +204,7 @@ public class Client {
 		public static final String METHOD = "getActivityByAvailabilityId";
 		// Parameter keys
 		public static final String PARAM_TOKEN = "token";
-		public static final String PARAM_AVAILABILITY_ID = "id";
+		public static final String PARAM_AVAILABILITY_ID = "availabilityId";
 		// Result keys
 		public static final String RESULT_ACTIVITY = "activity";
 		public static final String RESULT_ID = "id";
@@ -214,7 +214,7 @@ public class Client {
 		public static final String RESULT_COMMENT_MESSAGE = "message";
 		public static final String RESULT_COMMENT_DATE = "date";
 		
-		public static final String RESULT_USERS = "@users";
+		public static final String RESULT_USERS = "@user";
 		public static final String RESULT_USER_ID = "id";
 		public static final String RESULT_USER_NAME = "name";
 		public static final String RESULT_USER_SURNAME = "surname";
