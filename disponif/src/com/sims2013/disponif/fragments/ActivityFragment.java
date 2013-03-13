@@ -143,7 +143,7 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 	@Override
 	public void onActivityReceived(Activity result) {
 		super.onActivityReceived(result);
-		
+		mRequestedActivityId = REQUESTED_AVAILABILITY_NONE;
 		if (result != null) {
 			float scale = getResources().getDisplayMetrics().density;
 			LayoutParams lp = new LayoutParams(DisponIFUtils.dipToPixel(50,scale), DisponIFUtils.dipToPixel(50,scale));
