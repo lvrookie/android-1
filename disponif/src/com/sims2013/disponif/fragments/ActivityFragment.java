@@ -155,7 +155,7 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 			mClient.getActivity(DisponifApplication.getAccessToken(),
 					availabilityId);
 		}
-		shouldShowProgressDialog(true);
+		shouldShowProgressDialog(true, "Chargement", "Récupération des infos de l'activité ...");
 	}
 	
 	@Override
