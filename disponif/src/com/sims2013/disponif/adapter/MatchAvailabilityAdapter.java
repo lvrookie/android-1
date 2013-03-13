@@ -11,7 +11,6 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,7 +28,7 @@ public class MatchAvailabilityAdapter extends ArrayAdapter<Availability> {
 		TextView mDate;
 		TextView mDescription;
 		Button mMoreButton;
-		ImageButton mJoinActivity;
+		TextView mJoinActivity;
 	}
 
 	public MatchAvailabilityAdapter(Fragment context, int textViewResourceId,
@@ -83,7 +82,7 @@ public class MatchAvailabilityAdapter extends ArrayAdapter<Availability> {
 					.findViewById(R.id.item_match_availability_name);
 			holder.mMoreButton
 					.setOnLongClickListener((OnLongClickListener) mFragment);
-			holder.mJoinActivity = (ImageButton) convertView
+			holder.mJoinActivity = (TextView) convertView
 					.findViewById(R.id.item_availability_join_activity);
 			holder.mJoinActivity.setOnClickListener(new OnClickListener() {
 
@@ -125,6 +124,7 @@ public class MatchAvailabilityAdapter extends ArrayAdapter<Availability> {
 					"http://graph.facebook.com/" + av.getUser().getFacebookId()
 							+ "/picture?type=large",
 					R.drawable.bkg_white_gray_border);
+			holder.mJoinActivity.setText("Rejoindre " + user.getName() + " " + user.getSurname());
 		} else {
 			BitmapManager
 					.setBitmap(

@@ -94,11 +94,21 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp" />
 
-        <ImageButton
+        <TextView
             android:id="@+id/item_availability_join_activity"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@android:drawable/ic_menu_add" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:background="@drawable/bkg_blue_bt"
+            android:drawableLeft="@drawable/ic_join"
+            android:drawablePadding="3dp"
+            android:gravity="center_vertical"
+            android:paddingBottom="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="4dp"
+            android:textColor="@color/white" />
     </LinearLayout>
 
 </LinearLayout>
