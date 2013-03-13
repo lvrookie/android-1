@@ -149,19 +149,10 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 			LayoutParams lp = new LayoutParams(DisponIFUtils.dipToPixel(50,scale), DisponIFUtils.dipToPixel(50,scale));
 			lp.setMargins(DisponIFUtils.dipToPixel(3,scale), 0, DisponIFUtils.dipToPixel(3,scale), 0);
 			
-			ImageView iv = new ImageView(getActivity());
-			iv.setPadding(DisponIFUtils.dipToPixel(1,scale), DisponIFUtils.dipToPixel(1,scale), DisponIFUtils.dipToPixel(1,scale), DisponIFUtils.dipToPixel(1,scale));
-
 			mUsersPicturesLL.removeAllViews();
-			mUsersPicturesLL.addView(iv, lp);
-
-			BitmapManager.setBitmap(iv, "http://graph.facebook.com/"
-					+ DisponifApplication.getFacebookId() + "/picture?type=large",
-					R.drawable.bkg_white_gray_border);
-			
 			for (User user : result.getUsers()) {
 				Log.d(TAG, "adding user "+ user.getName() + " picture");
-				iv = new ImageView(getActivity());
+				ImageView iv = new ImageView(getActivity());
 				iv.setPadding(DisponIFUtils.dipToPixel(1,scale), DisponIFUtils.dipToPixel(1,scale), DisponIFUtils.dipToPixel(1,scale), DisponIFUtils.dipToPixel(1,scale));
 				mUsersPicturesLL.addView(iv, lp);
 				BitmapManager.setBitmap(iv, "http://graph.facebook.com/"

@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 
 import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
+import com.sims2013.disponif.Utils.DisponIFUtils;
 import com.sims2013.disponif.activities.ActivityActivity;
 import com.sims2013.disponif.activities.AvailabilityActivity;
 import com.sims2013.disponif.activities.MatchAvailabilityListActivity;
@@ -69,11 +70,15 @@ public class AvailabilityListFragment extends GenericFragment implements
 				.getMenuInfo();
 		int menuItemIndex = item.getItemId();
 		if (menuItemIndex == 0) {
-			shouldShowProgressDialog(true,
-					getString(R.string.availability_progress_remove_title),
-					getString(R.string.availability_progress_remove_message));
-			mClient.removeAvailability(DisponifApplication.getAccessToken(),
-					(Availability) mAdapter.getItem(info.position));
+			if (((Availability) mAdapter.getItem(info.position)).getStatus().equals(Availability.STATUS_OPEN)) {
+				shouldShowProgressDialog(true,
+						getString(R.string.availability_progress_remove_title),
+						getString(R.string.availability_progress_remove_message));
+				mClient.removeAvailability(DisponifApplication.getAccessToken(),
+						(Availability) mAdapter.getItem(info.position));
+			} else {
+				DisponIFUtils.makeToast(getActivity(), "Fonctionnalité indisponible pour le moment");
+			}
 		}
 		return true;
 	}
@@ -134,8 +139,6 @@ public class AvailabilityListFragment extends GenericFragment implements
 			}
 		}
 	}
-	
-	
 
 	@Override
 	protected void refresh() {
