@@ -123,6 +123,12 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 		
 		Availability av = mAvailabilities.get(position);
 		
+		if (av.getStatus().equals(Availability.STATUS_OPEN)) {
+			holder.mMatchAvailabilitiesButton.setText(mFragment.getString(R.string.match_availabilities_search_bt));
+		} else {
+			holder.mMatchAvailabilitiesButton.setText(mFragment.getString(R.string.show_activity_bt));
+		}
+		
 		holder.mDescription.setText(av.getDescription());
 		holder.mDate.setText("Du "
 				+ DisponIFUtils.datetimeToFrDate(getContext(),
