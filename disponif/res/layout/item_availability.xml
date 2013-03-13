@@ -160,7 +160,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bkg_item_availability_bt"
-            android:text="@string/match_availabilities_search_bt"
             android:textColor="@color/white" />
     </LinearLayout>
 

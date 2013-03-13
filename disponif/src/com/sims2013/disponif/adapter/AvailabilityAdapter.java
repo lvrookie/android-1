@@ -122,7 +122,6 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 		}
 
 		Availability av = mAvailabilities.get(position);
-
 		holder.mDescription.setText(av.getDescription());
 		holder.mDate
 				.setText("Du "
@@ -186,10 +185,13 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 			holder.mPrivacyIcon.setImageResource(R.drawable.ic_private);
 		}
 		if (av.getStatus().equals(Availability.STATUS_IN_PROGRESS)) {
+			holder.mMatchAvailabilitiesButton.setText(mFragment.getString(R.string.show_activity_bt));
 			holder.mStatusIcon.setImageResource(R.drawable.ic_in_progress);
 		} else if (av.getStatus().equals(Availability.STATUS_OPEN)) {
+			holder.mMatchAvailabilitiesButton.setText(mFragment.getString(R.string.match_availabilities_search_bt));
 			holder.mStatusIcon.setImageResource(0);
 		} else if (av.getStatus().equals(Availability.STATUS_CLOSED)) {
+			holder.mMatchAvailabilitiesButton.setText(mFragment.getString(R.string.show_activity_bt));
 			holder.mStatusIcon.setImageResource(R.drawable.ic_closed);
 		}
 		return convertView;

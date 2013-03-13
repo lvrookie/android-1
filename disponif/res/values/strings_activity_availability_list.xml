@@ -2,6 +2,7 @@
 <resources>
 
     <string name="match_availabilities_search_bt">Voir les dispos correspondantes</string>
+    <string name="show_activity_bt">Voir l\'activité</string>
     <string name="availability_date_simple_today">Aujourd\'hui</string>
     <string name="availability_date_simple">Dans %1$s jours</string>
 
