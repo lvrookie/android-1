@@ -14,6 +14,7 @@ public class TimePickerFragment extends DialogFragment implements
 
 	public static final String TAG = "com.sims2013.disponif.fragments.TimePickerFragment";
 	public static final String EXTRA_CALLER_ID = "com.sims2013.disponif.fragments.TimePickerFragment.EXTRA_CALLER_ID";
+	public static final String HOUR_INIT = "com.sims2013.disponif.fragments.TimePickerFragment.HOUR_INIT";
 	private OnTimeRangeSelected mListener;
 
 	private int mCallerId;
@@ -44,6 +45,9 @@ public class TimePickerFragment extends DialogFragment implements
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// Use the current time as the default values for the picker
 		final Calendar c = Calendar.getInstance();
+		if (getArguments().containsKey(HOUR_INIT)) {
+			c.setTimeInMillis(getArguments().getLong(HOUR_INIT));
+		}
 		int hour = c.get(Calendar.HOUR_OF_DAY);
 		int minute = c.get(Calendar.MINUTE);
 

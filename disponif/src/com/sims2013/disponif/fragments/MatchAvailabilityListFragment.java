@@ -38,6 +38,7 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 	public static final String EXTRA_START_TIME = "com.sims2013.disponif.fragments.MatchAvailabilityListFragment.EXTRA_START_TIME";
 	public static final String EXTRA_END_TIME = "com.sims2013.disponif.fragments.MatchAvailabilityListFragment.EXTRA_END_TIME";
 	public static final String EXTRA_TYPE_NAME = "com.sims2013.disponif.fragments.MatchAvailabilityListFragment.EXTRA_TYPE_NAME";
+	private static final int REQUEST_JOIN_ACTIVITY = 44;
 
 	MatchAvailabilityAdapter mAdapter;
 	ActionSlideExpandableListView mListView;
@@ -245,11 +246,18 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 				mAdapter.getItem(requestedAvailabilityPosition).getId());
 		intent.putExtra(ActivityActivity.EXTRA_AVAILABILITY_ID,
 				mCurrentAvailabilityId);
-		getActivity().startActivity(intent);
+		getActivity().startActivityForResult(intent, REQUEST_JOIN_ACTIVITY);
 		
-		Intent returnIntent = new Intent();
-		getActivity().setResult(Activity.RESULT_OK,returnIntent);
-		getActivity().finish();
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == REQUEST_JOIN_ACTIVITY) {
+			Intent returnIntent = new Intent();
+			getActivity().setResult(Activity.RESULT_OK,returnIntent);
+			getActivity().finish();
+		}
 	}
 
 }

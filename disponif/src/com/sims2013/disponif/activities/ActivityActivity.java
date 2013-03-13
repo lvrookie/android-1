@@ -1,5 +1,7 @@
 package com.sims2013.disponif.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.sims2013.disponif.fragments.ActivityFragment;
@@ -28,5 +30,12 @@ public class ActivityActivity extends GenericActivity {
 		setTitle(getIntent().getExtras().getString(EXTRA_ACTIVITY_NAME));
 	}
 	
+	
+	@Override
+	public void onBackPressed() {
+		Intent resultIntent = new Intent();
+		setResult(Activity.RESULT_OK,resultIntent);
+		finish();
+	}
 	
 }

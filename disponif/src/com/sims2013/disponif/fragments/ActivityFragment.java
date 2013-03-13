@@ -118,13 +118,13 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 				ActivityActivity.EXTRA_AVAILABILITY_ID);
 
 		if (mRequestedActivityId == REQUESTED_AVAILABILITY_NONE) {
-			mClient.joinActivity(DisponifApplication.getAccessToken(),
-					availabilityId, mRequestedActivityId);
-		} else {
 			mClient.getActivity(DisponifApplication.getAccessToken(),
 					availabilityId);
+		} else {
+			mClient.joinActivity(DisponifApplication.getAccessToken(),
+					availabilityId, mRequestedActivityId);
 		}
-		shouldShowProgressDialog(true);
+		shouldShowProgressDialog(true, "Chargement", "Récupération des infos de l'activité ...");
 	}
 	
 	@Override

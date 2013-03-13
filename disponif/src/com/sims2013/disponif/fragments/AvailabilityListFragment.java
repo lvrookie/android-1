@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 
 import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
+import com.sims2013.disponif.activities.ActivityActivity;
 import com.sims2013.disponif.activities.AvailabilityActivity;
 import com.sims2013.disponif.activities.MatchAvailabilityListActivity;
 import com.sims2013.disponif.adapter.AvailabilityAdapter;
@@ -133,6 +134,8 @@ public class AvailabilityListFragment extends GenericFragment implements
 			}
 		}
 	}
+	
+	
 
 	@Override
 	protected void refresh() {
@@ -158,15 +161,28 @@ public class AvailabilityListFragment extends GenericFragment implements
 
 	@Override
 	public void onGetMatchingAvailabilities(int position) {
-		Intent intent = new Intent(getActivity(), MatchAvailabilityListActivity.class);
-		intent.putExtra(MatchAvailabilityListFragment.EXTRA_AVAILABILITY_ID, mAdapter.getItem(position).getId());
-		intent.putExtra(MatchAvailabilityListFragment.EXTRA_CATEGORY_NAME, mAdapter.getItem(position).getCategoryName());
-		intent.putExtra(MatchAvailabilityListFragment.EXTRA_DESCRIPTION, mAdapter.getItem(position).getDescription());
-		intent.putExtra(MatchAvailabilityListFragment.EXTRA_CATEGORY_ID, mAdapter.getItem(position).getCategoryId());
-		intent.putExtra(MatchAvailabilityListFragment.EXTRA_END_TIME, mAdapter.getItem(position).getEndTime());
-		intent.putExtra(MatchAvailabilityListFragment.EXTRA_START_TIME, mAdapter.getItem(position).getStartTime());
-		intent.putExtra(MatchAvailabilityListFragment.EXTRA_TYPE_NAME, mAdapter.getItem(position).getTypeName());
-		getActivity().startActivityForResult(intent, REQUEST_CODE_GET_MATCHING_AVAILABILITIES);
+		
+		if (mAdapter.getItem(position).getStatus().equals(Availability.STATUS_OPEN)) {
+			Intent intent = new Intent(getActivity(), MatchAvailabilityListActivity.class);
+			intent.putExtra(MatchAvailabilityListFragment.EXTRA_AVAILABILITY_ID, mAdapter.getItem(position).getId());
+			intent.putExtra(MatchAvailabilityListFragment.EXTRA_CATEGORY_NAME, mAdapter.getItem(position).getCategoryName());
+			intent.putExtra(MatchAvailabilityListFragment.EXTRA_DESCRIPTION, mAdapter.getItem(position).getDescription());
+			intent.putExtra(MatchAvailabilityListFragment.EXTRA_CATEGORY_ID, mAdapter.getItem(position).getCategoryId());
+			intent.putExtra(MatchAvailabilityListFragment.EXTRA_END_TIME, mAdapter.getItem(position).getEndTime());
+			intent.putExtra(MatchAvailabilityListFragment.EXTRA_START_TIME, mAdapter.getItem(position).getStartTime());
+			intent.putExtra(MatchAvailabilityListFragment.EXTRA_TYPE_NAME, mAdapter.getItem(position).getTypeName());
+			getActivity().startActivityForResult(intent, REQUEST_CODE_GET_MATCHING_AVAILABILITIES);
+		} else {
+			Intent intent = new Intent(getActivity(), ActivityActivity.class);
+			intent.putExtra(ActivityActivity.EXTRA_ACTIVITY_NAME
+					, mAdapter.getItem(position).getCategoryName() 
+					+ " - "
+					+ mAdapter.getItem(position).getTypeName());
+			intent.putExtra(ActivityActivity.EXTRA_AVAILABILITY_ID,
+					mAdapter.getItem(position).getId());
+			getActivity().startActivity(intent);
+		}
+		
 	}
 	
 	

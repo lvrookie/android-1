@@ -6,7 +6,7 @@ public class Availability {
 	public static final int TYPE_NO_TYPE = -1;
 	
 	public static final String STATUS_CLOSED = "closed";
-	public static final String STATUS_IN_PROGRESS = "in_progress";
+	public static final String STATUS_IN_PROGRESS = "in progress";
 	public static final String STATUS_OPEN = "open";
 	
 	private int mId;
