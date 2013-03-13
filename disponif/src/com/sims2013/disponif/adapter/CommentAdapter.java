@@ -51,7 +51,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 		Comment comment = mCommentList.get(position);
 		holder.mComment.setText(comment.getMessage());
 		BitmapManager.setBitmap(holder.mUserProfilePicture, "http://graph.facebook.com/"
-				+ comment.getUser().getFacebookId() + "/picture?type=", R.drawable.bkg_white_gray_border);
+				+ comment.getUser().getFacebookId() + "/picture?type=small", R.drawable.bkg_white_gray_border);
 		return convertView;
 	}
 	

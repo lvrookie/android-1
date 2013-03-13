@@ -19,14 +19,17 @@ import android.widget.AdapterView;
 import com.sims2013.disponif.DisponifApplication;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.activities.AvailabilityActivity;
+import com.sims2013.disponif.activities.MatchAvailabilityListActivity;
 import com.sims2013.disponif.adapter.AvailabilityAdapter;
+import com.sims2013.disponif.adapter.AvailabilityAdapter.OnGetMatchingAvailabilitiesListener;
 import com.sims2013.disponif.model.Availability;
 import com.tjerkw.slideexpandable.library.ActionSlideExpandableListView;
 
 public class AvailabilityListFragment extends GenericFragment implements
-		OnLongClickListener {
+		OnLongClickListener, OnGetMatchingAvailabilitiesListener {
 
 	private static final int REQUEST_CODE_ADD_AVAILABILITY = 42;
+	private static final int REQUEST_CODE_GET_MATCHING_AVAILABILITIES = 43;
 
 	AvailabilityAdapter mAdapter;
 	ActionSlideExpandableListView mListView;
@@ -124,6 +127,10 @@ public class AvailabilityListFragment extends GenericFragment implements
 			if (resultCode == Activity.RESULT_OK) {
 				refresh();
 			}
+		} else if (requestCode == REQUEST_CODE_GET_MATCHING_AVAILABILITIES) {
+			if (resultCode == Activity.RESULT_OK) {
+				refresh();
+			}
 		}
 	}
 
@@ -147,6 +154,19 @@ public class AvailabilityListFragment extends GenericFragment implements
 	@Override
 	public boolean onLongClick(View arg0) {
 		return false;
+	}
+
+	@Override
+	public void onGetMatchingAvailabilities(int position) {
+		Intent intent = new Intent(getActivity(), MatchAvailabilityListActivity.class);
+		intent.putExtra(MatchAvailabilityListFragment.EXTRA_AVAILABILITY_ID, mAdapter.getItem(position).getId());
+		intent.putExtra(MatchAvailabilityListFragment.EXTRA_CATEGORY_NAME, mAdapter.getItem(position).getCategoryName());
+		intent.putExtra(MatchAvailabilityListFragment.EXTRA_DESCRIPTION, mAdapter.getItem(position).getDescription());
+		intent.putExtra(MatchAvailabilityListFragment.EXTRA_CATEGORY_ID, mAdapter.getItem(position).getCategoryId());
+		intent.putExtra(MatchAvailabilityListFragment.EXTRA_END_TIME, mAdapter.getItem(position).getEndTime());
+		intent.putExtra(MatchAvailabilityListFragment.EXTRA_START_TIME, mAdapter.getItem(position).getStartTime());
+		intent.putExtra(MatchAvailabilityListFragment.EXTRA_TYPE_NAME, mAdapter.getItem(position).getTypeName());
+		getActivity().startActivityForResult(intent, REQUEST_CODE_GET_MATCHING_AVAILABILITIES);
 	}
 	
 	

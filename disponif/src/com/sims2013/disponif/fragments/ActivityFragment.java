@@ -26,39 +26,9 @@ import com.sims2013.disponif.model.User;
 
 public class ActivityFragment extends GenericFragment implements OnClickListener {
 
-	// Button mDateButtonFrom;
-	// Button mHourButtonFrom;
-	// Button mDateButtonTo;
-	// Button mHourButtonTo;
-	// Spinner mActivitySpinner;
-	// Spinner mTypeSpinner;
-	// EditText mPlaceET;
-	// EditText mDescriptionET;
-	// LinearLayout mTypeSpinnerLayout;
-	// TextView mErrorDatesTv;
-	//
-	// ImageView mDateToErrorImage;
-	//
-	// Calendar mDateFrom;
-	// Calendar mDateTo;
-	//
-	// ArrayList<Category> mCategories;
-	// Category mCurrentCategory;
-	// Type mCurrentType;
-	//
-	// ArrayList<SubmitErrors> checkFieldsErrors;
-	//
-	// onAvailabilityAddedListener mListener;
-	// private CategorySpinnerAdapter mCategoryAdapter;
-	// private boolean mShouldHideTypeSpinner;
-	//
-	//
-	// private enum SubmitErrors {
-	// ERROR_NO_PLACE_GIVEN, ERROR_MISSING_INFORMATION,
-	// ERROR_END_DATE_BEFORE_START_DATE, ERROR_PAST_START_DATE,
-	// ERROR_NO_DESCRIPTION_GIVEN
-	// }
-
+	private static final int REQUESTED_AVAILABILITY_NONE = -1;
+	
+	int mRequestedActivityId;
 	int mActivityId;
 
 	// UI references
@@ -75,7 +45,6 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 	ImageView mProfilePicture;
 	ImageView mCategoryIcon;
 	ImageView mLiveIcon;
-	ImageView mCurrentUserProfilePicture;
 
 	private CommentAdapter mAdapter;
 
@@ -83,7 +52,7 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getActivity().getWindow().getAttributes().windowAnimations = R.style.slideRight;
-//		mActivityId = getArguments().getInt("");
+		
 	}
 
 	@Override
@@ -91,10 +60,17 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 			Bundle savedInstanceState) {
 		mView = inflater.inflate(R.layout.fragment_activity, container, false);
 		initUI();
-		refresh();
 		return mView;
 	}
 
+	@Override
+	public void onStart() {
+		super.onStart();
+		mRequestedActivityId = getArguments().getInt(
+				ActivityActivity.EXTRA_REQUESTED_AVAILABILITY_ID, REQUESTED_AVAILABILITY_NONE);
+		refresh();
+	}
+	
 	@Override
 	protected void initUI() {
 		super.initUI();
@@ -112,7 +88,6 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 		mCategoryIcon = (ImageView) mView
 				.findViewById(R.id.activity_category_icon);
 		mLiveIcon = (ImageView) mView.findViewById(R.id.activity_live_icon);
-		mCurrentUserProfilePicture = (ImageView) mView.findViewById(R.id.activity_current_user_picture);
 
 		mCategoryTypeTv = (TextView) mView
 				.findViewById(R.id.activity_category_type);
@@ -125,9 +100,6 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 
 		// TODO : Change this to activity info !!
 		BitmapManager.setBitmap(mProfilePicture, "http://graph.facebook.com/"
-				+ DisponifApplication.getFacebookId() + "/picture?type=large",
-				R.drawable.bkg_white_gray_border);
-		BitmapManager.setBitmap(mCurrentUserProfilePicture, "http://graph.facebook.com/"
 				+ DisponifApplication.getFacebookId() + "/picture?type=large",
 				R.drawable.bkg_white_gray_border);
 		BitmapManager.setBitmap(mCategoryIcon,
@@ -145,12 +117,9 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 		int availabilityId = getArguments().getInt(
 				ActivityActivity.EXTRA_AVAILABILITY_ID);
 
-		if (getArguments().containsKey(
-				ActivityActivity.EXTRA_REQUESTED_AVAILABILITY_ID)) {
-			int requestedAvailabilityId = getArguments().getInt(
-					ActivityActivity.EXTRA_REQUESTED_AVAILABILITY_ID);
+		if (mRequestedActivityId == REQUESTED_AVAILABILITY_NONE) {
 			mClient.joinActivity(DisponifApplication.getAccessToken(),
-					availabilityId, requestedAvailabilityId);
+					availabilityId, mRequestedActivityId);
 		} else {
 			mClient.getActivity(DisponifApplication.getAccessToken(),
 					availabilityId);
@@ -162,18 +131,25 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 	public void onActivityReceived(Activity result) {
 		super.onActivityReceived(result);
 		
-//		mRefreshingList = false;
 		if (result != null) {
 			float scale = getResources().getDisplayMetrics().density;
 			LayoutParams lp = new LayoutParams(DisponIFUtils.dipToPixel(50,scale), DisponIFUtils.dipToPixel(50,scale));
 			lp.setMargins(DisponIFUtils.dipToPixel(3,scale), 0, DisponIFUtils.dipToPixel(3,scale), 0);
-//			LayoutParams lp = new LayoutParams(30, 30);
-//			lp.setMargins(0, 0, 0, 0);
+			
+			ImageView iv = new ImageView(getActivity());
+			iv.setPadding(DisponIFUtils.dipToPixel(1,scale), DisponIFUtils.dipToPixel(1,scale), DisponIFUtils.dipToPixel(1,scale), DisponIFUtils.dipToPixel(1,scale));
+
+			mUsersPicturesLL.removeAllViews();
+			mUsersPicturesLL.addView(iv, lp);
+
+			BitmapManager.setBitmap(iv, "http://graph.facebook.com/"
+					+ DisponifApplication.getFacebookId() + "/picture?type=large",
+					R.drawable.bkg_white_gray_border);
+			
 			for (User user : result.getUsers()) {
 				Log.d(TAG, "adding user "+ user.getName() + " picture");
-				ImageView iv = new ImageView(getActivity());
+				iv = new ImageView(getActivity());
 				iv.setPadding(DisponIFUtils.dipToPixel(1,scale), DisponIFUtils.dipToPixel(1,scale), DisponIFUtils.dipToPixel(1,scale), DisponIFUtils.dipToPixel(1,scale));
-//				iv.setPadding(0,0,0,0);
 				mUsersPicturesLL.addView(iv, lp);
 				BitmapManager.setBitmap(iv, "http://graph.facebook.com/"
 						+ user.getFacebookId() + "/picture?type=large",
@@ -192,9 +168,8 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 	public void onClick(View view) {
 		if (view.getId() == R.id.activity_comments_add_bt) {
 			if (!TextUtils.isEmpty(mAddCommentET.getText())) {
-				
 				mClient.addComment(DisponifApplication.getAccessToken(), mActivityId, mAddCommentET.getText().toString());
-//				shouldShowProgressDialog(true, "Patientez...", "Envoi du message en cours...");
+				shouldShowProgressDialog(true, "Patientez...", "Envoi du message en cours...");
 			}
 		}
 	}

@@ -27,4 +27,6 @@ public class ActivityActivity extends GenericActivity {
 		}
 		setTitle(getIntent().getExtras().getString(EXTRA_ACTIVITY_NAME));
 	}
+	
+	
 }

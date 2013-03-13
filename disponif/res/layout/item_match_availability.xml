@@ -100,7 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="10dp"
-            android:background="@drawable/bkg_blue_bt"
+            android:background="@drawable/blue_button"
             android:drawableLeft="@drawable/ic_join"
             android:drawablePadding="3dp"
             android:gravity="center_vertical"

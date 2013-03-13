@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +20,13 @@ import android.widget.TextView;
 import com.sims2013.disponif.R;
 import com.sims2013.disponif.Utils.BitmapManager;
 import com.sims2013.disponif.Utils.DisponIFUtils;
-import com.sims2013.disponif.activities.MatchAvailabilityListActivity;
-import com.sims2013.disponif.fragments.MatchAvailabilityListFragment;
 import com.sims2013.disponif.model.Availability;
 
 public class AvailabilityAdapter extends ArrayAdapter<Availability> {
+	
+	public interface OnGetMatchingAvailabilitiesListener{
+		public void onGetMatchingAvailabilities(int position);
+	}
 	
 	private static class AvailabilityHolder{
 		ImageView mCategoryIcon;
@@ -89,15 +90,7 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 				public void onClick(View v) {
 
 					if (v.getId() == R.id.item_match_availibilities_button){
-						Intent intent = new Intent(mFragment.getActivity(), MatchAvailabilityListActivity.class);
-						intent.putExtra(MatchAvailabilityListFragment.EXTRA_AVAILABILITY_ID, mAvailabilities.get(position).getId());
-						intent.putExtra(MatchAvailabilityListFragment.EXTRA_CATEGORY_NAME, mAvailabilities.get(position).getCategoryName());
-						intent.putExtra(MatchAvailabilityListFragment.EXTRA_DESCRIPTION, mAvailabilities.get(position).getDescription());
-						intent.putExtra(MatchAvailabilityListFragment.EXTRA_CATEGORY_ID, mAvailabilities.get(position).getCategoryId());
-						intent.putExtra(MatchAvailabilityListFragment.EXTRA_END_TIME, mAvailabilities.get(position).getEndTime());
-						intent.putExtra(MatchAvailabilityListFragment.EXTRA_START_TIME, mAvailabilities.get(position).getStartTime());
-						intent.putExtra(MatchAvailabilityListFragment.EXTRA_TYPE_NAME, mAvailabilities.get(position).getTypeName());
-						mFragment.getActivity().startActivity(intent);
+						((OnGetMatchingAvailabilitiesListener) mFragment).onGetMatchingAvailabilities(position);
 					}
 				}
 			});

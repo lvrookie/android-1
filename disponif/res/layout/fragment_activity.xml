@@ -143,19 +143,14 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" >
+        android:layout_marginRight="10dp"
+        android:scrollbarStyle="outsideOverlay" >
 
         <LinearLayout
             android:id="@+id/activity_users_layout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal" >
-
-            <ImageView
-                android:id="@+id/activity_current_user_picture"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:padding="1dp" />
         </LinearLayout>
     </HorizontalScrollView>
 

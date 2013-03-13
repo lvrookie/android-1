@@ -237,7 +237,7 @@ public abstract class GenericFragment extends Fragment implements
 
 	protected void shouldShowProgressDialog(boolean shouldShow, String title,
 			String message) {
-		if (shouldShow) {
+		if (shouldShow && !mProgressDialog.isShowing()) {
 			mProgressDialog.setTitle(title);
 			mProgressDialog.setMessage(message);
 			mProgressDialog.show();

@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -245,6 +246,10 @@ public class MatchAvailabilityListFragment extends GenericFragment implements
 		intent.putExtra(ActivityActivity.EXTRA_AVAILABILITY_ID,
 				mCurrentAvailabilityId);
 		getActivity().startActivity(intent);
+		
+		Intent returnIntent = new Intent();
+		getActivity().setResult(Activity.RESULT_OK,returnIntent);
+		getActivity().finish();
 	}
 
 }
