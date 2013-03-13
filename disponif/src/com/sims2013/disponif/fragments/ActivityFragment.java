@@ -3,6 +3,7 @@ package com.sims2013.disponif.fragments;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -104,6 +105,18 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 		mAddCommentBt.setOnClickListener(this);
 		mAddCommentET = (EditText) mView
 				.findViewById(R.id.activity_comments_et);
+		mAddCommentET.setOnKeyListener(new View.OnKeyListener()
+		{
+			@Override
+			public boolean onKey(View arg0, int keyCode, KeyEvent event) {
+				if ( (event.getAction() == KeyEvent.ACTION_DOWN  ) &&
+			         (keyCode           == KeyEvent.KEYCODE_ENTER)   ) {           
+					mAddCommentBt.performClick();
+					return true;
+				}
+				return false;
+			}
+		} );
 		mUsersPicturesLL = (LinearLayout) mView
 				.findViewById(R.id.activity_users_layout);
 
