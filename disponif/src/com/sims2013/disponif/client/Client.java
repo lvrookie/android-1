@@ -101,6 +101,7 @@ public class Client {
 		public static final String RESULT_LONGITUDE = "longitude";
 		public static final String RESULT_RADIUS = "radius";
 		public static final String RESULT_PRIVACY = "privacy";
+		public static final String RESULT_STATUS = "status";
 		
 		public static final String RESULT_CATEGORY = "@category";
 		
@@ -458,6 +459,7 @@ public class Client {
 		        		availability.setLongitude(DisponIFUtils.getJSONFloat(availabilityObject, getUserAvailabilities.RESULT_LONGITUDE));
 		        		availability.setRadius(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_RADIUS));
 		        		availability.setPrivacy(DisponIFUtils.getJSONString(availabilityObject, getUserAvailabilities.RESULT_PRIVACY));
+		        		availability.setStatus(DisponIFUtils.getJSONString(availabilityObject, getUserAvailabilities.RESULT_STATUS));
 		        		
 		        		JSONObject option = availabilityObject.getJSONObject(getUserAvailabilities.RESULT_OPTION);
 		        		availability.setDescription(DisponIFUtils.getJSONString(option, getUserAvailabilities.RESULT_DESCRIPTION));
@@ -613,7 +615,7 @@ public class Client {
 		        	return availabilities;
 		        } catch (Exception e) {
 		        	Log.v("ClientJSON - getMatchAvailabilities", e.getMessage());
-		        	if (e.getCause() != null) {
+		        	if (e.getCause() != null && e.getCause().getMessage() != null) {
 			        	Log.v("ClientJSON - getMatchAvailabilities", e.getCause().getMessage());	
 					}
 		        	errorMessage = e.getMessage();

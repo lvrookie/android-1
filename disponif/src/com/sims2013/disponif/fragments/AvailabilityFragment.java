@@ -177,9 +177,14 @@ public class AvailabilityFragment extends GenericFragment implements
 					public void onItemSelected(AdapterView<?> arg0, View arg1,
 							int position, long arg3) {
 						mCurrentCategory = mCategories.get(position);
+						Type noType = new Type();
+						noType.setName("");
+						noType.setId(Availability.TYPE_NO_TYPE);
+						ArrayList<Type> typesArray = new ArrayList<Type>(mCategories.get(position)
+								.getTypes());
+						typesArray.add(0, noType);
 						TypeSpinnerAdapter adapter = new TypeSpinnerAdapter(
-								getActivity(), mCategories.get(position)
-										.getTypes());
+								getActivity(), typesArray);
 						mTypeSpinner.setAdapter(adapter);
 						mTypeSpinner.setEnabled(true);
 						if (mCurrentCategory.getTypes() ==null || mCurrentCategory.getTypes().isEmpty()) {
@@ -200,7 +205,7 @@ public class AvailabilityFragment extends GenericFragment implements
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
-				mCurrentType = mCurrentCategory.getTypes().get(position);
+				mCurrentType = (Type) mTypeSpinner.getAdapter().getItem(position);
 			}
 
 			@Override
@@ -513,7 +518,7 @@ public class AvailabilityFragment extends GenericFragment implements
 			});
 			if (mTypeSpinnerLayout.getVisibility() != View.VISIBLE) {
 				mTypeSpinnerLayout.startAnimation(a);
-				mCurrentType = mCurrentCategory.getTypes().get(0);
+				mCurrentType = (Type) mTypeSpinner.getAdapter().getItem(0);
 			}
 		}
 	}
