@@ -57,6 +57,9 @@ public class AvailabilityFragment extends GenericFragment implements
 
 	Calendar mDateFrom;
 	Calendar mDateTo;
+	
+	Boolean mIsHourFromSelected;
+	Boolean mIsHourToSelected;
 
 	ArrayList<Category> mCategories;
 	Category mCurrentCategory;
@@ -78,6 +81,10 @@ public class AvailabilityFragment extends GenericFragment implements
 		super.onCreate(savedInstanceState);
 		getActivity().getWindow().getAttributes().windowAnimations = R.style.slideRight;
 		mListener = (onAvailabilityAddedListener) getActivity();
+		mDateFrom = null;
+		mDateTo = null;
+		mIsHourFromSelected = false;
+		mIsHourToSelected = false;
 	}
 
 	@Override
@@ -227,6 +234,9 @@ public class AvailabilityFragment extends GenericFragment implements
 				Bundle b = new Bundle();
 				b.putInt(DatePickerFragment.EXTRA_CALLER_ID,
 						mDateButtonFrom.getId());
+				if (mDateFrom != null) {
+					b.putLong(DatePickerFragment.DATE_INIT, mDateFrom.getTimeInMillis());
+				}
 				final DatePickerFragment datePicker = DatePickerFragment
 						.newInstance(b);
 				datePicker.setListener(this);
@@ -239,6 +249,11 @@ public class AvailabilityFragment extends GenericFragment implements
 				Bundle b = new Bundle();
 				b.putInt(DatePickerFragment.EXTRA_CALLER_ID,
 						mDateButtonTo.getId());
+				if (mDateFrom != null && mDateTo == null) {
+					b.putLong(DatePickerFragment.DATE_INIT, mDateFrom.getTimeInMillis());
+				} else if (mDateTo != null) {
+					b.putLong(DatePickerFragment.DATE_INIT, mDateTo.getTimeInMillis());
+				}
 				final DatePickerFragment datePicker = DatePickerFragment
 						.newInstance(b);
 				datePicker.setListener(this);
@@ -251,6 +266,9 @@ public class AvailabilityFragment extends GenericFragment implements
 				Bundle b = new Bundle();
 				b.putInt(TimePickerFragment.EXTRA_CALLER_ID,
 						mHourButtonFrom.getId());
+				if (mIsHourFromSelected) {
+					b.putLong(TimePickerFragment.HOUR_INIT, mDateFrom.getTimeInMillis());
+				}
 				final TimePickerFragment timePicker = TimePickerFragment
 						.newInstance(b);
 				timePicker.setListener(this);
@@ -264,6 +282,11 @@ public class AvailabilityFragment extends GenericFragment implements
 				Bundle b = new Bundle();
 				b.putInt(TimePickerFragment.EXTRA_CALLER_ID,
 						mHourButtonTo.getId());
+				if (mIsHourFromSelected && !mIsHourToSelected) {
+					b.putLong(TimePickerFragment.HOUR_INIT, mDateFrom.getTimeInMillis());
+				} else if (mIsHourToSelected) {
+					b.putLong(TimePickerFragment.HOUR_INIT, mDateTo.getTimeInMillis());
+				}
 				final TimePickerFragment timePicker = TimePickerFragment
 						.newInstance(b);
 				timePicker.setListener(this);
@@ -434,14 +457,14 @@ public class AvailabilityFragment extends GenericFragment implements
 			mDateFrom.set(Calendar.MINUTE, minute);
 			mHourButtonFrom.setText(hourOfDay + ":"
 					+ ((minute < 10) ? "0" + minute : minute));
-
+			mIsHourFromSelected = true;
 			mDateFromErrorImage.setVisibility(View.INVISIBLE);
 		} else if (callerId == mHourButtonTo.getId()) {
 			mDateTo.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			mDateTo.set(Calendar.MINUTE, minute);
 			mHourButtonTo.setText(hourOfDay + ":"
 					+ ((minute < 10) ? "0" + minute : minute));
-
+			mIsHourToSelected = true;
 			mDateToErrorImage.setVisibility(View.INVISIBLE);
 		}
 	}

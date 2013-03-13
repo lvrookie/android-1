@@ -13,6 +13,7 @@ public class DatePickerFragment extends DialogFragment implements
 
 	public static final String TAG = "com.sims2013.disponif.fragments.DatePickerFragment";
 	public static final String EXTRA_CALLER_ID = "com.sims2013.disponif.fragments.DatePickerFragment.EXTRA_CALLER_ID";
+	public static final String DATE_INIT = "com.sims2013.disponif.fragments.DatePickerFragment.DATE_INIT";
 	
 	private int mCallerId;
 
@@ -44,6 +45,9 @@ public class DatePickerFragment extends DialogFragment implements
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// Use the current date as the default date in the picker
 		final Calendar c = Calendar.getInstance();
+		if (getArguments().containsKey(DATE_INIT)) {
+			c.setTimeInMillis(getArguments().getLong(DATE_INIT));
+		}
 		int year = c.get(Calendar.YEAR);
 		int month = c.get(Calendar.MONTH);
 		int day = c.get(Calendar.DAY_OF_MONTH);
