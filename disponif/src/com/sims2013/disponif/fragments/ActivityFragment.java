@@ -174,6 +174,7 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 			mCommentsList.setAdapter(mAdapter);
 		}
 		mCommentsList.setEmptyView(mView.findViewById(R.id.empty_comment_list));
+		mCommentsList.setSelection(mAdapter.getCount()-1);
 		getActivity().invalidateOptionsMenu();
 	}
 
@@ -190,6 +191,7 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 	@Override
 	public void onCommentAdded(Boolean state) {
 		super.onCommentAdded(state);
+		mAddCommentET.setText("");
 		if (state) {
 			refresh();
 		} else {
