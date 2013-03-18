@@ -254,4 +254,10 @@ public abstract class GenericFragment extends Fragment implements
 	public void onActivityReceived(com.sims2013.disponif.model.Activity result) {
 		shouldShowProgressDialog(false);
 	}
+	
+	@Override
+	public void onActivityLeft(Boolean state) {
+		// TODO Auto-generated method stub
+		
+	}
 }

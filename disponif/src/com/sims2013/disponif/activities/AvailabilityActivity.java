@@ -24,7 +24,6 @@ public class AvailabilityActivity extends GenericActivity implements
 			mFragment = (AvailabilityFragment) getSupportFragmentManager()
 					.findFragmentById(android.R.id.content);
 		}
-
 		setTitle(getResources().getString(R.string.availability_title));
 	}
 

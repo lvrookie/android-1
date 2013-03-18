@@ -4,11 +4,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -35,6 +39,7 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 	
 	int mRequestedActivityId;
 	int mActivityId;
+	Activity mActivity;
 
 	// UI references
 	TextView mCategoryTypeTv;
@@ -50,6 +55,8 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 	ImageView mProfilePicture;
 	ImageView mCategoryIcon;
 	ImageView mLiveIcon;
+	
+	onActivityLeavedListener mListener;
 
 	private CommentAdapter mAdapter;
 
@@ -57,7 +64,8 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getActivity().getWindow().getAttributes().windowAnimations = R.style.slideRight;
-		
+		mListener = (onActivityLeavedListener) getActivity();
+		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -74,6 +82,22 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 		mRequestedActivityId = getArguments().getInt(
 				ActivityActivity.EXTRA_REQUESTED_AVAILABILITY_ID, REQUESTED_AVAILABILITY_NONE);
 		refresh();
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+
+		inflater.inflate(R.menu.activity_activity_menu, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.leaveActivityMenu) {
+			shouldShowProgressDialog(true, "Chargement", "Sortie de l'activité ...");
+			mClient.leaveActivity(DisponifApplication.getAccessToken(), mActivityId);
+		}
+		return true;
 	}
 	
 	@Override
@@ -141,6 +165,7 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 	@Override
 	public void onActivityReceived(Activity result) {
 		super.onActivityReceived(result);
+		mActivity = result;
 		mRequestedActivityId = REQUESTED_AVAILABILITY_NONE;
 		if (result != null) {
 			float scale = getResources().getDisplayMetrics().density;
@@ -226,6 +251,22 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 		} else {
 			DisponIFUtils.makeToast(getActivity(), "Echec lors de l'envoi du commentaire.");
 		}
+	}
+
+	@Override
+	public void onActivityLeft(Boolean state) {
+		super.onActivityLeft(state);
+		shouldShowProgressDialog(false);
+		if (state) {
+			mListener.onActivityLeaved();
+		} else {
+			DisponIFUtils.makeToast(getActivity(), "Vous ne pouvez pas sortir de l'activité");
+		}
+	}
+	
+	// Interface to be implemented by the availability list fragment.
+	public interface onActivityLeavedListener {
+		void onActivityLeaved();
 	}
 
 }

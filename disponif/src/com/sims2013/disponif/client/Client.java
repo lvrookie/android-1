@@ -268,6 +268,15 @@ public class Client {
 		public static final String RESULT_USER_FB_ID = "facebookId";
 	}
 	
+	private class leaveActivity {
+		public static final String METHOD = "leaveActivity";
+		
+		public static final String PARAM_TOKEN = "token";
+		public static final String PARAM_AVAILABILITY_ID = "id";
+		
+		public static final String RESULT_STATE = "state";
+	}
+	
 	// Response listener interface
 	public interface onReceiveListener {
 		public void onPingReceive(String result);
@@ -281,6 +290,7 @@ public class Client {
 		public void onTokenExpired();
 		public void onActivityReceived(Activity result);
 		public void onCommentAdded(Boolean state);
+		public void onActivityLeft(Boolean state);
 	}
 	
 	// API Path
@@ -937,6 +947,43 @@ public class Client {
 					throwError(errorMessage);
 				} else {
 					mListener.onActivityReceived(result);
+				}
+				super.onPostExecute(result);
+			}
+		}.execute();
+	}
+	
+	// leaveActivity
+	public void leaveActivity(final String token, final int activityId) {
+		new AsyncTask<Void, Void, Boolean>(){
+
+			String errorMessage;
+			
+			@Override
+			protected Boolean doInBackground(Void... params) {
+		        try {
+		        	JSONObject JSObjet = new JSONObject();
+		        	JSObjet.put(leaveActivity.PARAM_TOKEN, token);
+		        	JSObjet.put(leaveActivity.PARAM_AVAILABILITY_ID, activityId);
+		        	
+		        	Log.v("ClientJSON - Calling webservice ", leaveActivity.METHOD);
+		        	JSONObject res = mJsonClient.callJSONObject(leaveActivity.METHOD, JSObjet);
+		        	Log.v("ClientJSON - addComment", res.toString());
+//			        	boolean resultJson = res.getBoolean(addComment.RESULT_STATE);
+		        	return res.getBoolean(leaveActivity.RESULT_STATE);
+		        } catch (Exception e) {
+		        	Log.v("ClientJSON - addComment - error", e.getMessage());
+		        	errorMessage = e.getMessage();
+		            return null;
+		        }
+			}
+
+			@Override
+			protected void onPostExecute(Boolean result) {
+				if (result == null) {
+					throwError(errorMessage);
+				} else {
+					mListener.onActivityLeft(result);
 				}
 				super.onPostExecute(result);
 			}

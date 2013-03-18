@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ public class AvailabilityListFragment extends GenericFragment implements
 
 	private static final int REQUEST_CODE_ADD_AVAILABILITY = 42;
 	private static final int REQUEST_CODE_GET_MATCHING_AVAILABILITIES = 43;
+	private static final int REQUEST_CODE_GET_ACTIVITY = 43;
 
 	AvailabilityAdapter mAdapter;
 	ActionSlideExpandableListView mListView;
@@ -120,8 +122,7 @@ public class AvailabilityListFragment extends GenericFragment implements
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.addAvailabilityMenu) {
-			Intent intent = new Intent(getActivity(),
-					AvailabilityActivity.class);
+			Intent intent = new Intent(getActivity(), AvailabilityActivity.class);
 			startActivityForResult(intent, REQUEST_CODE_ADD_AVAILABILITY);
 		}
 		return true;
@@ -129,11 +130,16 @@ public class AvailabilityListFragment extends GenericFragment implements
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		Log.v("FRAGMENT_RESULT", "Requestcode : " + requestCode + " resultcode : " + resultCode);
 		if (requestCode == REQUEST_CODE_ADD_AVAILABILITY) {
 			if (resultCode == Activity.RESULT_OK) {
 				refresh();
 			}
 		} else if (requestCode == REQUEST_CODE_GET_MATCHING_AVAILABILITIES) {
+			if (resultCode == Activity.RESULT_OK) {
+				refresh();
+			}
+		} else if (requestCode == REQUEST_CODE_GET_ACTIVITY) {
 			if (resultCode == Activity.RESULT_OK) {
 				refresh();
 			}
@@ -183,7 +189,7 @@ public class AvailabilityListFragment extends GenericFragment implements
 					+ mAdapter.getItem(position).getTypeName());
 			intent.putExtra(ActivityActivity.EXTRA_AVAILABILITY_ID,
 					mAdapter.getItem(position).getId());
-			getActivity().startActivity(intent);
+			getActivity().startActivityForResult(intent, REQUEST_CODE_GET_ACTIVITY);
 		}
 		
 	}
