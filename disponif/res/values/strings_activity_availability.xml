@@ -5,6 +5,9 @@
     <string name="availability_activity_label">Activité</string>
     <string name="availability_type_label">Type d\'activité</string>
     <string name="availability_date_label">Créneau horaire</string>
+    <string name="availability_privacy_label">Visibilité</string>
+    <string name="availability_privacy_private_label">Par les amis seulement</string>
+    <string name="availability_privacy_public_label">Par tout le monde</string>
     <string name="availability_date_from">Début</string>
     <string name="availability_date_to">Fin</string>
     <string name="availability_place_label">Lieu</string>

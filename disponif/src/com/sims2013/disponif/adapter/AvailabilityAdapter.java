@@ -179,11 +179,12 @@ public class AvailabilityAdapter extends ArrayAdapter<Availability> {
 				"http://disponif.darkserver.fr/server/res/category/"
 						+ av.getCategoryId() + ".png");
 
-		if (av.getPrivacy().equals("public")) {
-			holder.mPrivacyIcon.setImageResource(R.drawable.ic_public);
+		if (av.getPrivacy().equals(Availability.PRIVACY_PUBLIC)) {
+			holder.mPrivacyIcon.setImageResource(R.drawable.ic_public_2);
 		} else {
 			holder.mPrivacyIcon.setImageResource(R.drawable.ic_private);
 		}
+		
 		if (av.getStatus().equals(Availability.STATUS_IN_PROGRESS)) {
 			holder.mMatchAvailabilitiesButton.setText(mFragment.getString(R.string.show_activity_bt));
 			holder.mStatusIcon.setImageResource(R.drawable.ic_in_progress);

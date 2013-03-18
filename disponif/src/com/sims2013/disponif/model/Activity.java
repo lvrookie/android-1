@@ -7,6 +7,7 @@ public class Activity {
 	private String mStatus;
 	private ArrayList<User> mUsers;
 	private ArrayList<Comment> mComments;
+	private Availability mAvailability;
 	
 	public Activity() {
 		
@@ -36,6 +37,15 @@ public class Activity {
 	public void setComments(ArrayList<Comment> mComments) {
 		this.mComments = mComments;
 	}
+
+	public Availability getAvailability() {
+		return mAvailability;
+	}
+
+	public void setAvailability(Availability mAvailability) {
+		this.mAvailability = mAvailability;
+	}
+	
 	
 	
 }

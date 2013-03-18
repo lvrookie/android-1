@@ -9,6 +9,9 @@ public class Availability {
 	public static final String STATUS_IN_PROGRESS = "in progress";
 	public static final String STATUS_OPEN = "open";
 	
+	public static final String PRIVACY_PUBLIC = "public";
+	public static final String PRIVACY_PRIVATE = "private";
+	
 	private int mId;
 	private String mUserId;
 	private int mCategoryId;

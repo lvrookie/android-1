@@ -1,5 +1,9 @@
 package com.sims2013.disponif.fragments;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -115,12 +119,6 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 		BitmapManager.setBitmap(mProfilePicture, "http://graph.facebook.com/"
 				+ DisponifApplication.getFacebookId() + "/picture?type=large",
 				R.drawable.bkg_white_gray_border);
-		BitmapManager.setBitmap(mCategoryIcon,
-				"http://disponif.darkserver.fr/server/res/category/" + 1
-						+ ".png");
-		mCategoryTypeTv.setText("Change to correct activity info");
-		mDateTv.setText("Change to correct activity info");
-		mDescriptionTv.setText("Change to correct activity info");
 	}
 
 
@@ -166,6 +164,46 @@ public class ActivityFragment extends GenericFragment implements OnClickListener
 		}
 		mCommentsList.setEmptyView(mView.findViewById(R.id.empty_comment_list));
 		mCommentsList.setSelection(mAdapter.getCount()-1);
+		
+		if (result.getAvailability().getTypeId() != -1) {
+			mCategoryTypeTv.setText(result.getAvailability().getCategoryName() + " - " + result.getAvailability().getTypeName());
+		} else {
+			mCategoryTypeTv.setText(result.getAvailability().getCategoryName());
+		}	
+		
+		Date startDate = DisponIFUtils.stringToDate(result.getAvailability().getStartTime());
+		Date today = new Date();
+		int diffInDays = (int) ((startDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+		int diffInHours = Math
+				.round(((startDate.getTime() - today.getTime()) / (1000 * 60 * 60))) + 1;
+
+		Calendar calendar = GregorianCalendar.getInstance();
+		calendar.setTime(today);
+		int currHour = calendar.get(Calendar.HOUR_OF_DAY);
+
+		if (diffInHours <= 0) {
+			mDateTv.setVisibility(View.GONE);
+			mLiveIcon.setVisibility(View.VISIBLE);
+		} else if (diffInHours < (24 - currHour)) {
+			mLiveIcon.setVisibility(View.GONE);
+			mDateTv
+					.setText(getString(R.string.availability_date_simple_today));
+		} else if (diffInDays == 0) {
+			mLiveIcon.setVisibility(View.GONE);
+			mDateTv.setText(getString(R.string.availability_date_simple,
+					1));
+		} else {
+			mLiveIcon.setVisibility(View.GONE);
+			mDateTv.setText(getString(R.string.availability_date_simple,
+					diffInDays));
+		}
+		
+		mDescriptionTv.setText(result.getAvailability().getDescription());
+		
+		BitmapManager.setBitmap(mCategoryIcon,
+				"http://disponif.darkserver.fr/server/res/category/" + result.getAvailability().getCategoryId()
+						+ ".png");
+		
 		getActivity().invalidateOptionsMenu();
 	}
 

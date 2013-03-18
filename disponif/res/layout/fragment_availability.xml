@@ -67,6 +67,35 @@
                     android:popupBackground="@drawable/bkg_white_gray_border" />
             </LinearLayout>
         </LinearLayout>
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/availability_privacy_label"
+            android:textStyle="bold" />
+            
+       	<RadioGroup
+	        android:id="@+id/radioPrivacy"
+	        android:layout_width="match_parent"
+           	android:layout_height="wrap_content"
+           	android:layout_marginTop="5dp"
+           	android:padding="1dp" >
+
+	        <RadioButton
+	            android:id="@+id/radioPrivacyPublic"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/availability_privacy_public_label"  />
+	 
+	        <RadioButton
+	            android:id="@+id/radioPrivacyPrivate"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/availability_privacy_private_label"
+	            android:checked="true" />
+
+   		</RadioGroup>
 
         <TextView
             android:layout_width="match_parent"

@@ -23,6 +23,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -51,6 +52,9 @@ public class AvailabilityFragment extends GenericFragment implements
 	EditText mDescriptionET;
 	LinearLayout mTypeSpinnerLayout;
 	TextView mErrorDatesTv;
+	
+	RadioButton mPublicRadio;
+	RadioButton mPrivateRadio;
 
 	ImageView mDateFromErrorImage;
 	ImageView mDateToErrorImage;
@@ -127,6 +131,9 @@ public class AvailabilityFragment extends GenericFragment implements
 		mHourButtonFrom.setOnClickListener(this);
 		mHourButtonTo.setOnClickListener(this);
 
+		mPublicRadio = (RadioButton) mView.findViewById(R.id.radioPrivacyPublic);
+		mPrivateRadio = (RadioButton) mView.findViewById(R.id.radioPrivacyPrivate);
+		
 		mDateFromErrorImage = (ImageView) mView
 				.findViewById(R.id.availability_error_date_from);
 		mDateToErrorImage = (ImageView) mView
@@ -185,7 +192,7 @@ public class AvailabilityFragment extends GenericFragment implements
 							int position, long arg3) {
 						mCurrentCategory = mCategories.get(position);
 						Type noType = new Type();
-						noType.setName("");
+						noType.setName("Tout");
 						noType.setId(Availability.TYPE_NO_TYPE);
 						ArrayList<Type> typesArray = new ArrayList<Type>(mCategories.get(position)
 								.getTypes());
@@ -349,6 +356,12 @@ public class AvailabilityFragment extends GenericFragment implements
 		av.setStartTime(sdf.format(mDateFrom.getTime()));
 		av.setEndTime(sdf.format(mDateTo.getTime()));
 
+		if (mPublicRadio.isChecked()) {
+			av.setPrivacy(Availability.PRIVACY_PUBLIC);
+		} else {
+			av.setPrivacy(Availability.PRIVACY_PRIVATE);
+		}
+		
 		mClient.addAvailability(DisponifApplication.getAccessToken(), av);
 		shouldShowProgressDialog(true, "Ajout", "Ajout de la disponibilité ...");
 	}

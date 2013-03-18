@@ -61,7 +61,7 @@ public class Client {
 //		public static final String PARAM_LATITUDE = "latitude";
 //		public static final String PARAM_LONGITUDE = "longitude";
 //		public static final String PARAM_RADIUS = "radius";
-//		public static final String PARAM_PRIVACY = "privacy";
+		public static final String PARAM_PRIVACY = "privacy";
 		// Result keys
 		public static final String RESULT_STATE = "state";
 		public static final String RESULT_ID = "id";
@@ -172,6 +172,29 @@ public class Client {
 		public static final String PARAM_AVAILABILITY_ID = "id";
 		public static final String PARAM_REQUESTED_AVAILABILITY_ID = "requested_id";
 		// Result keys
+		public static final String RESULT_AVAILABILITY = "@availability";
+		
+		public static final String RESULT_AV_CATEGORY = "@category";
+		
+		public static final String RESULT_AV_CATEGORY_ID = "id";
+		public static final String RESULT_AV_CATEGORY_NAME = "name";
+		
+		public static final String RESULT_AV_TYPE = "@type";
+		
+		public static final String RESULT_AV_TYPE_ID = "id";
+		public static final String RESULT_AV_TYPE_NAME = "name";
+		
+		public static final String RESULT_AV_ID = "id";
+		public static final String RESULT_AV_START_TIME = "startTime";
+		public static final String RESULT_AV_END_TIME = "endTime";
+		public static final String RESULT_AV_OPTION = "option";
+		public static final String RESULT_AV_DESCRIPTION = "description";
+		public static final String RESULT_AV_MAX_PARTICIPANT = "maxParticipant";
+		public static final String RESULT_AV_LATITUDE = "latitude";
+		public static final String RESULT_AV_LONGITUDE = "longitude";
+		public static final String RESULT_AV_RADIUS = "radius";
+		public static final String RESULT_AV_PRIVACY = "privacy";
+		
 		public static final String RESULT_ACTIVITY = "activity";
 		public static final String RESULT_ID = "id";
 		public static final String RESULT_STATUS = "status";
@@ -206,6 +229,30 @@ public class Client {
 		public static final String PARAM_TOKEN = "token";
 		public static final String PARAM_AVAILABILITY_ID = "availabilityId";
 		// Result keys
+		
+		public static final String RESULT_AVAILABILITY = "@availability";
+		
+		public static final String RESULT_AV_CATEGORY = "@category";
+		
+		public static final String RESULT_AV_CATEGORY_ID = "id";
+		public static final String RESULT_AV_CATEGORY_NAME = "name";
+		
+		public static final String RESULT_AV_TYPE = "@type";
+		
+		public static final String RESULT_AV_TYPE_ID = "id";
+		public static final String RESULT_AV_TYPE_NAME = "name";
+		
+		public static final String RESULT_AV_ID = "id";
+		public static final String RESULT_AV_START_TIME = "startTime";
+		public static final String RESULT_AV_END_TIME = "endTime";
+		public static final String RESULT_AV_OPTION = "option";
+		public static final String RESULT_AV_DESCRIPTION = "description";
+		public static final String RESULT_AV_MAX_PARTICIPANT = "maxParticipant";
+		public static final String RESULT_AV_LATITUDE = "latitude";
+		public static final String RESULT_AV_LONGITUDE = "longitude";
+		public static final String RESULT_AV_RADIUS = "radius";
+		public static final String RESULT_AV_PRIVACY = "privacy";
+		
 		public static final String RESULT_ACTIVITY = "activity";
 		public static final String RESULT_ID = "id";
 		public static final String RESULT_STATUS = "status";
@@ -348,7 +395,7 @@ public class Client {
 //		        	JSObjet.put(addAvailability.PARAM_LATITUDE, availability.getLatitude());
 //		        	JSObjet.put(addAvailability.PARAM_LONGITUDE, availability.getLongitude());
 //		        	JSObjet.put(addAvailability.PARAM_RADIUS, availability.getRadius());
-//		        	JSObjet.put(addAvailability.PARAM_PRIVACY, availability.getPrivacy());
+		        	JSObjet.put(addAvailability.PARAM_PRIVACY, availability.getPrivacy());
 		        	Log.v("ClientJSON - Calling webservice ", addAvailability.METHOD);
 		        	JSONObject res = mJsonClient.callJSONObject(addAvailability.METHOD, JSObjet);
 		        	Log.v("ClientJSON - addAvailability", res.toString());
@@ -450,8 +497,6 @@ public class Client {
 		        		JSONObject availabilityObject = availailitiesArray.getJSONObject(i);
 		        		Availability availability = new Availability();
 		        		availability.setId(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_ID));
-//		        		availability.setCategoryId(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_CATEGORY_ID));
-//		        		availability.setTypeId(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_TYPE_ID));
 		        		availability.setStartTime(DisponIFUtils.getJSONString(availabilityObject, getUserAvailabilities.RESULT_START_TIME));
 		        		availability.setEndTime(DisponIFUtils.getJSONString(availabilityObject, getUserAvailabilities.RESULT_END_TIME));
 		        		availability.setMaxParticipant(DisponIFUtils.getJSONInt(availabilityObject, getUserAvailabilities.RESULT_MAX_PARTICIPANT));
@@ -569,8 +614,6 @@ public class Client {
 		        		Availability a = new Availability();
 		        		
 		        		a.setId(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_ID));
-//		        		a.setCategoryId(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_CATEGORY_ID));
-//		        		a.setTypeId(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_TYPE_ID));
 		        		a.setStartTime(DisponIFUtils.getJSONString(availabilityObject, getMatchAvailabilities.RESULT_START_TIME));
 		        		a.setEndTime(DisponIFUtils.getJSONString(availabilityObject, getMatchAvailabilities.RESULT_END_TIME));
 		        		a.setMaxParticipant(DisponIFUtils.getJSONInt(availabilityObject, getMatchAvailabilities.RESULT_MAX_PARTICIPANT));
@@ -694,6 +737,41 @@ public class Client {
 		        	}
 		        	activity.setComments(comments);
 		        	
+		        	JSONObject availabilityObject = activityJson.getJSONObject(joinActivity.RESULT_AVAILABILITY);
+	        		Availability a = new Availability();
+	        		
+	        		a.setId(DisponIFUtils.getJSONInt(availabilityObject, joinActivity.RESULT_AV_ID));
+	        		a.setStartTime(DisponIFUtils.getJSONString(availabilityObject, joinActivity.RESULT_AV_START_TIME));
+	        		a.setEndTime(DisponIFUtils.getJSONString(availabilityObject, joinActivity.RESULT_AV_END_TIME));
+	        		a.setMaxParticipant(DisponIFUtils.getJSONInt(availabilityObject, joinActivity.RESULT_AV_MAX_PARTICIPANT));
+	        		a.setLatitude(DisponIFUtils.getJSONFloat(availabilityObject, joinActivity.RESULT_AV_LATITUDE));
+	        		a.setLongitude(DisponIFUtils.getJSONFloat(availabilityObject, joinActivity.RESULT_AV_LONGITUDE));
+	        		a.setRadius(DisponIFUtils.getJSONInt(availabilityObject, joinActivity.RESULT_AV_RADIUS));
+	        		a.setPrivacy(DisponIFUtils.getJSONString(availabilityObject, joinActivity.RESULT_AV_PRIVACY));
+	        		
+	        		JSONObject option = availabilityObject.getJSONObject(joinActivity.RESULT_AV_OPTION);
+	        		a.setDescription(DisponIFUtils.getJSONString(option, joinActivity.RESULT_AV_DESCRIPTION));	        		
+	        		
+	        		if (availabilityObject.has(joinActivity.RESULT_AV_CATEGORY)) {
+		        		JSONObject catObject = availabilityObject.getJSONObject(joinActivity.RESULT_AV_CATEGORY);
+		        		a.setCategoryId(DisponIFUtils.getJSONInt(catObject, joinActivity.RESULT_AV_CATEGORY_ID));
+		        		a.setCategoryName(DisponIFUtils.getJSONString(catObject, joinActivity.RESULT_AV_CATEGORY_NAME));
+	        		} else {
+	        			a.setCategoryId(-1);
+		        		a.setCategoryName("");
+	        		}
+	        		
+	        		if (availabilityObject.has(joinActivity.RESULT_AV_TYPE)) {
+	        			JSONObject typeObject = availabilityObject.getJSONObject(joinActivity.RESULT_AV_TYPE);
+	        			a.setTypeId(DisponIFUtils.getJSONInt(typeObject, joinActivity.RESULT_AV_TYPE_ID));
+	        			a.setTypeName(DisponIFUtils.getJSONString(typeObject, joinActivity.RESULT_AV_TYPE_NAME));
+	        		} else {
+	        			a.setTypeId(-1);
+	        			a.setTypeName("");
+	        		}
+	        		
+	        		activity.setAvailability(a);
+		        	
 		        	return activity;
 		        } catch (Exception e) {
 		        	Log.v("ClientJSON - joinActivity - error", e.getMessage());
@@ -809,6 +887,41 @@ public class Client {
 		        		comments.add(tempComment);
 		        	}
 		        	activity.setComments(comments);
+		        	
+		        	JSONObject availabilityObject = activityJson.getJSONObject(getActivity.RESULT_AVAILABILITY);
+	        		Availability a = new Availability();
+	        		
+	        		a.setId(DisponIFUtils.getJSONInt(availabilityObject, getActivity.RESULT_AV_ID));
+	        		a.setStartTime(DisponIFUtils.getJSONString(availabilityObject, getActivity.RESULT_AV_START_TIME));
+	        		a.setEndTime(DisponIFUtils.getJSONString(availabilityObject, getActivity.RESULT_AV_END_TIME));
+	        		a.setMaxParticipant(DisponIFUtils.getJSONInt(availabilityObject, getActivity.RESULT_AV_MAX_PARTICIPANT));
+	        		a.setLatitude(DisponIFUtils.getJSONFloat(availabilityObject, getActivity.RESULT_AV_LATITUDE));
+	        		a.setLongitude(DisponIFUtils.getJSONFloat(availabilityObject, getActivity.RESULT_AV_LONGITUDE));
+	        		a.setRadius(DisponIFUtils.getJSONInt(availabilityObject, getActivity.RESULT_AV_RADIUS));
+	        		a.setPrivacy(DisponIFUtils.getJSONString(availabilityObject, getActivity.RESULT_AV_PRIVACY));
+	        		
+	        		JSONObject option = availabilityObject.getJSONObject(getActivity.RESULT_AV_OPTION);
+	        		a.setDescription(DisponIFUtils.getJSONString(option, getActivity.RESULT_AV_DESCRIPTION));	        		
+	        		
+	        		if (availabilityObject.has(getActivity.RESULT_AV_CATEGORY)) {
+		        		JSONObject catObject = availabilityObject.getJSONObject(getActivity.RESULT_AV_CATEGORY);
+		        		a.setCategoryId(DisponIFUtils.getJSONInt(catObject, getActivity.RESULT_AV_CATEGORY_ID));
+		        		a.setCategoryName(DisponIFUtils.getJSONString(catObject, getActivity.RESULT_AV_CATEGORY_NAME));
+	        		} else {
+	        			a.setCategoryId(-1);
+		        		a.setCategoryName("");
+	        		}
+	        		
+	        		if (availabilityObject.has(getActivity.RESULT_AV_TYPE)) {
+	        			JSONObject typeObject = availabilityObject.getJSONObject(getActivity.RESULT_AV_TYPE);
+	        			a.setTypeId(DisponIFUtils.getJSONInt(typeObject, getActivity.RESULT_AV_TYPE_ID));
+	        			a.setTypeName(DisponIFUtils.getJSONString(typeObject, getActivity.RESULT_AV_TYPE_NAME));
+	        		} else {
+	        			a.setTypeId(-1);
+	        			a.setTypeName("");
+	        		}
+	        		
+	        		activity.setAvailability(a);
 		        	
 		        	return activity;
 		        } catch (Exception e) {

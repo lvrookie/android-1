@@ -37,7 +37,8 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:background="#8F8F8F"
-            android:src="@drawable/ic_live" />
+            android:src="@drawable/ic_live"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="wrap_content"
